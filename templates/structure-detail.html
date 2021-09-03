@@ -1,0 +1,37 @@
+{% extends "common.html" %}
+
+{% block head %}
+
+{% endblock head%}
+
+{% block title %}Дом-Баня - {{structure.title}}{% endblock %}
+
+{% block content %}
+
+  <h1 class="heading heading--h1">{{structure.title}}</h1>
+
+  <p class="text">Размеры: {{structure.dimensions}}м</p>
+  <p class="text">Площадь: {{structure.square}}м<sup>2</sup></p>
+  <p class="text">Цена: {{structure.cost}} ₽</p>
+
+  <form action="#TODO" class="form form--structure" method="POST">
+    <fieldset class="form__fieldset">
+      <h2 class="heading heading--h2">Получите консультацию по этому ТИПУ</h2>
+      <label for="" class="form__label">
+        Ваше имя
+        <input type="text" class="form__input">
+      </label>
+      <label for="" class="form__label">
+        Ваш email
+        <input type="email" class="form__input">
+      </label>
+      <label for="" class="form__label">
+        Ваш телефон
+        <input type="tel" class="form__input">
+      </label>
+      <input type="submit" value="Позвоните мне">
+      {% csrf_token %}
+    </fieldset>
+  </form>
+
+{% endblock content %}

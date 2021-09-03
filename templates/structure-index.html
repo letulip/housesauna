@@ -1,0 +1,45 @@
+{% extends "common.html" %}
+
+{% block head %}
+
+{% endblock head%}
+
+{% block title %}Дом-Баня - Наши проекты{% endblock %}
+
+{% block content %}
+
+  <h1 class="heading heading--h1">Hello from HouseSauna app! We got {{house_count}} Houses and {{sauna_count}} Saunas</h1>
+
+  {% if houses_list %}
+  <h2 class="heading heading--h2">{{houses_dir_name}}</h2>
+  <ul class="objectList">
+    {% for house in houses_list %}
+    <li class="objectList__item">
+      <a href="/projects/{{house.full_name}}/" class="objectList__link">
+        <h3 class="heading heading--h3">{{house.title}} {{house.square}}м<sup>2</sup></h3>
+        <p class="text">Размеры: {{house.dimensions}}м</p>
+        <p class="text">Площадь: {{house.square}}м<sup>2</sup></p>
+        <p class="text">Цена: {{house.cost}} ₽</p>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if saunas_list %}
+  <h2 class="heading heading--h2">{{saunas_dir_name}}</h2>
+  <ul class="objectList">
+    {% for sauna in saunas_list %}
+    <li class="objectList__item">
+      <a href="/projects/{{sauna.full_name}}/" class="objectList__link">
+        <h3 class="heading heading--h3">{{sauna.title}} {{sauna.square}}м<sup>2</sup></h3>
+        <p class="text">Размеры: {{sauna.dimensions}}м</p>
+        <p class="text">Площадь: {{sauna.square}}м<sup>2</sup></p>
+        <p class="text">Цена: {{sauna.cost}} ₽</p>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+{% endblock content %}
