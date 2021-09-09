@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils import timezone
 from django.db import models
 from data import data
 
@@ -33,7 +34,8 @@ class House(models.Model):
       return self.full_name
 
   def was_published_recently(self):
-    return self.pub_date >= datetime.timezone.now() - datetime.timedelta(days=1)
+    now = timezone.now()
+    return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 
 class Sauna(models.Model):
@@ -65,4 +67,5 @@ class Sauna(models.Model):
       return self.full_name
 
   def was_published_recently(self):
-    return self.pub_date >= datetime.timezone.now() - datetime.timedelta(days=1)
+    now = timezone.now()
+    return now - datetime.timedelta(days=1) <= self.pub_date <= now
