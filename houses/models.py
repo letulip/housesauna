@@ -7,6 +7,7 @@ from data import data
 # Create your models here.
 class House(models.Model):
   dir_name = 'Построенные дома'
+  class_name = 'House'
   full_name = models.CharField(max_length=200, unique=True)
   short_name = models.CharField(max_length=200, unique=True)
   title = models.CharField(max_length=200)
@@ -40,6 +41,7 @@ class House(models.Model):
 
 class Sauna(models.Model):
   dir_name = 'Построенные дома-бани'
+  class_name = 'Sauna'
   full_name = models.CharField(max_length=200)
   short_name = models.CharField(max_length=200)
   title = models.CharField(max_length=200)

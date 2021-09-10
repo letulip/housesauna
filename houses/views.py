@@ -6,8 +6,8 @@ from django.views import generic
 from django.utils import timezone
 from .models import House, Sauna
 from itertools import chain
+from autoslug import AutoSlugField
 
-from houses import models
 # from django.template import loader
 
 # Create your views here.
@@ -70,7 +70,6 @@ def detail(request, structure_name):
   try:
     House.objects.get(full_name=structure_name)
   except House.DoesNotExist:
-    print('house')
     house_exists = False
   else:
     house_exists = True
@@ -80,7 +79,6 @@ def detail(request, structure_name):
   try:
     Sauna.objects.get(full_name=structure_name)
   except Sauna.DoesNotExist:
-    print('sauna')
     sauna_exists = False
   else:
     sauna_exists = True
