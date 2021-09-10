@@ -6,4 +6,20 @@
   <h1 class="heading heading--h1">
     Hello from HouseSauna!
   </h1>
+  {% if recent_projects %}
+  <ul class="recent">
+    {% for project in recent_projects %}
+      <li class="recent__item">
+        <img src="" alt="" class="recent__img">
+        <h3 class="heading heading--h3">{{project.title}}</h3>
+        <p class="text text--sm">Размеры дома: <b>{{project.dimensions}} м</b></p>
+        <p class="text text--sm">Общая площадь: <b>{{project.square}} м²</b></p>
+        <p class="text text--sm">Базовая стоимость: <b>{{project.cost}} ₽</b></p>
+        <a href="/projects/{{project.full_name}}" class="button">Подробнее о доме</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p class="text">No structures are available.</p>
+  {% endif %}
 {% endblock content %}
