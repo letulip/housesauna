@@ -1,13 +1,15 @@
+import houses
 from typing import Generic
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.urls.conf import path
 from django.views import generic
 from django.utils import timezone
 from .models import House, Sauna
 from itertools import chain
-from autoslug import AutoSlugField
 
+# from django.db import models
 # from django.template import loader
 
 # Create your views here.
@@ -39,31 +41,52 @@ class IndexView(generic.ListView):
     return context
 
 
-# def index(request):
-#   house_count = House.objects.all().count()
-#   houses_list = House.objects.order_by('-pub_date')
-#   houses_dir_name = House.objects.first().dir_name
+# Legacy common index function
+def index(request):
+  house_count = House.objects.all().count()
+  houses_list = House.objects.order_by('-pub_date')
+  houses_dir_name = House.objects.first().dir_name
 
-#   sauna_count = Sauna.objects.all().count()
-#   saunas_list = Sauna.objects.order_by('-pub_date')
-#   saunas_dir_name = Sauna.objects.first().dir_name
+  sauna_count = Sauna.objects.all().count()
+  saunas_list = Sauna.objects.order_by('-pub_date')
+  saunas_dir_name = Sauna.objects.first().dir_name
   
-#   context = {
-#     'house_count': house_count,
-#     'sauna_count': sauna_count,
-#     'houses_list': houses_list,
-#     'saunas_list': saunas_list,
-#     'houses_dir_name': houses_dir_name,
-#     'saunas_dir_name': saunas_dir_name,
-#   }
-#   return render(request, 'structure-index.html', context)
+  context = {
+    'house_count': house_count,
+    'sauna_count': sauna_count,
+    'houses_list': houses_list,
+    'saunas_list': saunas_list,
+    'houses_dir_name': houses_dir_name,
+    'saunas_dir_name': saunas_dir_name,
+  }
+  return render(request, 'structure-index.html', context)
 
-class DetailView(generic.DetailView):
+
+class HouseDetailView(generic.DetailView):
   model = House
   template_name = 'structure-detail.html'
-  #TODO how to apply DB name instead pk?
+  context_object_name = 'structure'
+
+  def get_object(self, queryset=None):
+    try:
+      return House.objects.get(full_name=self.kwargs.get('slug'))
+    except House.DoesNotExist:
+      raise redirect('/not-found/')
 
 
+class SaunaDetailView(generic.DetailView):
+  model = Sauna
+  template_name = 'structure-detail.html'
+  context_object_name = 'structure'
+
+  def get_object(self, queryset=None):
+    try:
+      return Sauna.objects.get(full_name=self.kwargs.get('slug'))
+    except Sauna.DoesNotExist:
+      raise redirect('/not-found/')
+
+
+# Legacy common detail function
 def detail(request, structure_name):
   house_exists = ''
 

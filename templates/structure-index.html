@@ -15,7 +15,7 @@
   <ul class="objectList">
     {% for house in houses_list %}
     <li class="objectList__item">
-      <a href="/projects/{{house.full_name}}/" class="objectList__link">
+      <a href="/projects/houses/{{house.full_name}}/" class="objectList__link">
         <h3 class="heading heading--h3">{{house.title}} {{house.square}}м<sup>2</sup></h3>
         <p class="text">Размеры: {{house.dimensions}}м</p>
         <p class="text">Площадь: {{house.square}}м<sup>2</sup></p>
@@ -31,7 +31,7 @@
   <ul class="objectList">
     {% for sauna in saunas_list %}
     <li class="objectList__item">
-      <a href="/projects/{{sauna.full_name}}/" class="objectList__link">
+      <a href="/projects/saunas/{{sauna.full_name}}/" class="objectList__link">
         <h3 class="heading heading--h3">{{sauna.title}} {{sauna.square}}м<sup>2</sup></h3>
         <p class="text">Размеры: {{sauna.dimensions}}м</p>
         <p class="text">Площадь: {{sauna.square}}м<sup>2</sup></p>
