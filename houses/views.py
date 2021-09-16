@@ -18,10 +18,10 @@ class IndexView(generic.ListView):
   context_object_name = 'all_structures'
 
   def get_object_count(self, model):
-    return model.objects.all().count()
+    return model.objects.filter(pub_date__lte=timezone.now()).all().count()
   
   def get_object_list(self, model):
-    return model.objects.order_by('-pub_date')
+    return model.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')
   
   def get_object_dir_name(self, model):
     return model.objects.first().dir_name
@@ -69,9 +69,9 @@ class HouseDetailView(generic.DetailView):
 
   def get_object(self, queryset=None):
     try:
-      return House.objects.get(full_name=self.kwargs.get('slug'))
+      return House.objects.filter(pub_date__lte=timezone.now()).get(full_name=self.kwargs.get('slug'))
     except House.DoesNotExist:
-      raise redirect('/not-found/')
+      raise Http404()
 
 
 class SaunaDetailView(generic.DetailView):
@@ -81,9 +81,9 @@ class SaunaDetailView(generic.DetailView):
 
   def get_object(self, queryset=None):
     try:
-      return Sauna.objects.get(full_name=self.kwargs.get('slug'))
+      return Sauna.objects.filter(pub_date__lte=timezone.now()).get(full_name=self.kwargs.get('slug'))
     except Sauna.DoesNotExist:
-      raise redirect('/not-found/')
+      raise Http404()
 
 
 # Legacy common detail function

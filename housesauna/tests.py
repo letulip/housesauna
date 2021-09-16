@@ -74,3 +74,32 @@ class IndexViewTests(TestCase):
       resp.context['recent_projects'],
       [house, sauna]
     )
+
+class StructureDetailViewTests(TestCase):
+  def test_future_structure(self):
+    """
+    The detail view of a structure with a pub_date in the future returns a 404 not found.
+    """
+    future_house = create_structure('House', 'small-house-30', 1, 5)
+    future_sauna = create_structure('Sauna', 'small-sauna-30', 1, 5)
+    url = reverse('houses:detail', args=(future_house.id,))
+    url1 = reverse('houses:detail', args=(future_sauna.id,))
+    resp = self.client.get(url)
+    resp1 = self.client.get(url1)
+    # self.assertEqual(resp.status_code, 404)
+    # self.assertEqual(resp1.status_code, 404)
+    self.assertContains(resp, 'Страница не найдена')
+    self.assertContains(resp1, 'Страница не найдена')
+
+  def test_past_structure(self):
+    """
+    The detail view of a structure with a pub_date in the past displays the question's text.
+    """
+    past_house = create_structure('House', 'small-house-30', 1, -5)
+    past_sauna = create_structure('Sauna', 'small-sauna-30', 1, -5)
+    url = reverse('houses:detail', args=(past_house.id,))
+    url1 = reverse('houses:detail', args=(past_sauna.id,))
+    resp = self.client.get(url)
+    resp1 = self.client.get(url1)
+    self.assertContains(resp, past_house.full_name)
+    self.assertContains(resp1, past_sauna.full_name)

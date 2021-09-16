@@ -30,5 +30,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('design/', views.design, name='design'),
     path('production/', views.production, name='production'),
-    path('projects/', include('houses.urls')),
+    path('projects/', include(('houses.urls', 'houses'), namespace='houses')),
 ]
