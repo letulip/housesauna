@@ -6,7 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Дом-Баня{% endblock %}</title>
-
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   {% block head %}
   {% endblock head %}
 </head>
@@ -17,12 +18,12 @@
 
   <main class="page-main">
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
   </main>
 
   {% include "footer.html" %}
 
   {% block scripts %}
-  {% endblock %}
+  {% endblock scripts %}
 </body>
 </html>
