@@ -1,25 +1,214 @@
 {% extends "common.html" %}
+{% load static %}
 
 {% block title %} Дом-Баня - Добро пожаловать!{% endblock %}
 
 {% block content %}
-  <h1 class="heading heading--h1">
-    Hello from HouseSauna!
-  </h1>
-  {% if recent_projects %}
-  <ul class="recent">
-    {% for project in recent_projects %}
-      <li class="recent__item">
-        <img src="" alt="" class="recent__img">
-        <h3 class="heading heading--h3">{{project.title}}</h3>
-        <p class="text text--sm">Размеры дома: <b>{{project.dimensions}} м</b></p>
-        <p class="text text--sm">Общая площадь: <b>{{project.square}} м<sup>2</sup></b></p>
-        <p class="text text--sm">Базовая стоимость: <b>{{project.cost}} ₽</b></p>
-        <a href="/projects/{{project.full_name}}" class="button">Подробнее о доме</a>
-      </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-    <p class="text">No structures are available.</p>
-  {% endif %}
+<section class="promo">
+  <article class="promo__wrapper">
+      <h1 class="promo__heading heading heading--h1 heading--uppercase heading--white">
+        Дома и бани из<br>клееного&nbsp;бруса
+      </h1>
+      <P class="promo__text text text--white">
+        Мы сторим дома из клееного бруса для постояного проживания 
+        и делаем&nbsp;это&nbsp;качествено. 
+      </P>
+      <div class="promo__buttons">
+        <a href="/projects/#houses" class="button button--uppercase button--bold button--big">дома</a>
+        <a href="/projects/#saunas" class="button button--uppercase button--bold button--big">бани</a>
+      </div>
+  </article>
+</section>
+
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide grid__element--marginBottom-medium">
+      <h2 class="heading heading--h2">Наша команда</h2>
+      <p class="text text--center">Самая большая ценность &mdash; это люди.<br>Мы строим качественно.</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Иван Зорин</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Игорь Викторович</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Проектировщик</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Степан Асланов</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Павел Серафимович</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
+    </div>
+  </article>
+</section>
+
+<div class="hr"></div><section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h2 class="heading heading--h2 heading--paddingBottom-50">Этапы работы с нами</h2>
+      <ol class="list list--ordered">
+        <li class="list__item list__item--ordered">
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Консультация</h5>
+          <p class="text text--sm">Выявление Ваших пожеланий и потребностей.</p>
+          <p class="text text--sm text--grey">Требуемое время: ~2-3 часа.</p>
+        </li>
+        <li class="list__item list__item--ordered">
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Выезд на участок</h5>
+          <p class="text text--sm">Подбор готового решения или разработка нового на Ваш вкус.</p>
+          <p class="text text--sm text--grey">Требуемое время: ~2-7 дней.</p>
+        </li>
+        <li class="list__item list__item--ordered">
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Договоры и проектирование</h5>
+          <p class="text text--sm">Заключение договора на проектирование.<br>Проектирование нужного Вам решения.<br>Заключение договора на поставку бруса и подряда на строительство.</p>
+          <p class="text text--sm text--grey">Требуемое время: ~30 дней.</p>
+        </li>
+        <li class="list__item list__item--ordered">
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Строительство</h5>
+          <p class="text text--sm">Реализация проектного решения.</p>
+          <p class="text text--sm text--grey">Требуемое время: ~2-6 месяцев.</p>
+        </li>
+        <li class="list__item list__item--ordered">
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Приёмка результата</h5>
+          <p class="text text--sm">Дом Вашей мечты готов!</p>
+        </li>
+      </ol>
+    </div>
+  </article>
+</section>
+
+
+{% if recent_projects %}
+  <div class="hr"></div>
+
+  <section class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--paddingBottom-50">Наши последние работы</h2>
+      </div>
+    </article>
+
+    <article class="grid__article grid__article--three">
+      <!-- <div class="grid__element"> -->
+      {% for project in recent_projects %}
+        <a class="preview" href="/projects/{{project.full_name}}">
+          <picture class="img img--preview">
+            <img src="{% static 'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
+          </picture>
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}}</h5>
+          <p class="text text--sm text--nopadding">Размеры дома: <b>{{project.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding">Стоимость: <b>{{project.cost}} ₽</b></p>
+          <div class="button button--alt button--marginTop-15 button--marginBottom-20">Подробнее о доме</div>
+        </a>
+      {% endfor %}
+      <!-- </div> -->
+    </article>
+  </section>
+{% endif %}
+
+  <div class="hr"></div>
+
+  <section class="content-slider">
+    <h2 class="heading heading--h2 heading--bold heading--center">
+      Отзывы наших клиентов
+    </h2>
+    <div class="content-slider__control content-slider__control--quote content-slider__control-left"></div>
+    <div class="content-slider__control content-slider__control--quote content-slider__control-right"></div>
+    <div class="content-slider__wrapper">
+      <article class="content-slider__item quote">
+        <div class="quote__wrapper">
+          <h3 class="heading heading--h3">Маргарита Гибадуллина</h3>
+          <p class="quote__subHeading">
+            Заслуженная артистка России и её дом-баня из клееного бруса.
+          </p>
+          <p class="content-slider__text text text--sm">
+            Главное человек! Это очень редкие качества для строителя: пунктуальный, документальный, чистоплотный, всё в срок.<br>
+            <b>Просто всем рекомендую, просто это большая редкость в наше время!</b>
+          </p>
+        </div>
+        <div class="quote__videoWrapper">
+          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/ALiJ2Q5Rsn8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </article>
+      <article class="content-slider__item quote">
+        <div class="quote__wrapper">
+          <h3 class="heading heading--h3">Корней Мартыщук</h3>
+          <p class="quote__subHeading">
+            Руководитель организации и его дом из клееного бруса.
+          </p>
+          <p class="content-slider__text text text--sm">
+            Мы удовлетворены работой, профессионализмом ребят, тем как они решали вопросы и все главные вопросы были решены.<br>
+            <b>Через два года обязательно обратимся за строительством бани.</b>
+          </p>
+        </div>
+        <div class="quote__videoWrapper">
+          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/i_1qkI2uSBA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </article>
+      <article class="content-slider__item quote">
+        <div class="quote__wrapper">
+          <h3 class="heading heading--h3">Анатолий Александрович</h3>
+          <p class="quote__subHeading">
+            Руководитель организации и его дом-баня из клееного бруса.
+          </p>
+          <p class="content-slider__text text text--sm">
+            Сделали быстро, качественно. Я сам занимаюсь деревом, сделали всё грамотно. Всем советую.<br>
+            <b>Баня получилась - супер!</b>
+          </p>
+        </div>
+        <div class="quote__videoWrapper">
+          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/zM0cLf1XyHk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </article>
+      <article class="content-slider__item quote">
+        <div class="quote__wrapper">
+          <h3 class="heading heading--h3">Владимир Васильевич</h3>
+          <p class="quote__subHeading">
+            Руководитель организации и его баня из клееного бруса.
+          </p>
+          <p class="content-slider__text text text--sm">
+            Вы очень удивительные люди, как ни странно, я вот таких ещё работников как вы, не встречал.<br>
+            <b>Всё только на отлично!</b>
+          </p>
+        </div>
+        <div class="quote__videoWrapper">
+          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/GUGF6y4XhVI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="hr"></div>
+
+  <section class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2">Наш YouTube канал</h2>
+        <a class="" href="https://www.youtube.com/channel/UCoj58GpShlVhV-euDQdW_nQ" target="_blank">
+          <img src="{% static 'img/icons/icon-youtube-big.svg' %}" alt="youtube logo" class="img img--youtube">
+        </a>
+        <p class="text">Расскажем и покажем про наши проекты со всеми нюансами.<br>Убедитесь сами!</p>
+      </div>
+    </article>
+  </section>
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/content-slider/content-slider.js' %}"></script>
+{% endblock scripts %}

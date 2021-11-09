@@ -1,4 +1,5 @@
 {% extends "common.html" %}
+{% load static %}
 
 {% block head %}
 
@@ -6,40 +7,151 @@
 
 {% block title %}Дом-Баня - Наши проекты{% endblock %}
 
-{% block content %}
+{% block content %}<section class="content-slider content-slider--top">
+  <div class="content-slider__control content-slider__control-left"></div>
+  <div class="content-slider__control content-slider__control-right"></div>
+  <div class="content-slider__wrapper content-slider__wrapper--top">
+    <article class="content-slider__item promo promo--half content-slider__item--houses">
+      <div class="promo__wrapper">
+        <h1 class="heading heading--h1 heading--white">Дома из клееного бруса</h1>
+        <p class="content-slider__text text text--white">Мы успешно реализовали уже 11 проектов домов из клееного бруса.</p>
+        <div class="promo__buttons">
+          <a href="#houses" class="button button--uppercase button--bold button--big">Смотреть все</a>
+        </div>
+      </div>
+    </article>
+    <article class="content-slider__item promo promo--half content-slider__item--projectsSmall">
+      <div class="promo__wrapper">
+        <h1 class="heading heading--h1 heading--white">Бани из клееного бруса</h1>
+        <p class="content-slider__text text text--white">Мы успешно реализовали уже 14 проектов бань из клееного бруса.
+        </p>
+        <div class="promo__buttons">
+          <a href="#saunas" class="button button--uppercase button--bold button--big">Смотреть все</a>
+        </div>
+      </div>
+    </article>
+    <article class="content-slider__item promo promo--half content-slider__item--projects">
+      <div class="promo__wrapper">
+        <h1 class="heading heading--h1 heading--white">Проекты небольших домов</h1>
+        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса до 100м²</p>
+        <div class="promo__buttons">
+          <a href="#projects-small" class="button button--uppercase button--bold button--big">Смотреть все</a>
+        </div>
+      </div>
+    </article>
+    <article class="content-slider__item promo promo--half content-slider__item--projectsBig">
+      <div class="promo__wrapper">
+        <h1 class="heading heading--h1 heading--white">Проекты домов из<br>клееного бруса</h1>
+        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса от 100м² до 200м²</p>
+        <div class="promo__buttons">
+          <a href="#projects" class="button button--uppercase button--bold button--big">Смотреть все</a>
+        </div>
+      </div>
+    </article>
+    <article class="content-slider__item promo promo--half content-slider__item--saunas">
+      <div class="promo__wrapper">
+        <h1 class="heading heading--h1 heading--white">Проекты  больших домов из клееного&nbsp;бруса</h1>
+        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса от 200м²</p>
+        <div class="promo__buttons">
+          <a href="#projects-big" class="button button--uppercase button--bold button--big">Смотреть все</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
 
-  <h1 class="heading heading--h1">Hello from HouseSauna app! We got {{house_count}} Houses and {{sauna_count}} Saunas</h1>
 
   {% if houses_list %}
-  <h2 class="heading heading--h2">{{houses_dir_name}}</h2>
-  <ul class="objectList">
-    {% for house in houses_list %}
-    <li class="objectList__item">
-      <a href="/projects/houses/{{house.full_name}}/" class="objectList__link">
-        <h3 class="heading heading--h3">{{house.title}} {{house.square}}м<sup>2</sup></h3>
-        <p class="text">Размеры: {{house.dimensions}}м</p>
-        <p class="text">Площадь: {{house.square}}м<sup>2</sup></p>
-        <p class="text">Цена: {{house.cost}} ₽</p>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+    <section id="houses" class="grid">
+      <article class="grid__article">
+        <div class="grid__element grid__element--wide">
+          <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{houses_dir_name}}</h2>
+        </div>
+      </article>
+      <article class="grid__article grid__article--three more">
+        {% for house in houses_list %}
+        <!-- <div class="grid__element grid__element--marginBottom-medium"> -->
+          <a class="preview grid__element--marginBottom-medium" href="/projects/houses/{{house.full_name}}/">
+            <picture class="img img--preview">
+              <img src="{% static 'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
+            </picture>
+            <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{house.title}} {{house.square}}м<sup class="text__sup">2</sup></h5>
+            <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{house.dimensions}}м</b></p>
+            <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
+            <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
+          </a>
+        <!-- </div> -->
+        {% endfor %}
+      </article>
+    </section>
+
+    <div class="hr"></div>
   {% endif %}
 
   {% if saunas_list %}
-  <h2 class="heading heading--h2">{{saunas_dir_name}}</h2>
-  <ul class="objectList">
-    {% for sauna in saunas_list %}
-    <li class="objectList__item">
-      <a href="/projects/saunas/{{sauna.full_name}}/" class="objectList__link">
-        <h3 class="heading heading--h3">{{sauna.title}} {{sauna.square}}м<sup>2</sup></h3>
-        <p class="text">Размеры: {{sauna.dimensions}}м</p>
-        <p class="text">Площадь: {{sauna.square}}м<sup>2</sup></p>
-        <p class="text">Цена: {{sauna.cost}} ₽</p>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+    <section id="saunas" class="grid">
+      <article class="grid__article">
+        <div class="grid__element grid__element--wide">
+          <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{saunas_dir_name}}</h2>
+        </div>
+      </article>
+      <article class="grid__article grid__article--three more">
+        {% for sauna in saunas_list %}
+        <!-- <div class="grid__element grid__element--marginBottom-medium"> -->
+          <a class="preview grid__element--marginBottom-medium" href="/projects/saunas/{{sauna.full_name}}/">
+            <picture class="img img--preview">
+              <img src="{% static 'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
+            </picture>
+            <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{sauna.title}} {{sauna.square}}м<sup class="text__sup">2</sup></h5>
+            <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{sauna.dimensions}}м</b></p>
+            <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
+            <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
+          </a>
+        <!-- </div> -->
+        {% endfor %}
+      </article>
+    </section>
+
+    <div class="hr"></div>
   {% endif %}
 
+  <section id="projects-small" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты домов и бань до&nbsp;100м²</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three">
+    </article>
+  </section>
+
+  <div class="hr"></div>
+
+  <section id="projects" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты домов и бань от&nbsp;100м²&nbsp;до&nbsp;200м²</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three">
+    </article>
+  </section>
+
+  <div class="hr"></div>
+
+  <section id="projects-big" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты больших домов и бань от&nbsp;200м²</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three">
+    </article>
+  </section>
+
 {% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/content-slider/content-slider.js' %}"></script>
+<script src="{% static 'js/more.js' %}"></script>
+{% endblock scripts %}
