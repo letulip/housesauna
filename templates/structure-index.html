@@ -70,7 +70,6 @@
       </article>
       <article class="grid__article grid__article--three more">
         {% for house in houses_list %}
-        <!-- <div class="grid__element grid__element--marginBottom-medium"> -->
           <a class="preview grid__element--marginBottom-medium" href="/projects/houses/{{house.full_name}}/">
             <picture class="img img--preview">
               <img src="{% static 'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
@@ -80,7 +79,6 @@
             <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
             <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
           </a>
-        <!-- </div> -->
         {% endfor %}
       </article>
     </section>
@@ -97,7 +95,6 @@
       </article>
       <article class="grid__article grid__article--three more">
         {% for sauna in saunas_list %}
-        <!-- <div class="grid__element grid__element--marginBottom-medium"> -->
           <a class="preview grid__element--marginBottom-medium" href="/projects/saunas/{{sauna.full_name}}/">
             <picture class="img img--preview">
               <img src="{% static 'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
@@ -107,7 +104,6 @@
             <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
             <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
           </a>
-        <!-- </div> -->
         {% endfor %}
       </article>
     </section>

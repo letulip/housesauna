@@ -1,37 +1,104 @@
 {% extends "common.html" %}
+{% load static %}
 
 {% block head %}
 
 {% endblock head%}
 
-{% block title %}Дом-Баня - {{structure.title}}{% endblock %}
+{% block title %}Дом-Баня - {{structure.title}} {{structure.square}}м²{% endblock %}
 
 {% block content %}
 
-  <h1 class="heading heading--h1">{{structure.title}}</h1>
+<section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-0.jpeg' %});">
+  <article class="promo__wrapper">
+      <h1 class="heading heading--h2 heading--white">
+        {{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup>
+      </h1>
+      <p class="promo__text text text--white">
+        Размеры дома: <b>{{structure.dimensions}}м</b><br>
+        Общая площадь: <b>{{structure.square}}м<sup class="text__sup">2</sup></b><br>
+        Базовая стоимость: <b>{{structure.cost}} ₽</b>
+      </p>
+      <div class="grid grid--marginTop-0">
+        <div class="grid__article grid__article--two grid__article--gap-big">
+          <div class="grid__element">
+            <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/{{structure.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div class="grid__element">
+            <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
+            <form action="/submit" class="form form--house" method="POST">
+              <label for="" class="form__label">
+                <input type="email" class="form__input" required>
+                <span class="form__placeholder">Ваш email</span>
+              </label>
+              <label for="" class="form__label">
+                <input type="text" class="form__input" required>
+                <span class="form__placeholder">Ваше имя</span>
+              </label>
+              <label for="" class="form__label">
+                <input type="tel" class="form__input" required>
+                <span class="form__placeholder">Ваш телефон</span>
+              </label>
+              <button type="submit" class="form__submit button button--big">Позвоните мне</button>
+              {% csrf_token %}
+            </form>
+            <p class="text text--white text--sm">Обработка заявки осущетствляется в течение рабочего дня. Отправляя заявку вы соглашаетесь с нашей <a href="" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
+          </div>
+        </div>
+      </div>
+  </article>
+</section>
 
-  <p class="text">Размеры: {{structure.dimensions}} м</p>
-  <p class="text">Площадь: {{structure.square}} м<sup>2</sup></p>
-  <p class="text">Цена: {{structure.cost}} ₽</p>
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h2 class="heading heading--h2 heading--paddingBottom-50">Дом для постоянного проживания из&nbsp;клееного&nbsp;бруса.</h2>
+      <p class="text text--left">
+        Размеры дома: <b>13,0×18,0 м</b><br>
+        Площадь 1-го этажа: <b>185,5 м²</b><br>
+        Площадь 2-го этажа: <b>107,5 м²</b><br>
+        Общая площадь: <b>293 м²</b>
+      </p>
+      <p class="text text--left">
+        В данном сооружении использовался клееный брус сечением <b>Ш 174/В 140 мм</b>.
+      </p>
+      <div>
+        <p class="text text--left text--nopadding">
+          Тепловой контур (базовый комплект дома) включает в себя:
+        </p>
+        <ul class="text text--left list list--paddingLeft-small">
+          <li>устройство фундамента,</li>
+          <li>монтаж стен из клееного бруса,</li>
+          <li>монтаж балок перекрытия 1-ого и 2-ого этажа с утеплением 200 мм,</li>
+          <li>монтаж стропильно-балочной системы,</li>
+          <li>металлочерепицу,</li>
+          <li>монтаж кровли с утеплением 200 мм,</li>
+          <li>обработку стен из бруса защитным составом (покраска) в два слоя,</li>
+          <li>обшивку свесов карнизов отделочной рейкой,</li>
+          <li>монтаж оконных и дверных блоков в комплекте с москитными сетками, ограничителями открывания, подоконниками, отливами.</li>
+        </ul>
+      </div>
+      <p class="text text--left">
+        Общая стоимость теплового контура (базового комплекта дома), включая материалы и работы, составляет <b>14 500 000 ₽</b>.
+      </p>
+      <p class="text text--left">
+        Срок строительства <b>девять месяцев</b>.
+      </p>
+      <p class="text text--left">
+        Стоимость проекта меняется в зависимости от сечения бруса, фундамента, комплектации и выбора отделочных материалов.
+      </p>
+    </div>
+  </article>
+</section>
 
-  <form action="#TODO" class="form form--structure" method="POST">
-    <fieldset class="form__fieldset">
-      <h2 class="heading heading--h2">Получите консультацию по этому ТИПУ</h2>
-      <label for="" class="form__label">
-        Ваше имя
-        <input type="text" class="form__input">
-      </label>
-      <label for="" class="form__label">
-        Ваш email
-        <input type="email" class="form__input">
-      </label>
-      <label for="" class="form__label">
-        Ваш телефон
-        <input type="tel" class="form__input">
-      </label>
-      <input type="submit" value="Позвоните мне">
-      {% csrf_token %}
-    </fieldset>
-  </form>
+<section class="gallery">
+
+  {% with ''|center:structure.images_count as range %}
+  {% for i in range %}
+  <img src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
+  {% endfor %}
+  {% endwith %}
+  
+</section>
 
 {% endblock content %}
