@@ -7,16 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Дом-Баня{% endblock %}</title>
   {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %}">
   {% block head %}
   {% endblock head %}
 </head>
 
-<body class="page-body">
+<body class="pageBody">
 
   {% include "header.html" %}
 
-  <main class="page-main">
+  <main class="pageMain">
     {% block content %}
     {% endblock content %}
   </main>

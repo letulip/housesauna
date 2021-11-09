@@ -1,17 +1,17 @@
-<header class="page-header">
-  <nav class="main-nav">
-    <ul class="main-nav__list">
-      <li class="main-nav__item">
-        <a href="/projects/" class="main-nav__link">Проекты</a>
+<header class="pageHeader">
+  <nav class="mainNav">
+    <ul class="mainNav__list">
+      <li class="mainNav__item">
+        <a href="/projects/" class="mainNav__link">Проекты</a>
       </li>
-      <li class="main-nav__item">
-        <a href="/about/" class="main-nav__link">О нас</a>
+      <li class="mainNav__item">
+        <a href="/about/" class="mainNav__link">О нас</a>
       </li>
-      <li class="main-nav__item">
-        <a href="/design/" class="main-nav__link">Проектирование</a>
+      <li class="mainNav__item">
+        <a href="/design/" class="mainNav__link">Проектирование</a>
       </li>
-      <li class="main-nav__item">
-        <a href="/production/" class="main-nav__link">Производство</a>
+      <li class="mainNav__item">
+        <a href="/production/" class="mainNav__link">Производство</a>
       </li>
     </ul>
   </nav>
@@ -19,4 +19,42 @@
   <a class="logo" href="/">ДомБаня</a>
 
   <div class="header-contacts"></div>
+</header>
+<header class="pageHeader">
+  <div class="pageHeader__logoWrapper">
+    <div class="burger">
+      <div class="burger__element"></div>
+    </div>
+    <a href="/" class="pageHeader__logoLink"><img src="{% static 'img/logo.svg' %}" width="150" height="47" alt="" class="logo pageHeader__logo"></a>
+  </div>
+  <nav class="mainNav">
+    <ul class="mainNav__list">
+      <li class="mainNav__item"><a href="/about/" class="mainNav__link">О нас</a></li>
+      <li class="mainNav__item"><a href="/production/" class="mainNav__link">Производство</a></li>
+      <li class="mainNav__item"><a href="/design/" class="mainNav__link">Проектирование</a></li>
+      <li class="mainNav__item"><a href="/projects/" class="mainNav__link">Проекты</a></li>
+      <li class="mainNav__item mainNav__item--logo"><a href="/" class="mainNav__link"><img src="{% static 'img/logo.svg' %}" alt="" class="logo"></a></li>
+    </ul>
+    <div class="social">
+      <a href="https://www.youtube.com/channel/UCoj58GpShlVhV-euDQdW_nQ" class="social__item">
+        <svg class="social__icon social__icon--yt" width="20" height="20">
+          <use href="{% static 'img/sprite.svg#icon-youtube' %}"></use>
+        </svg>
+      </a>
+      <a href="https://www.facebook.com/kirovdt" class="social__item">
+        <svg class="social__icon social__icon--fb" width="20" height="20">
+          <use href="{% static 'img/sprite.svg#icon-facebook' %}"></use>
+        </svg>
+      </a>
+      <a href="https://www.instagram.com/dom_banya_msk/" class="social__item">
+        <svg class="social__icon social__icon--insta" width="20" height="20">
+          <use href="{% static 'img/sprite.svg#icon-instagram' %}"></use>
+        </svg>
+      </a>
+    </div>
+    <div class="pageHeader__contacts">
+      <a href="tel:+79104084800" class="pageHeader__phone">+7(910)408-48-00</a>
+      <a href="tel:+79857601534" class="pageHeader__phone">+7(985)760-15-34</a>
+    </div>
+  </nav>
 </header>
