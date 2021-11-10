@@ -9,9 +9,9 @@
 
 {% block content %}
 
-<section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-0.jpeg' %});">
-  <article class="promo__wrapper">
-      <h1 class="heading heading--h2 heading--white">
+  <section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-0.jpeg' %});">
+    <article class="promo__wrapper">
+      <h1 class="heading heading--h2 heading--bold heading--white">
         {{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup>
       </h1>
       <p class="promo__text text text--white">
@@ -42,7 +42,7 @@
               <button type="submit" class="form__submit button button--big">Позвоните мне</button>
               {% csrf_token %}
             </form>
-            <p class="text text--white text--sm">Обработка заявки осущетствляется в течение рабочего дня. Отправляя заявку вы соглашаетесь с нашей <a href="" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
+            <p class="text text--white text--sm">Обработка заявки осущетствляется в течение рабочего дня. Отправляя заявку вы соглашаетесь с нашей <a href="#TODO" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
           </div>
         </div>
       </div>
@@ -52,15 +52,19 @@
 <section class="grid">
   <article class="grid__article">
     <div class="grid__element grid__element--wide">
-      <h2 class="heading heading--h2 heading--paddingBottom-50">Дом для постоянного проживания из&nbsp;клееного&nbsp;бруса.</h2>
+      <h2 class="heading heading--h2 heading--paddingBottom-50">{{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup></h2>
       <p class="text text--left">
-        Размеры дома: <b>13,0×18,0 м</b><br>
-        Площадь 1-го этажа: <b>185,5 м²</b><br>
-        Площадь 2-го этажа: <b>107,5 м²</b><br>
-        Общая площадь: <b>293 м²</b>
+        Размеры дома: <b>{{structure.dimensions}} м</b><br>
+        {% if structure.square1 %}
+        Площадь 1-го этажа: <b>{{structure.square1}} м²</b><br>
+        {% endif %}
+        {% if structure.square1 %}
+        Площадь 2-го этажа: <b>{{structure.square2}} м²</b><br>
+        {% endif %}
+        Общая площадь: <b>{{structure.square}} м²</b>
       </p>
       <p class="text text--left">
-        В данном сооружении использовался клееный брус сечением <b>Ш 174/В 140 мм</b>.
+        В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
       </p>
       <div>
         <p class="text text--left text--nopadding">
@@ -79,10 +83,10 @@
         </ul>
       </div>
       <p class="text text--left">
-        Общая стоимость теплового контура (базового комплекта дома), включая материалы и работы, составляет <b>14 500 000 ₽</b>.
+        Общая стоимость теплового контура (базового комплекта дома), включая материалы и работы, составляет <b>{{structure.cost}} ₽</b>.
       </p>
       <p class="text text--left">
-        Срок строительства <b>девять месяцев</b>.
+        Срок строительства <b>{{structure.construction}}</b>.
       </p>
       <p class="text text--left">
         Стоимость проекта меняется в зависимости от сечения бруса, фундамента, комплектации и выбора отделочных материалов.

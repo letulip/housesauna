@@ -3,6 +3,11 @@
 
 {% block title %} Дом-Баня - Добро пожаловать!{% endblock %}
 
+{% block head %}
+<meta name="description" content="ДомБаня - Дома и бани из клееного бруса. Мы сторим дома из клееного бруса для постояного проживания 
+и делаем это качествено.">
+{% endblock head %}
+
 {% block content %}
 <section class="promo">
   <article class="promo__wrapper">
@@ -11,7 +16,7 @@
       </h1>
       <P class="promo__text text text--white">
         Мы сторим дома из клееного бруса для постояного проживания 
-        и делаем&nbsp;это&nbsp;качествено. 
+        и делаем&nbsp;это&nbsp;качествено.
       </P>
       <div class="promo__buttons">
         <a href="/projects/#houses" class="button button--uppercase button--bold button--big">дома</a>
@@ -30,29 +35,37 @@
       <picture class="img img--round">
         <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="" class="img__img img__img--team">
       </picture>
-      <h5 class="heading heading--h5 heading--paddingBottom-5">Иван Зорин</h5>
-      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+      <div>
+        <p class="text text--nopadding text--regular">Иван Зорин</p>
+        <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+      </div>
     </div>
     <div class="grid__element">
       <picture class="img img--round">
         <img src="{% static 'img/team/igor-victor-round.png' %}" alt="" class="img__img img__img--team">
       </picture>
-      <h5 class="heading heading--h5 heading--paddingBottom-5">Игорь Викторович</h5>
-      <p class="text text--sm text--sm-center text--grey text--nopadding">Проектировщик</p>
+      <div>
+        <p class="text text--nopadding text--regular">Игорь Викторович</p>
+        <p class="text text--sm text--sm-center text--grey text--nopadding">Проектировщик</p>
+      </div>
     </div>
     <div class="grid__element">
       <picture class="img img--round">
         <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="" class="img__img img__img--team">
       </picture>
-      <h5 class="heading heading--h5 heading--paddingBottom-5">Степан Асланов</h5>
-      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+      <div>
+        <p class="text text--nopadding text--regular">Степан Асланов</p>
+        <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+      </div>
     </div>
     <div class="grid__element">
       <picture class="img img--round">
         <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="" class="img__img img__img--team">
       </picture>
-      <h5 class="heading heading--h5 heading--paddingBottom-5">Павел Серафимович</h5>
-      <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
+      <div>
+        <p class="text text--nopadding text--regular">Павел Серафимович</p>
+        <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
+      </div>
     </div>
   </article>
 </section>
@@ -63,27 +76,27 @@
       <h2 class="heading heading--h2 heading--paddingBottom-50">Этапы работы с нами</h2>
       <ol class="list list--ordered">
         <li class="list__item list__item--ordered">
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Консультация</h5>
+          <p class="text text--left text--bold">Консультация</p>
           <p class="text text--sm">Выявление Ваших пожеланий и потребностей.</p>
           <p class="text text--sm text--grey">Требуемое время: ~2-3 часа.</p>
         </li>
         <li class="list__item list__item--ordered">
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Выезд на участок</h5>
+          <p class="text text--left text--bold">Выезд на участок</p>
           <p class="text text--sm">Подбор готового решения или разработка нового на Ваш вкус.</p>
           <p class="text text--sm text--grey">Требуемое время: ~2-7 дней.</p>
         </li>
         <li class="list__item list__item--ordered">
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Договоры и проектирование</h5>
+          <p class="text text--left text--bold">Договоры и проектирование</p>
           <p class="text text--sm">Заключение договора на проектирование.<br>Проектирование нужного Вам решения.<br>Заключение договора на поставку бруса и подряда на строительство.</p>
           <p class="text text--sm text--grey">Требуемое время: ~30 дней.</p>
         </li>
         <li class="list__item list__item--ordered">
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Строительство</h5>
+          <p class="text text--left text--bold">Строительство</p>
           <p class="text text--sm">Реализация проектного решения.</p>
           <p class="text text--sm text--grey">Требуемое время: ~2-6 месяцев.</p>
         </li>
         <li class="list__item list__item--ordered">
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-5 heading--bold">Приёмка результата</h5>
+          <p class="text text--left text--bold">Приёмка результата</p>
           <p class="text text--sm">Дом Вашей мечты готов!</p>
         </li>
       </ol>
@@ -199,7 +212,7 @@
     <article class="grid__article">
       <div class="grid__element grid__element--wide">
         <h2 class="heading heading--h2">Наш YouTube канал</h2>
-        <a class="" href="https://www.youtube.com/channel/UCoj58GpShlVhV-euDQdW_nQ" target="_blank">
+        <a class="" href="https://www.youtube.com/channel/UCoj58GpShlVhV-euDQdW_nQ" target="_blank" rel="noreferrer">
           <img src="{% static 'img/icons/icon-youtube-big.svg' %}" alt="youtube logo" class="img img--youtube">
         </a>
         <p class="text">Расскажем и покажем про наши проекты со всеми нюансами.<br>Убедитесь сами!</p>
@@ -210,5 +223,5 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="{% static 'js/content-slider/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider/content-slider.js' %}"></script>
 {% endblock scripts %}

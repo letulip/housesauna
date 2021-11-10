@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'housesauna.urls'
@@ -66,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'csp.context_processors.nonce',
             ],
         },
     },
@@ -133,3 +135,32 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSP_DEFAULT_SRC = ["'none'"]
+CSP_BASE_URI = ["'self'"]
+CSP_SCRIPT_SRC = [
+  "'self'",
+]
+CSP_SCRIPT_SRC_ELEM = [
+  "'self'",
+]
+CSP_FRAME_SRC = [
+  "'self'",
+  "https://yandex.ru",
+  "https://www.yandex.ru",
+  "https://youtube.com",
+  "https://www.youtube.com",
+]
+CSP_STYLE_SRC = [
+  "'self'",
+  "'unsafe-inline'",
+]
+CSP_IMG_SRC = [
+  "'self'",
+  "http://www.w3.org",
+  "data:",
+]
+CSP_FONT_SRC = [
+  "https://fonts.gstatic.com",
+]
+CSP_INCLUDE_NONCE_IN = ["script-src"]
