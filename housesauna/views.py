@@ -15,11 +15,13 @@ class IndexView(generic.ListView):
     return model.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:6]
 
   def get_queryset(self):
-    result_list = list(chain(self.get_object_list(House), self.get_object_list(Sauna)))[:6]
+    chain_list = list(chain(self.get_object_list(House), self.get_object_list(Sauna)))
+    result_list = sorted(
+      chain_list, key=lambda instance: instance.pub_date, reverse=True)[:6]
     return result_list
 
-def index(request):
-  return render(request, 'index.html')
+# def index(request):
+#   return render(request, 'index.html')
 
 def about(request):
   return render(request, 'about.html')
