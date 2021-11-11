@@ -29,6 +29,8 @@ urlpatterns = [
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
     path('design/', views.design, name='design'),
+    path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),
     path('projects/', include(('houses.urls', 'houses'), namespace='houses')),
+    path('submit/', views.submit_form, name='submit'),
 ]

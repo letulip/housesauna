@@ -148,6 +148,6 @@
 {% endblock content %}
 
 {% block scripts %}
-<script src="{% static 'js/content-slider/content-slider.js' %}"></script>
-<script src="{% static 'js/more.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/more.js' %}"></script>
 {% endblock scripts %}

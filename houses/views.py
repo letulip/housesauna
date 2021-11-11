@@ -119,4 +119,3 @@ def detail(request, structure_name):
     return redirect('/not-found/')
   else:
     return render(request, 'structure-detail.html', {'structure': structure})
-

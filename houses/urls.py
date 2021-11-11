@@ -7,5 +7,6 @@ urlpatterns = [
   path('', views.IndexView.as_view(), name='index'),
   path('<str:structure_name>/', views.detail, name='detail'),
   path('houses/<slug:slug>/', views.HouseDetailView.as_view(), name='detail'),
-  path('saunas/<slug:slug>/', views.SaunaDetailView.as_view(), name='detail')
+  path('saunas/<slug:slug>/', views.SaunaDetailView.as_view(), name='detail'),
+  # path('sumbit/', views.SubmitFormHandler.as_view(), name='submit'),
 ]

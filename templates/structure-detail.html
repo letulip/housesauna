@@ -26,23 +26,25 @@
           </div>
           <div class="grid__element">
             <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
-            <form action="/submit" class="form form--house" method="POST">
+            <form action="/submit/" class="form form--house" method="POST">
               <label for="" class="form__label">
-                <input type="email" class="form__input" required>
+                <input type="email" name="email" class="form__input" required>
                 <span class="form__placeholder">Ваш email</span>
               </label>
               <label for="" class="form__label">
-                <input type="text" class="form__input" required>
+                <input type="text" name="name" class="form__input" required>
                 <span class="form__placeholder">Ваше имя</span>
               </label>
               <label for="" class="form__label">
-                <input type="tel" class="form__input" required>
+                <input type="tel" name="phone" class="form__input" required>
                 <span class="form__placeholder">Ваш телефон</span>
               </label>
+              <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
+              <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
               <button type="submit" class="form__submit button button--big">Позвоните мне</button>
               {% csrf_token %}
             </form>
-            <p class="text text--white text--sm">Обработка заявки осущетствляется в течение рабочего дня. Отправляя заявку вы соглашаетесь с нашей <a href="#TODO" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
+            <p class="text text--white text--sm">Обработка заявки осущетствляется в течение рабочего дня. Отправляя заявку вы соглашаетесь с нашей <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
           </div>
         </div>
       </div>
@@ -99,7 +101,7 @@
 
   {% with ''|center:structure.images_count as range %}
   {% for i in range %}
-  <img src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
+  <img src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
   {% endfor %}
   {% endwith %}
   
