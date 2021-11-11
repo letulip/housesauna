@@ -11,8 +11,11 @@ from .forms import SubmitFormHandler
 
 import telepot
 
-my_token = '1847478305:AAHYKtvf6Pk196xFpaskKD6n1rlZbHX3ZcY'
-my_chat_id = -1001556856215
+my_token = None
+# TODO read form file
+
+my_chat_id = None
+# TODO read form file
 
 def send_telegram(msg, chat_id=my_chat_id, token=my_token):
     """
