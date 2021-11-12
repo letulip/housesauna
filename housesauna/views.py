@@ -9,13 +9,19 @@ from houses.models import House, Sauna
 from itertools import chain
 from .forms import SubmitFormHandler
 
+import os
+
 import telepot
 
 my_token = None
 # TODO read form file
+with open('./housesauna/token.txt') as f:
+  my_token = f.read().strip()
 
 my_chat_id = None
 # TODO read form file
+with open('./housesauna/chat.txt') as f:
+  my_chat_id = f.read().strip()
 
 def send_telegram(msg, chat_id=my_chat_id, token=my_token):
     """
