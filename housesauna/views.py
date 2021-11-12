@@ -14,12 +14,10 @@ import os
 import telepot
 
 my_token = None
-# TODO read form file
 with open('./housesauna/token.txt') as f:
   my_token = f.read().strip()
 
 my_chat_id = None
-# TODO read form file
 with open('./housesauna/chat.txt') as f:
   my_chat_id = f.read().strip()
 
