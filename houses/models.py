@@ -10,7 +10,7 @@ class House(models.Model):
   dir_name = 'Построенные дома'
   class_name = 'House'
   full_name = models.CharField(max_length=200, unique=True)
-  slug = AutoSlugField(populate_from='full_name', default='SOME SLUG')
+  slug = models.SlugField(max_length=300, unique=True)
   short_name = models.CharField(max_length=200, unique=True)
   title = models.CharField(max_length=200)
   dimensions = models.CharField(max_length=15)
@@ -45,7 +45,7 @@ class Sauna(models.Model):
   dir_name = 'Построенные дома-бани'
   class_name = 'Sauna'
   full_name = models.CharField(max_length=200)
-  slug = AutoSlugField(populate_from='full_name', default='SOME SLUG')
+  slug = models.SlugField(max_length=300, unique=True)
   short_name = models.CharField(max_length=200)
   title = models.CharField(max_length=200)
   dimensions = models.CharField(max_length=15)
