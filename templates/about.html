@@ -1,4 +1,5 @@
 {% extends "common.html" %}
+{% load static %}
 
 {% block head %}
 
@@ -7,5 +8,151 @@
 {% block title %}Дом-Баня - О нас{% endblock %}
 
 {% block content %}
-<h1 class="heading heading--h1">О нас</h1>
+<section class="promo promo--about">
+  <article class="promo__wrapper ">
+      <p class="promo__text text text--white text--uppercase">
+        Наша команда 
+      </p> 
+
+      <h1 class="promo__heading heading heading--h1 heading--uppercase heading--white">
+        Мы строим качественно.
+      </h1>
+      <p class="promo__text text text--white">
+        Ценность компании — это наши сотрудники, их знания и опыт. 
+      </p>
+  </article>
+</section>
+
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <p class="text text--left text--sm">
+        <span class="text--big text--left text--float-right">Ответственное отношение к поставленной задаче, 
+        соблюдение оговоренных сроков — мы ценим свою профессиональную репутацию 
+        и предлагаем клиентам только лучшее.<br></span>
+        Выбирая строительного подрядчика, необходимо иметь четкое представление об уровне квалификации нанимаемых специалистов, их опыте работы с клееным брусом, наличии специального оборудования. Для человека, не разбирающегося в вопросах строительства, достаточно сложно решить данную задачу.
+        <br>
+        Мы предлагаем каждому потенциальному заказчику посетить наш офис, пообщаться со специалистами, занимающимися разработкой проекта и его реализацией. Помимо консультаций по интересующим вопросам, вы сможете посетить стройплощадку и оценить уровень мастерства наших строителей, познакомится на практике с особенностями технологического процесса. Все работы ведутся в полном соответствии с действующими СНиП, что выгодно отличает нас от низкоквалифицированных строительных бригад.
+        <br>
+        Мы уделяем повышенное внимание выбору задействованных в процессе строительства материалов, поскольку от этого напрямую зависят эксплуатационные качества возводимого здания, стоимость и продолжительность строительства.
+      </p>
+    </div>
+
+    <div class="grid__element grid__element--wide">
+      <p class="text">
+        <span class="text--big">Выбрав нас в качестве строительного подрядчика вы гарантированно получите качественный результат.</span>
+      </p>
+    </div>
+  </article>
+</section>
+
+<div class="hr"></div>
+
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="Специалист по строительству Иван Зорин" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Иван Зорин</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="Руководитель проектного отдела Игорь Викторович" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Игорь Викторович</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Руководитель проектного отдела</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="Специалист по строительству Степан Асланов" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Степан Асланов</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
+    </div>
+    <div class="grid__element">
+      <picture class="img img--round">
+        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="Прораб Павел Серафимович" class="img__img img__img--team">
+      </picture>
+      <h5 class="heading heading--h5 heading--paddingBottom-5">Павел Серафимович</h5>
+      <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
+    </div>
+  </article>
+</section>
+
+
+<div class="hr"></div>
+
+<section class="content-slider">
+  <h2 class="heading heading--h2 heading--bold heading--center">
+    Отзывы наших клиентов
+  </h2>
+  <div class="content-slider__control content-slider__control--quote content-slider__control-left"></div>
+  <div class="content-slider__control content-slider__control--quote content-slider__control-right"></div>
+  <div class="content-slider__wrapper">
+
+    <article class="content-slider__item quote">
+      <div class="quote__wrapper">
+        <h3 class="heading heading--h3">Маргарита Гибадуллина</h3>
+        <p class="quote__subHeading">
+          Заслуженная артистка России и её дом-баня из клееного бруса.
+        </p>
+        <p class="content-slider__text text text--sm">
+          Главное человек! Это очень редкие качества для строителя: пунктуальный, документальный, чистоплотный, всё в срок.<br>
+          <b>Просто всем рекомендую, просто это большая редкость в наше время!</b>
+        </p>
+      </div>
+      <div class="quote__videoWrapper">
+        <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/ALiJ2Q5Rsn8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </article>
+    <article class="content-slider__item quote">
+      <div class="quote__wrapper">
+        <h3 class="heading heading--h3">Корней Мартыщук</h3>
+        <p class="quote__subHeading">
+          Руководитель организации и его дом из клееного бруса.
+        </p>
+        <p class="content-slider__text text text--sm">
+          Мы удовлетворены работой, профессионализмом ребят, тем как они решали вопросы и все главные вопросы были решены.<br>
+          <b>Через два года обязательно обратимся за строительством бани.</b>
+        </p>
+      </div>
+      <div class="quote__videoWrapper">
+        <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/i_1qkI2uSBA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </article>
+    <article class="content-slider__item quote">
+      <div class="quote__wrapper">
+        <h3 class="heading heading--h3">Анатолий Александрович</h3>
+        <p class="quote__subHeading">
+          Руководитель организации и его дом-баня из клееного бруса.
+        </p>
+        <p class="content-slider__text text text--sm">
+          Сделали быстро, качественно. Я сам занимаюсь деревом, сделали всё грамотно. Всем советую.<br>
+          <b>Баня получилась - супер!</b>
+        </p>
+      </div>
+      <div class="quote__videoWrapper">
+        <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/zM0cLf1XyHk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </article>
+    <article class="content-slider__item quote">
+      <div class="quote__wrapper">
+        <h3 class="heading heading--h3">Владимир Васильевич</h3>
+        <p class="quote__subHeading">
+          Руководитель организации и его баня из клееного бруса.
+        </p>
+        <p class="content-slider__text text text--sm">
+          Вы очень удивительные люди, как ни странно, я вот таких ещё работников как вы, не встречал.<br>
+          <b>Всё только на отлично!</b>
+        </p>
+      </div>
+      <div class="quote__videoWrapper">
+        <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/GUGF6y4XhVI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </article>
+  </div>
+
+</section>
 {% endblock content %}

@@ -3,7 +3,6 @@ import datetime
 from django.utils import timezone
 from django.db import models
 from data import data
-from autoslug import AutoSlugField
 
 # Create your models here.
 class House(models.Model):
