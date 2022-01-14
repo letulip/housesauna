@@ -38,6 +38,9 @@ class House(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
+    class Meta():
+        ordering = ['pub_date']
+
 
 class Sauna(models.Model):
     dir_name = 'Построенные дома-бани'
@@ -63,7 +66,7 @@ class Sauna(models.Model):
 
     '''
     Sauna object example:
-    full_name='house-sauna-130-meters', short_name='house-sauna-130', title='Дом-Баня из клееного бруса', dimensions='9,0x12,0', square='130', square1='', square2='', cost='7 150 000', video_url='YW8b3dcT6_A', cover='', description1='', description2='', complex='', construction='ДВА месяца', brus='Ш 130/ В 140', images_count=20, pub_date=timezone.now()
+    full_name='house-sauna-130-meters', short_name='house-sauna-130', title='Дом Баня из клееного бруса', dimensions='9,0x12,0', square='130', square1='', square2='', cost='7 150 000', video_url='YW8b3dcT6_A', cover='', description1='', description2='', complex='', construction='ДВА месяца', brus='Ш 130/ В 140', images_count=20, pub_date=timezone.now()
     '''
 
     def __str__(self) -> str:
@@ -72,3 +75,6 @@ class Sauna(models.Model):
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    class Meta():
+        ordering = ['-pub_date']
