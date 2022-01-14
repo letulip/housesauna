@@ -39,7 +39,7 @@ class House(models.Model):
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
     class Meta():
-        ordering = ['pub_date']
+        ordering = ['-pub_date']
 
 
 class Sauna(models.Model):

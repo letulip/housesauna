@@ -19,7 +19,9 @@ class IndexView(generic.ListView):
     context_object_name = 'recent_projects'
 
     def get_object_list(self, model: models.Model) -> models.Model:
-        return model.objects.filter(pub_date__lte=timezone.now())[:LAST_TO_VIEW]
+        return model.objects.filter(
+            pub_date__lte=timezone.now()
+        )[:LAST_TO_VIEW]
 
     def get_queryset(self) -> list:
         chain_list = list(chain(

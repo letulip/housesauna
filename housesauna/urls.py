@@ -31,6 +31,9 @@ urlpatterns = [
     path('design/', views.design, name='design'),
     path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),
-    path('projects/', include(('houses.urls', 'houses'), namespace='houses')),
+    path(
+        'projects/',
+        include(('houses.urls', 'houses'), namespace='houses')
+    ),
     path('submit/', views.submit_form, name='submit'),
 ]
