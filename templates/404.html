@@ -7,10 +7,17 @@
 {% block title %}Дом Баня - О нас{% endblock %}
 
 {% block content %}
-<h1 class="heading heading--h1">Страница не найдена</h1>
-<p class="text">
-  Может быть вы ошиблись в адресе, предлагаем вернуться на главную страницу и попробовать снова.<br>
-  {{ exception }}
-  <br>
-  <a href="/" class="text__link">На главную</a></p>
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide grid__element--marginBottom-medium">
+      <h1 class="heading heading--h1">Страница не найдена</h1>
+      <p class="text">
+        Может быть вы ошиблись в адресе, предлагаем вернуться на главную страницу и попробовать снова.<br>
+        {{ exception }}
+        <br>
+        <a href="/" class="text__link">На главную</a>
+      </p>
+    </div>
+  </article>
+</section>
 {% endblock content %}
