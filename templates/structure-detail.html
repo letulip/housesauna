@@ -108,3 +108,7 @@
 </section>
 
 {% endblock content %}
+
+{% block scripts %}
+<scriptnonce="{{ CSP_NONCE }}" src="{% static '/js/gallery/gallery.js' %}"></script>
+{% endblock scripts %}
