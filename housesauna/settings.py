@@ -170,7 +170,7 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'ivladimirskiy@ya.ru'
 EMAIL_HOST_PASSWORD = None
 with open('./housesauna/smtp.txt') as f:
-  EMAIL_HOST_PASSWORD = f.read().strip()
+    EMAIL_HOST_PASSWORD = f.read().strip()
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'noreply@domizkleenogobrusa.ru'

@@ -43,13 +43,13 @@ class IndexView(generic.ListView):
 
 
 # Legacy common index function
-def index(request: HttpRequest):
+def index(request: HttpRequest) -> render:
     house_count = House.objects.all().count()
-    houses_list = House.objects.order_by('-pub_date')
+    houses_list = House.objects.all()
     houses_dir_name = House.objects.first().dir_name
 
     sauna_count = Sauna.objects.all().count()
-    saunas_list = Sauna.objects.order_by('-pub_date')
+    saunas_list = Sauna.objects.all()
     saunas_dir_name = Sauna.objects.first().dir_name
 
     context = {

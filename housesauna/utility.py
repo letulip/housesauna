@@ -9,7 +9,7 @@ with open('./housesauna/chat.txt') as f:
     my_chat_id = f.read().strip()
 
 
-def send_telegram(msg) -> None:
+def send_telegram(msg: str) -> None:
     """
     Send a message to a telegram user or group specified on chatId
     chat_id must be a number!

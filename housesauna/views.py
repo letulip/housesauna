@@ -47,17 +47,11 @@ def submit_form(request: HttpRequest) -> render:
             form_phone = form.cleaned_data['phone']
             form_page = form.cleaned_data['form_link']
             form_object = form.cleaned_data['form_name']
-            subject = '%s хочет консультацию' % (form_client)
-            message = '''%s хочет консультацию по %s.
-            Телефон: %s
-            Email: %s
-            Страница объекта: %s''' % (
-                form_client,
-                form_object,
-                form_phone,
-                form_email,
-                form_page
-            )
+            subject = f'{form_client} хочет консультацию'
+            message = f'''{form_client} хочет консультацию по {form_object}.
+            Телефон: {form_phone}
+            Email: {form_email}
+            Страница объекта: {form_page}'''
             sender = 'noreply@domizkleenogobrusa.ru'
 
             recipients = ['ivladimirskiy@ya.ru']
@@ -96,13 +90,13 @@ def notfound(request: HttpRequest) -> render:
 
 def handler404(request: HttpRequest, exception) -> render:
     context = {
-        'exeption': exception,
+        'exception': exception,
     }
     return render(request, '404.html', context)
 
 
 def handler500(request: HttpRequest, exception) -> render:
     context = {
-        'exeption': exception,
+        'exception': exception,
     }
     return render(request, '500.html', context)
