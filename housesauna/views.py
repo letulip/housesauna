@@ -36,39 +36,40 @@ class IndexView(generic.ListView):
         return result_list
 
 
-def submit_form(request: HttpRequest):
-    if request.method == 'POST':
+def submit_form(request: HttpRequest) -> render:
+
+    if request.POST:
         form = SubmitFormHandler(request.POST)
 
-    if form.is_valid():
-        form_email = form.cleaned_data['email']
-        form_client = form.cleaned_data['name']
-        form_phone = form.cleaned_data['phone']
-        form_page = form.cleaned_data['form_link']
-        form_object = form.cleaned_data['form_name']
-        subject = '%s хочет консультацию' % (form_client)
-        message = '''%s хочет консультацию по %s.
-        Телефон: %s
-        Email: %s
-        Страница объекта: %s''' % (
-            form_client,
-            form_object,
-            form_phone,
-            form_email,
-            form_page
-        )
-        sender = 'noreply@domizkleenogobrusa.ru'
+        if form.is_valid():
+            form_email = form.cleaned_data['email']
+            form_client = form.cleaned_data['name']
+            form_phone = form.cleaned_data['phone']
+            form_page = form.cleaned_data['form_link']
+            form_object = form.cleaned_data['form_name']
+            subject = '%s хочет консультацию' % (form_client)
+            message = '''%s хочет консультацию по %s.
+            Телефон: %s
+            Email: %s
+            Страница объекта: %s''' % (
+                form_client,
+                form_object,
+                form_phone,
+                form_email,
+                form_page
+            )
+            sender = 'noreply@domizkleenogobrusa.ru'
 
-        recipients = ['ivladimirskiy@ya.ru']
-        send_mail(
-            subject,
-            message,
-            sender,
-            recipients
-        )
-        send_telegram(message)
+            recipients = ['ivladimirskiy@ya.ru']
+            send_mail(
+                subject,
+                message,
+                sender,
+                recipients
+            )
+            send_telegram(message)
 
-        return HttpResponseRedirect(request.path_info)
+            return HttpResponseRedirect(request.path_info)
 
     return render(request, 'submit.html')
 
