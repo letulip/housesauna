@@ -72,7 +72,7 @@
     </article>
     <article class="grid__article grid__article--three more">
       {% for house in houses_list %}
-        <a class="preview grid__element--marginBottom-medium" href="/projects/houses/{{house.full_name}}/">
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:house-detail' house.full_name %}">
           <picture class="img img--preview">
             <img src="{% static 'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
           </picture>
@@ -97,7 +97,7 @@
     </article>
     <article class="grid__article grid__article--three more">
       {% for sauna in saunas_list %}
-        <a class="preview grid__element--marginBottom-medium" href="/projects/saunas/{{sauna.full_name}}/">
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:sauna-detail' sauna.full_name %}">
           <picture class="img img--preview">
             <img src="{% static 'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
           </picture>
@@ -122,7 +122,7 @@
     </article>
     <article class="grid__article grid__article--three">
       {% for project in projects_list %}
-        <a class="preview grid__element--marginBottom-medium" href="/projects/{{project.full_name}}/">
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:project-detail' project.slug %}">
           <picture class="img img--preview">
             <img src="{% static '../'|add:project.image.url|add:'' %}" alt="" class="img__img preview__img">
           </picture>

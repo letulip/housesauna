@@ -77,7 +77,7 @@ class ProjectDetailView(generic.DetailView):
         self.project = get_object_or_404(
             Project, slug=self.kwargs.get('slug')
         )
-        return Project.objects.filter(slug=self.project)
+        return Project.objects.filter(full_name=self.project)
 
 
 # Legacy function for OLD URLs support
