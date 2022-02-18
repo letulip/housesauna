@@ -28,8 +28,24 @@ class House(models.Model):
 
     '''
     House object example:
-    full_name='house-122-meters', short_name='house-122', title='Дом из клееного бруса для постоянного проживания', dimensions='9,2x8,6', square='122', square1='71,7', square2='50,6', cost='6 000 000', video_url='bU_CYEp0y5M', cover='', description1='', description2='', complex='', construction='ДВА месяца', brus='Ш 174/ В 140', images_count=7, pub_date=timezone.now()
-    ''' 
+    full_name='house-122-meters',
+    short_name='house-122',
+    title='Дом из клееного бруса для постоянного проживания',
+    dimensions='9,2x8,6',
+    square='122',
+    square1='71,7',
+    square2='50,6',
+    cost='6 000 000',
+    video_url='bU_CYEp0y5M',
+    cover='',
+    description1='',
+    description2='',
+    complex='',
+    construction='ДВА месяца',
+    brus='Ш 174/ В 140',
+    images_count=7,
+    pub_date=timezone.now()
+    '''
 
     def __str__(self) -> str:
         return self.full_name
@@ -66,15 +82,47 @@ class Sauna(models.Model):
 
     '''
     Sauna object example:
-    full_name='house-sauna-130-meters', short_name='house-sauna-130', title='Дом Баня из клееного бруса', dimensions='9,0x12,0', square='130', square1='', square2='', cost='7 150 000', video_url='YW8b3dcT6_A', cover='', description1='', description2='', complex='', construction='ДВА месяца', brus='Ш 130/ В 140', images_count=20, pub_date=timezone.now()
+    full_name='house-sauna-130-meters',
+    short_name='house-sauna-130',
+    title='Дом Баня из клееного бруса',
+    dimensions='9,0x12,0',
+    square='130',
+    square1='',
+    square2='',
+    cost='7 150 000',
+    video_url='YW8b3dcT6_A',
+    cover='',
+    description1='',
+    description2='',
+    complex='',
+    construction='ДВА месяца',
+    brus='Ш 130/ В 140',
+    images_count=20,
+    pub_date=timezone.now()
     '''
 
     def __str__(self) -> str:
         return self.full_name
 
-    def was_published_recently(self):
+    def was_published_recently(self) -> bool:
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
     class Meta():
         ordering = ['-pub_date']
+
+
+class Project(models.Model):
+    full_name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=300, unique=True)
+    short_name = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    dimensions = models.CharField(max_length=15)
+    square = models.CharField(max_length=15)
+    image = models.ImageField(
+        'Превью проекта',
+        upload_to='projects/',
+    )
+
+    def __str__(self) -> str:
+        return self.full_name
