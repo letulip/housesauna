@@ -7,7 +7,9 @@
 
 {% block title %}Дом Баня - Наши проекты{% endblock %}
 
-{% block content %}<section class="content-slider content-slider--top">
+{% block content %}
+
+<section class="content-slider content-slider--top">
   <div class="content-slider__control content-slider__control-left"></div>
   <div class="content-slider__control content-slider__control-right"></div>
   <div class="content-slider__wrapper content-slider__wrapper--top">
@@ -61,56 +63,57 @@
 </section>
 
 
-  {% if houses_list %}
-    <section id="houses" class="grid">
-      <article class="grid__article">
-        <div class="grid__element grid__element--wide">
-          <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{houses_dir_name}}</h2>
-        </div>
-      </article>
-      <article class="grid__article grid__article--three more">
-        {% for house in houses_list %}
-          <a class="preview grid__element--marginBottom-medium" href="/projects/houses/{{house.full_name}}/">
-            <picture class="img img--preview">
-              <img src="{% static 'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
-            </picture>
-            <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{house.title}} {{house.square}}м<sup class="text__sup">2</sup></h5>
-            <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{house.dimensions}}м</b></p>
-            <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
-            <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
-          </a>
-        {% endfor %}
-      </article>
-    </section>
+{% if houses_list %}
+  <section id="houses" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{houses_dir_name}}</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three more">
+      {% for house in houses_list %}
+        <a class="preview grid__element--marginBottom-medium" href="/projects/houses/{{house.full_name}}/">
+          <picture class="img img--preview">
+            <img src="{% static 'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
+          </picture>
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{house.title}} {{house.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{house.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
+        </a>
+      {% endfor %}
+    </article>
+  </section>
 
-    <div class="hr"></div>
-  {% endif %}
+  <div class="hr"></div>
+{% endif %}
 
-  {% if saunas_list %}
-    <section id="saunas" class="grid">
-      <article class="grid__article">
-        <div class="grid__element grid__element--wide">
-          <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{saunas_dir_name}}</h2>
-        </div>
-      </article>
-      <article class="grid__article grid__article--three more">
-        {% for sauna in saunas_list %}
-          <a class="preview grid__element--marginBottom-medium" href="/projects/saunas/{{sauna.full_name}}/">
-            <picture class="img img--preview">
-              <img src="{% static 'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
-            </picture>
-            <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{sauna.title}} {{sauna.square}}м<sup class="text__sup">2</sup></h5>
-            <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{sauna.dimensions}}м</b></p>
-            <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
-            <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
-          </a>
-        {% endfor %}
-      </article>
-    </section>
+{% if saunas_list %}
+  <section id="saunas" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{saunas_dir_name}}</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three more">
+      {% for sauna in saunas_list %}
+        <a class="preview grid__element--marginBottom-medium" href="/projects/saunas/{{sauna.full_name}}/">
+          <picture class="img img--preview">
+            <img src="{% static 'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
+          </picture>
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{sauna.title}} {{sauna.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{sauna.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
+        </a>
+      {% endfor %}
+    </article>
+  </section>
 
-    <div class="hr"></div>
-  {% endif %}
+  <div class="hr"></div>
+{% endif %}
 
+{% if projects_list %}
   <section id="projects-small" class="grid">
     <article class="grid__article">
       <div class="grid__element grid__element--wide">
@@ -118,32 +121,42 @@
       </div>
     </article>
     <article class="grid__article grid__article--three">
+      {% for project in projects_list %}
+        <a class="preview grid__element--marginBottom-medium" href="/projects/{{project.full_name}}/">
+          <picture class="img img--preview">
+            <img src="{% static '../'|add:project.image.url|add:'' %}" alt="" class="img__img preview__img">
+          </picture>
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}} {{project.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{project.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
+        </a>
+      {% endfor %}
     </article>
   </section>
+{% endif %}
+<!-- <div class="hr"></div>
 
-  <div class="hr"></div>
+<section id="projects" class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты домов и бань от&nbsp;100м²&nbsp;до&nbsp;200м²</h2>
+    </div>
+  </article>
+  <article class="grid__article grid__article--three">
+  </article>
+</section>
 
-  <section id="projects" class="grid">
-    <article class="grid__article">
-      <div class="grid__element grid__element--wide">
-        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты домов и бань от&nbsp;100м²&nbsp;до&nbsp;200м²</h2>
-      </div>
-    </article>
-    <article class="grid__article grid__article--three">
-    </article>
-  </section>
+<div class="hr"></div>
 
-  <div class="hr"></div>
-
-  <section id="projects-big" class="grid">
-    <article class="grid__article">
-      <div class="grid__element grid__element--wide">
-        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты больших домов и бань от&nbsp;200м²</h2>
-      </div>
-    </article>
-    <article class="grid__article grid__article--three">
-    </article>
-  </section>
+<section id="projects-big" class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты больших домов и бань от&nbsp;200м²</h2>
+    </div>
+  </article>
+  <article class="grid__article grid__article--three">
+  </article>
+</section> -->
 
 {% endblock content %}
 

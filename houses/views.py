@@ -1,11 +1,10 @@
 from django.http.response import Http404
-from django.shortcuts import render, redirect
-from django.http import HttpRequest
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.utils import timezone
-from .models import House, Sauna
 from django.db import models
 from itertools import chain
+from .models import House, Sauna, Project
 
 
 # Create your views here.
@@ -26,7 +25,8 @@ class IndexView(generic.ListView):
         result_list = list(
             chain(
                 self.get_object_list(House),
-                self.get_object_list(Sauna)
+                self.get_object_list(Sauna),
+                self.get_object_list(Project)
             )
         )
         return result_list
@@ -39,28 +39,9 @@ class IndexView(generic.ListView):
         context['sauna_count'] = self.get_object_count(Sauna)
         context['saunas_dir_name'] = self.get_object_dir_name(Sauna)
         context['saunas_list'] = self.get_object_list(Sauna)
+        context['projects_count'] = self.get_object_count(Project)
+        context['projects_list'] = self.get_object_list(Project)
         return context
-
-
-# Legacy common index function
-def index(request: HttpRequest) -> render:
-    house_count = House.objects.all().count()
-    houses_list = House.objects.all()
-    houses_dir_name = House.objects.first().dir_name
-
-    sauna_count = Sauna.objects.all().count()
-    saunas_list = Sauna.objects.all()
-    saunas_dir_name = Sauna.objects.first().dir_name
-
-    context = {
-        'house_count': house_count,
-        'sauna_count': sauna_count,
-        'houses_list': houses_list,
-        'saunas_list': saunas_list,
-        'houses_dir_name': houses_dir_name,
-        'saunas_dir_name': saunas_dir_name,
-    }
-    return render(request, 'structure-index.html', context)
 
 
 class HouseDetailView(generic.DetailView):
@@ -68,13 +49,11 @@ class HouseDetailView(generic.DetailView):
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
 
-    def get_object(self, queryset=None):
-        try:
-            return House.objects.filter(
-                pub_date__lte=timezone.now()
-            ).get(full_name=self.kwargs.get('slug'))
-        except House.DoesNotExist:
-            raise Http404()
+    def get_queryset(self):
+        self.house = get_object_or_404(
+            House, full_name=self.kwargs.get('slug')
+        )
+        return House.objects.filter(slug=self.house)
 
 
 class SaunaDetailView(generic.DetailView):
@@ -82,18 +61,28 @@ class SaunaDetailView(generic.DetailView):
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
 
-    def get_object(self, queryset=None):
-        try:
-            return Sauna.objects.filter(
-                pub_date__lte=timezone.now()
-            ).get(full_name=self.kwargs.get('slug'))
-        except Sauna.DoesNotExist:
-            raise Http404()
+    def get_queryset(self):
+        self.sauna = get_object_or_404(
+            Sauna, full_name=self.kwargs.get('slug')
+        )
+        return Sauna.objects.filter(slug=self.sauna)
 
 
-# Legacy common detail function
-def detail(request: HttpRequest, structure_name: str) -> render:
-    house_exists = None
+class ProjectDetailView(generic.DetailView):
+    model = Project
+    template_name = 'project-detail.html'
+    context_object_name = 'project'
+
+    def get_queryset(self):
+        self.project = get_object_or_404(
+            Project, slug=self.kwargs.get('slug')
+        )
+        return Project.objects.filter(slug=self.project)
+
+
+# Legacy function for OLD URLs support
+def detail(request, structure_name):
+    house_exists = ''
 
     try:
         House.objects.get(full_name=structure_name)
@@ -102,7 +91,7 @@ def detail(request: HttpRequest, structure_name: str) -> render:
     else:
         house_exists = True
 
-    sauna_exists = None
+    sauna_exists = ''
 
     try:
         Sauna.objects.get(full_name=structure_name)

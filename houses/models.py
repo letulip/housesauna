@@ -123,6 +123,10 @@ class Project(models.Model):
         'Превью проекта',
         upload_to='projects/',
     )
+    pub_date = models.DateTimeField('date published')
 
     def __str__(self) -> str:
         return self.full_name
+
+    class Meta():
+        ordering = ['square']

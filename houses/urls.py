@@ -13,6 +13,11 @@ urlpatterns = [
         name='detail'
     ),
     path(
+        'projects/<slug:slug>/',
+        views.ProjectDetailView.as_view(),
+        name='project-detail'
+    ),
+    path(
         'houses/<slug:slug>/',
         views.HouseDetailView.as_view(),
         name='house-detail'
