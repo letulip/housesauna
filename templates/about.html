@@ -1,5 +1,6 @@
 {% extends "common.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block head %}
 
@@ -51,30 +52,46 @@
 <section class="grid">
   <article class="grid__article">
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="Специалист по строительству Иван Зорин" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/ivan-zorin-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Иван Зорин" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Иван Зорин</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="Руководитель проектного отдела Игорь Викторович" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/igor-victor-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Игорь Викторович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Игорь Викторович</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Руководитель проектного отдела</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="Специалист по строительству Степан Асланов" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/stepan-aslan-round.jpeg' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Степан Асланов" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Степан Асланов</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="Прораб Павел Серафимович" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/pavel-seraf-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Павел Серафимович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Павел Серафимович</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
     </div>

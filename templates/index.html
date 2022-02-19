@@ -1,5 +1,6 @@
 {% extends "common.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %} Дом Баня - Добро пожаловать!{% endblock %}
 
@@ -32,36 +33,52 @@
       <p class="text text--center">Самая большая ценность &mdash; это люди.<br>Мы строим качественно.</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/ivan-zorin-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Иван Зорин" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Иван Зорин</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/igor-victor-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Игорь Викторович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Игорь Викторович</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Проектировщик</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/stepan-aslan-round.jpeg' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Степан Асланов" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Степан Асланов</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/pavel-seraf-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Павел Серафимович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Павел Серафимович</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
@@ -119,9 +136,16 @@
       <!-- <div class="grid__element"> -->
       {% for project in recent_projects %}
         <a class="preview" href="/projects/{{project.full_name}}">
-          <picture class="img img--preview">
+          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
+            {% thumbnail path "357x240" crop="center" upscale=True as im %}
+              <picture class="img img--preview">
+                <img src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img">
+              </picture>
+            {% endthumbnail %}
+          {% endwith %}
+          <!-- <picture class="img img--preview">
             <img src="{% static 'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
-          </picture>
+          </picture> -->
           <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}}</h5>
           <p class="text text--sm text--nopadding">Размеры дома: <b>{{project.dimensions}}м</b></p>
           <p class="text text--sm text--nopadding">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
