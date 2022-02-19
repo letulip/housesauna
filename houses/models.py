@@ -118,7 +118,7 @@ class Project(models.Model):
     short_name = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     dimensions = models.CharField(max_length=15)
-    square = models.CharField(max_length=15)
+    square = models.FloatField(max_length=15)
     image = models.ImageField(
         'Превью проекта',
         upload_to='projects/',
