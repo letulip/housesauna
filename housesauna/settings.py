@@ -23,12 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = None
 with open('./housesauna/djsecret.txt') as f:
-  SECRET_KEY = f.read().strip()
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['127.0.0.1']
+
+# PROD SETTINGS
+# DEBUG = False
+# ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
 
 
 # Application definition
