@@ -148,6 +148,12 @@ CSP_SCRIPT_SRC = [
 ]
 CSP_SCRIPT_SRC_ELEM = [
   "'self'",
+  "https://api-maps.yandex.ru",
+  "https://yandex.st",
+  "https://yastatic.net",
+  "https://core-renderer-tiles.maps.yandex.net",
+  "https://yastatic.net",
+  "https://core-road-events-renderer.maps.yandex.net",
 ]
 CSP_FRAME_SRC = [
   "'self'",
@@ -164,6 +170,10 @@ CSP_IMG_SRC = [
   "'self'",
   "http://www.w3.org",
   "data:",
+  "https://api-maps.yandex.ru",
+  "https://core-renderer-tiles.maps.yandex.net",
+  "https://core-jams-rdr-cache.maps.yandex.net",
+  "https://core-road-events-renderer.maps.yandex.net",
 ]
 CSP_FONT_SRC = [
   "https://fonts.gstatic.com",
