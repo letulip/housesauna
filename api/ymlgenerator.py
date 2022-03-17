@@ -1,20 +1,21 @@
 from xml.dom import minidom
 from datetime import datetime as dt
+from django.db.models import QuerySet
 
 DOMAIN = 'https://domizkleenogobrusa.ru/'
 
 
-def generate_offer_id(category, id):
+def generate_offer_id(category: str, id: int) -> str:
     prefix = 1000 if category == 'House' else 2000
     new_id = prefix + id
     return new_id
 
 
-def generate_offer_price(price):
+def generate_offer_price(price: str) -> str:
     return price.replace(' ', '')
 
 
-def generate_yml(queryset):
+def generate_yml(structures: QuerySet) -> None:
     root = minidom.Document()
 
     date = dt.now().strftime('%Y-%m-%d %H:%M')
@@ -59,7 +60,7 @@ def generate_yml(queryset):
 
     offers = root.createElement('offers')
 
-    for structure in queryset:
+    for structure in structures:
         offer = root.createElement('offer')
         offer_id = generate_offer_id(structure.class_name, structure.id)
         offer.setAttribute('id', f'{offer_id}')
@@ -128,10 +129,7 @@ def generate_yml(queryset):
     xml_root.appendChild(shop)
 
     xml_str = root.toprettyxml(indent='\t', newl='\n')
-    # xml_str = root.toprettyxml(encoding='utf-8')
     save_path_file = 'yandex.yml'
 
     with open(save_path_file, 'w') as f:
         f.write(xml_str)
-
-# generate_yml(get_queryset())

@@ -74,7 +74,3 @@ class StructureSerializer(serializers.ModelSerializer):
 
     def get_param(self, obj):
         return f'Брус сечение: {obj.brus}'
-
-
-class SaunaSerializer(serializers.ModelSerializer):
-    pass
