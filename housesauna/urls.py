@@ -17,14 +17,24 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from rest_framework import routers
+from api.views import StructuresViewSet
 from . import views
 
 handler404 = views.handler404
+
+router = routers.DefaultRouter()
+router.register(
+    r'api/v1/structures',
+    StructuresViewSet,
+    basename='StructuresViewSet'
+)
 
 urlpatterns = [
     path('saunaman/', admin.site.urls),
     # path('', views.index, name='index'),
     path('', views.IndexView.as_view(), name='index'),
+    path('', include(router.urls)),
     path('objects-yml/', views.ObjectsYMLView.as_view(), name='objectsyml'),
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
