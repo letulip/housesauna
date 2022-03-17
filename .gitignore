@@ -5,5 +5,7 @@ dist
 data.py
 db.sqlite3
 *.txt
+*.xml
+*.yml
 
 media/cache/

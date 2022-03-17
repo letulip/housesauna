@@ -1,8 +1,10 @@
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
 from django.http import HttpRequest
 from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
+from django.core import serializers
+from django.core.files import File
 from django.core.mail import send_mail
 from itertools import chain
 from django.db import models
@@ -34,6 +36,34 @@ class IndexView(generic.ListView):
             reverse=True
         )[:LAST_TO_VIEW]
         return result_list
+
+
+class ObjectsYMLView(generic.View):
+    def get_object_list(self, model: models.Model) -> models.Model:
+        return model.objects.filter(
+            pub_date__lte=timezone.now()
+        )
+
+    def export_to_xml(self) -> None:
+        chain_list = list(chain(
+            self.get_object_list(House),
+            self.get_object_list(Sauna)
+        ))
+        result_list = sorted(
+            chain_list,
+            key=lambda instance: instance.pub_date,
+            reverse=True
+        )
+        data = serializers.serialize('xml', result_list)
+        f = open('catalog.xml', 'w')
+        myfile = File(f)
+        myfile.write(data)
+        myfile.close()
+        print('Done')
+        return result_list
+
+    def get(self, request):
+        return HttpResponse(self.export_to_xml())
 
 
 def submit_form(request: HttpRequest) -> render:

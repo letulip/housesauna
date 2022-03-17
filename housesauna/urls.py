@@ -25,6 +25,7 @@ urlpatterns = [
     path('saunaman/', admin.site.urls),
     # path('', views.index, name='index'),
     path('', views.IndexView.as_view(), name='index'),
+    path('objects-yml/', views.ObjectsYMLView.as_view(), name='objectsyml'),
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
     path('design/', views.design, name='design'),
