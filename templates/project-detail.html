@@ -55,22 +55,22 @@
     <article class="grid__article">
       <div class="grid__element grid__element--wide">
         <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Хочу такую Дом-Баню</h2>
-        <form action="/submit/" class="form form--house" method="POST">
+        <form action="/submit/" class="form form--wide" method="POST">
           <label for="" class="form__label">
-            <input type="email" name="email" class="form__input" required>
-            <span class="form__placeholder">Ваш email</span>
+            <input type="email" name="email" class="form__input form__input--dark" required>
+            <span class="form__placeholder form__placeholder--dark">Ваш email</span>
           </label>
           <label for="" class="form__label">
-            <input type="text" name="name" class="form__input" required>
-            <span class="form__placeholder">Ваше имя</span>
+            <input type="text" name="name" class="form__input form__input--dark" required>
+            <span class="form__placeholder form__placeholder--dark">Ваше имя</span>
           </label>
           <label for="" class="form__label">
-            <input type="tel" name="phone" class="form__input" required>
-            <span class="form__placeholder">Ваш телефон</span>
+            <input type="tel" name="phone" class="form__input form__input--dark" required>
+            <span class="form__placeholder form__placeholder--dark">Ваш телефон</span>
           </label>
           <input type="hidden" name="form_name" value="{{project.title}} {{project.square}}м">
           <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
-          <button type="submit" class="form__submit button button--big">Позвоните мне</button>
+          <button type="submit" class="form__submit form__submit--dark form__submit--wide form__submit--center button button--big">Позвоните мне</button>
           {% csrf_token %}
         </form>
         <p class="text text--sm">Обработка заявки осущетствляется в течение рабочего дня.<br>Отправляя заявку вы соглашаетесь с нашей <a href="/policy/" class="text__link">политикой конфиденциальности</a>.</p>
