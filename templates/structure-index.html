@@ -86,7 +86,7 @@
           {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
-                <img src="{{ im.url }}" alt="{{house.title}}" class="img__img preview__img">
+                <img loading="lazy" src="{{ im.url }}" alt="{{house.title}}" class="img__img preview__img">
               </picture>
             {% endthumbnail %}
           {% endwith %}
@@ -115,7 +115,7 @@
           {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
-                <img src="{{ im.url }}" alt="{{sauna.title}}" class="img__img preview__img">
+                <img loading="lazy" src="{{ im.url }}" alt="{{sauna.title}}" class="img__img preview__img">
               </picture>
             {% endthumbnail %}
           {% endwith %}
@@ -170,7 +170,7 @@
           {% with 'http://'|add:request.get_host|add:project.image.url as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview img--previewProject">
-                <img src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img img__img--project">
+                <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img img__img--project">
               </picture>
             {% endthumbnail %}
           {% endwith %}

@@ -23,7 +23,7 @@
           #TODO short descriprion in model
         </p>
         <picture class="img">
-          <img src="{% static '../'|add:project.image.url|add:'' %}" alt="" class="img__img preview__img">
+          <img loading="lazy" src="{% static '../'|add:project.image.url|add:'' %}" alt="" class="img__img preview__img">
         </picture>
       </div>
     </article>

@@ -7,14 +7,18 @@
   <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' ; style-src 'self' 'unsafe-inline';"> -->
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
   <title>{% block title %}Дом Баня{% endblock %}</title>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %}">
   {% block head %}
   {% endblock head %}
-  <script nonce="{{ CSP_NONCE }}"  src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=3bc4a693-f065-47a8-bdd4-4c7fd4d23917" type="text/javascript"></script>
-  <script nonce="{{ CSP_NONCE }}"  src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
-  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/route-panel-control.js' %}" type="text/javascript"></script>
+  <!-- PRELOADS START -->
+  <link rel="preload" href="https://yastatic.net/s3/front-maps-static/maps-front-jsapi-v2-1/2.1.79-37/build/release/full-6341f0c1e121ed8c4cbf1c6d8dc350380d538a9a.js" as="script">
+  <link rel="preload" href="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=3bc4a693-f065-47a8-bdd4-4c7fd4d23917" as="script">
+  <link rel="preload" href="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript" as="script">
+  <link rel="preload" href="{% static 'js/route-panel-control.js' %}" as="script">
+  <!-- PRELOADS END -->
 </head>
 
 <body class="pageBody">
@@ -30,6 +34,9 @@
 
   {% include "footer.html" %}
 
+  <script nonce="{{ CSP_NONCE }}"  src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=3bc4a693-f065-47a8-bdd4-4c7fd4d23917" type="text/javascript"></script>
+  <script nonce="{{ CSP_NONCE }}"  src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>
+  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/route-panel-control.js' %}" type="text/javascript"></script>
   <script nonce="{{ CSP_NONCE }}" src="{% static 'js/burger/burger.js' %}"></script>
 
   {% block scripts %}

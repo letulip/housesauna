@@ -145,9 +145,14 @@ CSP_DEFAULT_SRC = ["'none'"]
 CSP_BASE_URI = ["'self'"]
 CSP_SCRIPT_SRC = [
   "'self'",
+  "'unsafe-inline'",
+  "https://api-maps.yandex.ru",
+  "https://yandex.st",
+  "https://yastatic.net",
 ]
 CSP_SCRIPT_SRC_ELEM = [
   "'self'",
+  "'unsafe-inline'",
   "https://api-maps.yandex.ru",
   "https://yandex.st",
   "https://yastatic.net",
@@ -157,6 +162,7 @@ CSP_SCRIPT_SRC_ELEM = [
 ]
 CSP_FRAME_SRC = [
   "'self'",
+  "'unsafe-inline'",
   "https://yandex.ru",
   "https://www.yandex.ru",
   "https://youtube.com",
