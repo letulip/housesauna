@@ -40,13 +40,6 @@
 
   {% include "footer.html" %}
   <!-- <script>
-    // const addRoutePanCtrl = (body) => {
-    //   let routePanCtrl = document.createElement(`script`);
-    //   routePanCtrl.type = `text/javascript`;
-    //   routePanCtrl.nonce = `{{ CSP_NONCE }}`;
-    //   routePanCtrl.src = `{% static 'js/route-panel-control.js' %}`;
-    //   body.appendChild(routePanCtrl);
-    // }
     setTimeout(() => {
       const body = document.querySelector(`body`);
       
@@ -63,9 +56,19 @@
       body.appendChild(yaStatic);
       
       setTimeout(() => {
-        addRoutePanCtrl(body);
-      }, 500);
+        ymaps.ready(window.mapsInit);
+      }, 1000);
     }, 2000);
+
+    // const getYaMap = () => {
+    //   const myMap = new ymaps.Map("map",{center: [30.325,59.935],zoom: 13});
+    //   ymaps.geocode("Санкт-Петербург, ул. Невский проспект, 28").then(function (res) {
+    //     var coord = res.geoObjects.get(0).geometry.getCoordinates();
+    //     var myPlacemark = new ymaps.Placemark(coord);
+    //     myMap.geoObjects.add(myPlacemark);
+    //     myMap.setCenter(coord);					
+    //   });
+    // };
   </script> -->
 
   
