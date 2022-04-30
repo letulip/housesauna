@@ -1,11 +1,12 @@
 {% extends "common.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block head %}
 
 {% endblock head%}
 
-{% block title %}Дом-Баня - О нас{% endblock %}
+{% block title %}Дом Баня - О нас{% endblock %}
 
 {% block content %}
 <section class="promo promo--about">
@@ -51,30 +52,46 @@
 <section class="grid">
   <article class="grid__article">
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="Специалист по строительству Иван Зорин" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/ivan-zorin-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Иван Зорин" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Иван Зорин</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="Руководитель проектного отдела Игорь Викторович" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/igor-victor-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Игорь Викторович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Игорь Викторович</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Руководитель проектного отдела</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="Специалист по строительству Степан Асланов" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/stepan-aslan-round.jpeg' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Степан Асланов" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Степан Асланов</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="Прораб Павел Серафимович" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/pavel-seraf-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Павел Серафимович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <h5 class="heading heading--h5 heading--paddingBottom-5">Павел Серафимович</h5>
       <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
     </div>
@@ -96,7 +113,7 @@
       <div class="quote__wrapper">
         <h3 class="heading heading--h3">Маргарита Гибадуллина</h3>
         <p class="quote__subHeading">
-          Заслуженная артистка России и её дом-баня из клееного бруса.
+          Заслуженная артистка России и её Дом Баня из клееного бруса.
         </p>
         <p class="content-slider__text text text--sm">
           Главное человек! Это очень редкие качества для строителя: пунктуальный, документальный, чистоплотный, всё в срок.<br>
@@ -126,7 +143,7 @@
       <div class="quote__wrapper">
         <h3 class="heading heading--h3">Анатолий Александрович</h3>
         <p class="quote__subHeading">
-          Руководитель организации и его дом-баня из клееного бруса.
+          Руководитель организации и его Дом Баня из клееного бруса.
         </p>
         <p class="content-slider__text text text--sm">
           Сделали быстро, качественно. Я сам занимаюсь деревом, сделали всё грамотно. Всем советую.<br>

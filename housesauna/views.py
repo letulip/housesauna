@@ -1,95 +1,132 @@
-from typing import Generic
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponse
+from django.http import HttpRequest
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.utils import timezone
 from django.views import generic
+from django.core import serializers
+from django.core.files import File
 from django.core.mail import send_mail
-from houses.models import House, Sauna
 from itertools import chain
+from django.db import models
+from houses.models import House, Sauna
 from .forms import SubmitFormHandler
+from .utility import send_telegram
 
-import os
+LAST_TO_VIEW = 6
 
-import telepot
-
-my_token = None
-with open('./housesauna/token.txt') as f:
-  my_token = f.read().strip()
-
-my_chat_id = None
-with open('./housesauna/chat.txt') as f:
-  my_chat_id = f.read().strip()
-
-def send_telegram(msg, chat_id=my_chat_id, token=my_token):
-    """
-    Send a message to a telegram user or group specified on chatId
-    chat_id must be a number!
-    """
-    print(msg)
-    bot = telepot.Bot(my_token)
-    bot.sendMessage(chat_id=chat_id, text=msg)
-    # info('message was sent')
 
 # Create your views here.
 class IndexView(generic.ListView):
-  template_name = 'index.html'
-  context_object_name = 'recent_projects'
-  
-  def get_object_list(self, model):
-    return model.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:6]
+    template_name = 'index.html'
+    context_object_name = 'recent_projects'
 
-  def get_queryset(self):
-    chain_list = list(chain(self.get_object_list(House), self.get_object_list(Sauna)))
-    result_list = sorted(
-      chain_list, key=lambda instance: instance.pub_date, reverse=True)[:6]
-    return result_list
+    def get_object_list(self, model: models.Model) -> models.Model:
+        return model.objects.filter(
+            pub_date__lte=timezone.now()
+        )[:LAST_TO_VIEW]
 
-# def index(request):
-#   return render(request, 'index.html')
+    def get_queryset(self) -> list:
+        chain_list = list(chain(
+            self.get_object_list(House),
+            self.get_object_list(Sauna)
+        ))
+        result_list = sorted(
+            chain_list,
+            key=lambda instance: instance.pub_date,
+            reverse=True
+        )[:LAST_TO_VIEW]
+        return result_list
 
-def submit_form(request):
-  if request.method == 'POST':
-    form = SubmitFormHandler(request.POST)
 
-    if form.is_valid():
-      form_email = form.cleaned_data['email']
-      form_client = form.cleaned_data['name']
-      form_phone = form.cleaned_data['phone']
-      form_page = form.cleaned_data['form_link']
-      form_object = form.cleaned_data['form_name']
-      subject = '%s хочет консультацию' % (form_client)
-      message = '''%s хочет консультацию по %s.
-      Телефон: %s
-      Email: %s
-      Страница объекта: %s''' % (form_client, form_object, form_phone, form_email, form_page)
-      sender = 'noreply@domizkleenogobrusa.ru'
+class ObjectsYMLView(generic.View):
+    def get_object_list(self, model: models.Model) -> models.Model:
+        return model.objects.filter(
+            pub_date__lte=timezone.now()
+        )
 
-      recipients = ['ivladimirskiy@ya.ru']
-      # send_mail(subject, message, sender, recipients)
-      send_telegram(message)
-    
-      return HttpResponseRedirect(request.path_info)
+    def export_to_xml(self) -> None:
+        chain_list = list(chain(
+            self.get_object_list(House),
+            self.get_object_list(Sauna)
+        ))
+        result_list = sorted(
+            chain_list,
+            key=lambda instance: instance.pub_date,
+            reverse=True
+        )
+        data = serializers.serialize('xml', result_list)
+        f = open('catalog.xml', 'w')
+        myfile = File(f)
+        myfile.write(data)
+        myfile.close()
+        print('Done')
+        return result_list
 
-  return render(request, 'submit.html')
+    def get(self, request):
+        return HttpResponse(self.export_to_xml())
 
-def about(request):
-  return render(request, 'about.html')
 
-def design(request):
-  return render(request, 'design.html')
+def submit_form(request: HttpRequest) -> render:
 
-def policy(request):
-  return render(request, 'policy.html')
+    if request.POST:
+        form = SubmitFormHandler(request.POST)
 
-def production(request):
-  return render(request, 'production.html')
+        if form.is_valid():
+            form_email = form.cleaned_data['email']
+            form_client = form.cleaned_data['name']
+            form_phone = form.cleaned_data['phone']
+            form_page = form.cleaned_data['form_link']
+            form_object = form.cleaned_data['form_name']
+            subject = f'{form_client} хочет консультацию'
+            message = f'''{form_client} хочет консультацию по {form_object}.
+            Телефон: {form_phone}
+            Email: {form_email}
+            Страница объекта: {form_page}'''
+            sender = 'noreply@domizkleenogobrusa.ru'
 
-def notfound(request):
-  return render(request, '404.html')
+            recipients = ['ivladimirskiy@ya.ru']
+            send_mail(
+                subject,
+                message,
+                sender,
+                recipients
+            )
+            send_telegram(message)
 
-def handler404(request, exception, template_name="404.html"):
-  return render(request, '404.html')
+            return HttpResponseRedirect(request.path_info)
 
-def handler500(request, exception, template_name="500.html"):
-  return render(request, '500.html')
+    return render(request, 'submit.html')
+
+
+def about(request: HttpRequest) -> render:
+    return render(request, 'about.html')
+
+
+def design(request: HttpRequest) -> render:
+    return render(request, 'design.html')
+
+
+def policy(request: HttpRequest) -> render:
+    return render(request, 'policy.html')
+
+
+def production(request: HttpRequest) -> render:
+    return render(request, 'production.html')
+
+
+def notfound(request: HttpRequest) -> render:
+    return render(request, '404.html')
+
+
+def handler404(request: HttpRequest, exception) -> render:
+    context = {
+        'exception': exception,
+    }
+    return render(request, '404.html', context)
+
+
+def handler500(request: HttpRequest, exception) -> render:
+    context = {
+        'exception': exception,
+    }
+    return render(request, '500.html', context)

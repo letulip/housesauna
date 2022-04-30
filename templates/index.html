@@ -1,7 +1,8 @@
 {% extends "common.html" %}
 {% load static %}
+{% load thumbnail %}
 
-{% block title %} Дом-Баня - Добро пожаловать!{% endblock %}
+{% block title %} Дом Баня - Добро пожаловать!{% endblock %}
 
 {% block head %}
 <meta name="description" content="ДомБаня - Дома и бани из клееного бруса. Мы сторим дома из клееного бруса для постояного проживания 
@@ -32,36 +33,52 @@
       <p class="text text--center">Самая большая ценность &mdash; это люди.<br>Мы строим качественно.</p>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/ivan-zorin-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/ivan-zorin-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Иван Зорин" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Иван Зорин</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/igor-victor-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/igor-victor-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Игорь Викторович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Игорь Викторович</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Проектировщик</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/stepan-aslan-round.jpeg' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/stepan-aslan-round.jpeg' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Степан Асланов" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Степан Асланов</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Специалист по строительству</p>
       </div>
     </div>
     <div class="grid__element">
-      <picture class="img img--round">
-        <img src="{% static 'img/team/pavel-seraf-round.png' %}" alt="" class="img__img img__img--team">
-      </picture>
+      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/team/pavel-seraf-round.png' as path %}
+        {% thumbnail path "200x200" crop="center" upscale=True as im %}
+          <picture class="img img--round">
+            <img src="{{ im.url }}" alt="Павел Серафимович" class="img__img img__img--team">
+          </picture>
+        {% endthumbnail %}
+      {% endwith %}
       <div>
         <p class="text text--nopadding text--regular">Павел Серафимович</p>
         <p class="text text--sm text--sm-center text--grey text--nopadding">Прораб</p>
@@ -119,9 +136,16 @@
       <!-- <div class="grid__element"> -->
       {% for project in recent_projects %}
         <a class="preview" href="/projects/{{project.full_name}}">
-          <picture class="img img--preview">
+          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
+            {% thumbnail path "357x240" crop="center" upscale=True as im %}
+              <picture class="img img--preview">
+                <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img">
+              </picture>
+            {% endthumbnail %}
+          {% endwith %}
+          <!-- <picture class="img img--preview">
             <img src="{% static 'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
-          </picture>
+          </picture> -->
           <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}}</h5>
           <p class="text text--sm text--nopadding">Размеры дома: <b>{{project.dimensions}}м</b></p>
           <p class="text text--sm text--nopadding">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
@@ -136,8 +160,8 @@
 
   <div class="hr"></div>
 
-  <section class="content-slider">
-    <h2 class="heading heading--h2 heading--bold heading--paddingTop-50 heading--center">
+  <section class="grid content-slider">
+    <h2 class="heading heading--h2 heading--bold heading--center">
       Отзывы наших клиентов
     </h2>
     <div class="content-slider__control content-slider__control--quote content-slider__control-left"></div>
@@ -147,7 +171,7 @@
         <div class="quote__wrapper">
           <h3 class="heading heading--h3">Маргарита Гибадуллина</h3>
           <p class="quote__subHeading">
-            Заслуженная артистка России и её дом-баня из клееного бруса.
+            Заслуженная артистка России и её Дом Баня из клееного бруса.
           </p>
           <p class="content-slider__text text text--sm">
             Главное человек! Это очень редкие качества для строителя: пунктуальный, документальный, чистоплотный, всё в срок.<br>
@@ -155,7 +179,7 @@
           </p>
         </div>
         <div class="quote__videoWrapper">
-          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/ALiJ2Q5Rsn8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/ALiJ2Q5Rsn8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </article>
       <article class="content-slider__item quote">
@@ -170,14 +194,14 @@
           </p>
         </div>
         <div class="quote__videoWrapper">
-          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/i_1qkI2uSBA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/i_1qkI2uSBA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </article>
       <article class="content-slider__item quote">
         <div class="quote__wrapper">
           <h3 class="heading heading--h3">Анатолий Александрович</h3>
           <p class="quote__subHeading">
-            Руководитель организации и его дом-баня из клееного бруса.
+            Руководитель организации и его Дом Баня из клееного бруса.
           </p>
           <p class="content-slider__text text text--sm">
             Сделали быстро, качественно. Я сам занимаюсь деревом, сделали всё грамотно. Всем советую.<br>
@@ -185,7 +209,7 @@
           </p>
         </div>
         <div class="quote__videoWrapper">
-          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/zM0cLf1XyHk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/zM0cLf1XyHk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </article>
       <article class="content-slider__item quote">
@@ -200,7 +224,7 @@
           </p>
         </div>
         <div class="quote__videoWrapper">
-          <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/GUGF6y4XhVI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/GUGF6y4XhVI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
       </article>
     </div>

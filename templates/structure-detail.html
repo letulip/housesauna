@@ -5,7 +5,7 @@
 
 {% endblock head%}
 
-{% block title %}Дом-Баня - {{structure.title}} {{structure.square}}м²{% endblock %}
+{% block title %}Дом Баня - {{structure.title}} {{structure.square}}м²{% endblock %}
 
 {% block content %}
 
@@ -22,7 +22,7 @@
       <div class="grid grid--marginTop-0">
         <div class="grid__article grid__article--two grid__article--gap-big">
           <div class="grid__element">
-            <iframe class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/{{structure.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/{{structure.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
           <div class="grid__element">
             <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
@@ -101,10 +101,14 @@
 
   {% with ''|center:structure.images_count as range %}
   {% for i in range %}
-  <img src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
+  <img loading="lazy" src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
   {% endfor %}
   {% endwith %}
   
 </section>
 
 {% endblock content %}
+
+{% block scripts %}
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/gallery/gallery.js' %}"></script>
+{% endblock scripts %}

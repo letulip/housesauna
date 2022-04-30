@@ -23,12 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = None
 with open('./housesauna/djsecret.txt') as f:
-  SECRET_KEY = f.read().strip()
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = ['127.0.0.1']
+
+# PROD SETTINGS
+# DEBUG = False
+# ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
 
 
 # Application definition
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'csp.context_processors.nonce',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -140,12 +145,24 @@ CSP_DEFAULT_SRC = ["'none'"]
 CSP_BASE_URI = ["'self'"]
 CSP_SCRIPT_SRC = [
   "'self'",
+  "'unsafe-inline'",
+  "https://api-maps.yandex.ru",
+  "https://yandex.st",
+  "https://yastatic.net",
 ]
 CSP_SCRIPT_SRC_ELEM = [
   "'self'",
+  "'unsafe-inline'",
+  "https://api-maps.yandex.ru",
+  "https://yandex.st",
+  "https://yastatic.net",
+  "https://core-renderer-tiles.maps.yandex.net",
+  "https://yastatic.net",
+  "https://core-road-events-renderer.maps.yandex.net",
 ]
 CSP_FRAME_SRC = [
   "'self'",
+  "'unsafe-inline'",
   "https://yandex.ru",
   "https://www.yandex.ru",
   "https://youtube.com",
@@ -159,8 +176,31 @@ CSP_IMG_SRC = [
   "'self'",
   "http://www.w3.org",
   "data:",
+  "https://api-maps.yandex.ru",
+  "https://core-renderer-tiles.maps.yandex.net",
+  "https://core-jams-rdr-cache.maps.yandex.net",
+  "https://core-road-events-renderer.maps.yandex.net",
 ]
 CSP_FONT_SRC = [
   "https://fonts.gstatic.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.sendinblue.com'
+EMAIL_HOST_USER = 'ivladimirskiy@ya.ru'
+EMAIL_HOST_PASSWORD = None
+with open('./housesauna/smtp.txt') as f:
+    EMAIL_HOST_PASSWORD = f.read().strip()
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'noreply@domizkleenogobrusa.ru'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}

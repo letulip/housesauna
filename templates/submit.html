@@ -4,16 +4,22 @@
 
 {% endblock head%}
 
-{% block title %}Дом-Баня - Форма отправлена{% endblock %}
+{% block title %}Дом Баня - Форма отправлена{% endblock %}
 
 {% block content %}
-<h1 class="heading heading--h1">Ваша заявка отправлена</h1>
-<p class="text">
-  Обычно мы обрабатываем заявки в течение рабочего дня<br>
-  Мы обязательно свяжемся с вами.
-</p>
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide grid__element--marginBottom-medium">
+      <h1 class="heading heading--h1">Ваша заявка отправлена</h1>
+      <p class="text">
+        Обычно мы обрабатываем заявки в течение рабочего дня<br>
+        Мы обязательно свяжемся с вами.
+      </p>
 
-<p class="text">
-  А пока предлагаем им вернуться <a href="/" class="text__link">на главную</a>
-</p>
+      <p class="text">
+        А пока предлагаем им вернуться <a href="/" class="text__link">на главную</a>
+      </p>
+    </div>
+  </article>
+</section>
 {% endblock content %}

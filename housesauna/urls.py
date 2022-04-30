@@ -13,24 +13,42 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from houses.views import IndexView
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include
-
+from rest_framework import routers
+from api.views import StructuresViewSet
 from . import views
 
-
 handler404 = views.handler404
+
+router = routers.DefaultRouter()
+router.register(
+    r'api/v1/structures',
+    StructuresViewSet,
+    basename='StructuresViewSet'
+)
 
 urlpatterns = [
     path('saunaman/', admin.site.urls),
     # path('', views.index, name='index'),
     path('', views.IndexView.as_view(), name='index'),
+    path('', include(router.urls)),
+    path('objects-yml/', views.ObjectsYMLView.as_view(), name='objectsyml'),
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
     path('design/', views.design, name='design'),
     path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),
-    path('projects/', include(('houses.urls', 'houses'), namespace='houses')),
+    path(
+        'projects/',
+        include(('houses.urls', 'houses'), namespace='houses')
+    ),
     path('submit/', views.submit_form, name='submit'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )
