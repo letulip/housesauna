@@ -6,8 +6,10 @@ from django.views import generic
 from django.core import serializers
 from django.core.files import File
 from django.core.mail import send_mail
-from itertools import chain
 from django.db import models
+
+from itertools import chain
+
 from houses.models import House, Sauna
 from .forms import SubmitFormHandler
 from .utility import send_telegram
