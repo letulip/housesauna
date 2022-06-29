@@ -1,6 +1,9 @@
-from xml.dom import minidom
 from datetime import datetime as dt
+
 from django.db.models import QuerySet
+
+from xml.etree.ElementTree import Element, SubElement, tostring
+
 
 DOMAIN = 'https://domizkleenogobrusa.ru/'
 
@@ -15,121 +18,80 @@ def generate_offer_price(price: str) -> str:
     return price.replace(' ', '')
 
 
-def generate_yml(structures: QuerySet) -> None:
-    root = minidom.Document()
+def generate_yml2(structures: QuerySet) -> None:
+    date = dt.now().strftime('%Y-%m-%dT%H:%M')
+    catalog = Element('yml_catalog')
+    catalog.set('date', date)
 
-    date = dt.now().strftime('%Y-%m-%d %H:%M')
-    xml_root = root.createElement('yml_catalog')
-    root.appendChild(xml_root)
-    xml_root.setAttribute('date', date)
+    shop = SubElement(catalog, 'shop')
 
-    shop = root.createElement('shop')
-    name = root.createElement('name')
-    shop_name = root.createTextNode('ДомБаня')
-    name.appendChild(shop_name)
-    shop.appendChild(name)
+    name = SubElement(shop, 'name')
+    name.text = 'ДомБаня'
 
-    company = root.createElement('company')
-    company_name = root.createTextNode('ДомБаня')
-    company.appendChild(company_name)
-    shop.appendChild(company)
+    company = SubElement(shop, 'company')
+    company.text = 'ДомБаня'
 
-    url = root.createElement('url')
-    url_text = root.createTextNode(DOMAIN)
-    url.appendChild(url_text)
-    shop.appendChild(url)
+    url = SubElement(shop, 'url')
+    url.text = DOMAIN
 
-    currencies = root.createElement('currencies')
-    currency = root.createElement('currency')
-    currency.setAttribute('id', 'RUB')
-    currency.setAttribute('rate', '1')
-    currencies.appendChild(currency)
-    shop.appendChild(currencies)
+    currencies = SubElement(shop, 'currencies')
+    currency = SubElement(currencies, 'currency')
+    currency.set('id', 'RUB')
+    currency.set('rate', '1')
 
-    categories = root.createElement('categories')
+    categories = SubElement(shop, 'categories')
     x = 1
     while x < 3:
-        category = root.createElement('category')
-        category.setAttribute('id', f'{x}')
-        category_name = 'Дома' if x == 1 else 'Бани'
-        category_text = root.createTextNode(f'{category_name}')
-        category.appendChild(category_text)
-        categories.appendChild(category)
+        category = SubElement(categories, 'category')
+        category.set('id', f'{x}')
+        category.text = 'Дома' if x == 1 else 'Бани'
         x += 1
-    shop.appendChild(categories)
 
-    offers = root.createElement('offers')
+    offers = SubElement(shop, 'offers')
 
     for structure in structures:
-        offer = root.createElement('offer')
+        offer = SubElement(offers, 'offer')
         offer_id = generate_offer_id(structure.class_name, structure.id)
-        offer.setAttribute('id', f'{offer_id}')
+        offer.set('id', f'{offer_id}')
 
-        offer_name = root.createElement('name')
-        offer_name_text = root.createTextNode(f'{structure.title}')
-        offer_name.appendChild(offer_name_text)
-        offer.appendChild(offer_name)
+        offer_name = SubElement(offer, 'name')
+        offer_name.text = f'{structure.title}'
 
-        offer_url = root.createElement('url')
-        offer_url_text = root.createTextNode(f'{DOMAIN}{structure.slug}')
-        offer_url.appendChild(offer_url_text)
-        offer.appendChild(offer_url)
+        offer_url = SubElement(offer, 'url')
+        offer_url.text = f'{DOMAIN}{structure.slug}'
 
-        offer_picture = root.createElement('picture')
-        offer_picture_text = root.createTextNode(
-            f'{DOMAIN}{structure.slug}-0.jpg'
-        )
-        offer_picture.appendChild(offer_picture_text)
-        offer.appendChild(offer_picture)
+        offer_picture = SubElement(offer, 'picture')
+        offer_picture.text = f'{DOMAIN}{structure.slug}-0.jpg'
 
-        offer_price = root.createElement('price')
-        offer_price_text = root.createTextNode(
-            f'{generate_offer_price(structure.cost)}'
-        )
-        offer_price.appendChild(offer_price_text)
-        offer.appendChild(offer_price)
+        offer_price = SubElement(offer, 'price')
+        offer_price.text = f'{generate_offer_price(structure.cost)}'
 
-        offer_currency_id = root.createElement('currencyId')
-        offer_currency_id_text = root.createTextNode('RUR')
-        offer_currency_id.appendChild(offer_currency_id_text)
-        offer.appendChild(offer_currency_id)
+        offer_currency_id = SubElement(offer, 'currencyId')
+        offer_currency_id.text = 'RUR'
 
-        offer_category_id = root.createElement('categoryId')
+        offer_category_id = SubElement(offer, 'categoryId')
         category_id = 1 if category == 'House' else 2
-        offer_category_id_text = root.createTextNode(str(category_id))
-        offer_category_id.appendChild(offer_category_id_text)
-        offer.appendChild(offer_category_id)
+        offer_category_id.text = str(category_id)
 
-        offer_dimensions = root.createElement('dimensions')
-        offer_dimensions_text = root.createTextNode(f'{structure.dimensions}')
-        offer_dimensions.appendChild(offer_dimensions_text)
-        offer.appendChild(offer_dimensions)
+        offer_dimensions = SubElement(offer, 'dimensions')
+        offer_dimensions.text = f'{structure.dimensions}'
 
-        offer_param_constr = root.createElement('param')
-        offer_param_constr.setAttribute('name', 'Срок постройки')
-        offer_param_constr_text = root.createTextNode(f'{structure.construction}')
-        offer_param_constr.appendChild(offer_param_constr_text)
-        offer.appendChild(offer_param_constr)
+        offer_param_constr = SubElement(offer, 'param')
+        offer_param_constr.set('name', 'Срок постройки')
+        offer_param_constr.text = f'{structure.construction}'
 
-        offer_param_square = root.createElement('param')
-        offer_param_square.setAttribute('name', 'Площадь')
-        offer_param_square_text = root.createTextNode(f'{structure.square}')
-        offer_param_square.appendChild(offer_param_square_text)
-        offer.appendChild(offer_param_square)
+        offer_param_square = SubElement(offer, 'param')
+        offer_param_square.set('name', 'Площадь')
+        offer_param_square.text = f'{structure.square}'
 
-        offer_param_brus = root.createElement('param')
-        offer_param_brus.setAttribute('name', 'Брус сечение')
-        offer_param_brus_text = root.createTextNode(f'{structure.brus}')
-        offer_param_brus.appendChild(offer_param_brus_text)
-        offer.appendChild(offer_param_brus)
+        offer_param_brus = SubElement(offer, 'param')
+        offer_param_brus.set('name', 'Брус сечение')
+        offer_param_brus.text = f'{structure.brus}'
 
-        offers.appendChild(offer)
-    shop.appendChild(offers)
+    encoded_cat = tostring(catalog, encoding='unicode', xml_declaration=True)
 
-    xml_root.appendChild(shop)
-
-    xml_str = root.toprettyxml(indent='\t', newl='\n')
-    save_path_file = 'yandex.yml'
+    save_path_file = 'yandex2.yml'
 
     with open(save_path_file, 'w') as f:
-        f.write(xml_str)
+        f.write(encoded_cat)
+    return encoded_cat
