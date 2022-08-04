@@ -27,11 +27,12 @@ with open('./housesauna/djsecret.txt') as f:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # PROD SETTINGS
 # DEBUG = False
 # ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
+# ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
 
 
 # Application definition
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_xml',
     'sorl.thumbnail',
 ]
 
@@ -135,6 +137,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
   os.path.join(BASE_DIR, 'static'),
 ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

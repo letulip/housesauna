@@ -9,3 +9,6 @@ db.sqlite3
 *.yml
 
 media/cache/
+
+venv/
+.env
