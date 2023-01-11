@@ -185,6 +185,7 @@ CSP_IMG_SRC = [
   "https://core-road-events-renderer.maps.yandex.net",
 ]
 CSP_FONT_SRC = [
+  "'self'",
   "https://fonts.gstatic.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
