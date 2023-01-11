@@ -100,9 +100,9 @@
 <section class="gallery">
 
   {% with ''|center:structure.images_count as range %}
-  {% for i in range %}
-  <img loading="lazy" src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
-  {% endfor %}
+    {% for i in range %}
+    <img loading="lazy" src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
+    {% endfor %}
   {% endwith %}
   
 </section>
