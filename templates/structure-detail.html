@@ -1,6 +1,7 @@
 {% extends "common.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load houses_filters %}
 
 {% block head %}
 
@@ -102,14 +103,19 @@
 
   {% with ''|center:structure.images_count as range %}
     {% for i in range %}
-      
-    <a class="gallery__link" href="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg">
-      {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-'|add:forloop.counter0|add:'.jpeg' as path %}
-        {% thumbnail path "357x240" crop="center" upscale=True as im %}
-          <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{forloop.counter0}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0" />
-        {% endthumbnail %}
+      {% with img_link='img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-'|concat:forloop.counter|add:'.jpeg' counter=forloop.counter %}
+      {{img_link}}
+      {{counter}}
+
+      <a class="gallery__link" href="{% static ''|add:img_link %}">
+        
+        {% with 'https://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
+          {% thumbnail path "357x240" crop="center" upscale=True as im %}
+            <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{forloop.counter}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{forloop.counter}}" tabindex="0" />
+          {% endthumbnail %}
+        {% endwith %}
+      </a>
       {% endwith %}
-    </a>
     {% endfor %}
   {% endwith %}
   
