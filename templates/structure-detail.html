@@ -1,5 +1,7 @@
 {% extends "common.html" %}
 {% load static %}
+{% load thumbnail %}
+{% load houses_filters %}
 
 {% block head %}
 
@@ -97,12 +99,22 @@
   </article>
 </section>
 
-<section class="gallery">
+<section class="gallery" id="lightgallery">
 
   {% with ''|center:structure.images_count as range %}
-  {% for i in range %}
-  <img loading="lazy" src="{% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-' %}{{forloop.counter0}}.jpeg" alt="Изображение {{structure.short_name}}-{{forloop.counter0}}" class="gallery__img" data-img-index="{{forloop.counter0}}" tabindex="0">
-  {% endfor %}
+    {% for i in range %}
+      {% with img_link='img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-'|concat:forloop.counter0|add:'.jpeg' counter=forloop.counter0 %}
+
+      <a class="gallery__link" href="{% static ''|add:img_link %}">
+
+        {% with 'https://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
+          {% thumbnail path "357x240" crop="center" upscale=True as im %}
+            <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{counter}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{counter}}" tabindex="0" />
+          {% endthumbnail %}
+        {% endwith %}
+      </a>
+      {% endwith %}
+    {% endfor %}
   {% endwith %}
   
 </section>
@@ -110,5 +122,14 @@
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/gallery/gallery.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lightgallery.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lg-thumbnail.js' %}"></script>
+<script type="text/javascript">
+  lightGallery(document.getElementById('lightgallery'), {
+      plugins: [lgThumbnail],
+      thumbnail: true,
+      licenseKey: 'your_license_key',
+      speed: 500,
+  });
+</script>
 {% endblock scripts %}

@@ -85,15 +85,16 @@ def submit_form(request: HttpRequest) -> render:
             Email: {form_email}
             Страница объекта: {form_page}'''
             sender = 'noreply@domizkleenogobrusa.ru'
+            
+            send_telegram(message)
 
-            recipients = ['ivladimirskiy@ya.ru']
+            recipients = ['ivladimirskiy@ya.ru', 'aslanov72@mail.ru']
             send_mail(
                 subject,
                 message,
                 sender,
                 recipients
             )
-            send_telegram(message)
 
             return HttpResponseRedirect(request.path_info)
 
