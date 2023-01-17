@@ -17,8 +17,7 @@ def generate_offer_id(category: str, id: int) -> str:
 def generate_offer_price(price: str) -> str:
     return price.replace(' ', '')
 
-
-def generate_yml2(structures: QuerySet) -> None:
+def generate_yml_market(structures: QuerySet) -> str:
     date = dt.now().strftime('%Y-%m-%dT%H:%M')
     catalog = Element('yml_catalog')
     catalog.set('date', date)
@@ -90,7 +89,85 @@ def generate_yml2(structures: QuerySet) -> None:
 
     encoded_cat = tostring(catalog, encoding='unicode', xml_declaration=True)
 
-    save_path_file = 'yandex2.yml'
+    save_path_file = 'yandex_market.yml'
+
+    with open(save_path_file, 'w') as f:
+        f.write(encoded_cat)
+    return encoded_cat
+
+
+def generate_yml_realty(structures: QuerySet) -> str:
+    date = dt.now().strftime('%Y-%m-%dT%H:%M')
+    catalog = Element('realty-feed')
+    catalog.set(
+        'xmlns',
+        'http://webmaster.yandex.ru/schemas/feed/realty/2010-06'
+    )
+
+    generation_date = SubElement(catalog, 'generation-date')
+    generation_date.text = f'{date}'
+
+    for structure in structures:
+        offer = SubElement(catalog, 'offer')
+        offer_id = generate_offer_id(structure.class_name, structure.id)
+        offer.set('internal-id', f'{offer_id}')
+
+        offer_type = SubElement(offer, 'type')
+        offer_type.text = 'продажа'
+
+        offer_prop_type = SubElement(offer, 'prop_type')
+        offer_prop_type.text = 'жилая'
+
+        offer_category_id = SubElement(offer, 'categoryId')
+        category_id = 'дом'
+        offer_category_id.text = str(category_id)
+
+        # sales-agent info
+        offer_agent = SubElement(offer, 'sales-agent')
+
+        offer_agent_name = SubElement(offer_agent, 'name')
+        offer_agent_name.text = 'ДомБаня'
+
+        offer_agent_phone = SubElement(offer_agent, 'phone')
+        offer_agent_phone.text = '79857601534'
+
+        offer_agent_category = SubElement(offer_agent, 'category')
+        offer_agent_category.text = 'застройщик'
+
+        offer_agent_organisation = SubElement(offer_agent, 'organisation')
+        offer_agent_organisation.text = 'ДомБаня'
+
+        offer_agent_url = SubElement(offer_agent, 'url')
+        offer_agent_url.text = DOMAIN
+
+        offer_agent_photo = SubElement(offer_agent, 'photo')
+        offer_agent_photo.text = f'{DOMAIN}static/img/logo.svg'
+
+        # bargain info
+        offer_price = SubElement(offer, 'price')
+
+        offer_price_value = SubElement(offer_price, 'value')
+        offer_price_value.text = f'{generate_offer_price(structure.cost)}'
+
+        offer_price_currency_id = SubElement(offer_price, 'currency')
+        offer_price_currency_id.text = 'RUR'
+
+        # area info
+        offer_area = SubElement(offer, 'area')
+
+        offer_area_value = SubElement(offer_area, 'value')
+        offer_area_value.text = f'{structure.square}'
+
+        offer_area_unit = SubElement(offer_area, 'unit')
+        offer_area_unit.text = 'кв. м'
+
+        # deal info
+        offer_deal = SubElement(offer, 'deal-status')
+        offer_deal.text = 'продажа от застройщика'
+
+    encoded_cat = tostring(catalog, encoding='unicode', xml_declaration=True)
+
+    save_path_file = 'yandex_realty.ymr'
 
     with open(save_path_file, 'w') as f:
         f.write(encoded_cat)

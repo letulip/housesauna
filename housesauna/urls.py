@@ -20,7 +20,7 @@ from django.urls import path, include
 
 from rest_framework import routers
 
-from api.views import StructuresApiView
+from api.views import RealtyApiView, StructuresApiView
 from . import views
 
 handler404 = views.handler404
@@ -29,13 +29,17 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('saunaman/', admin.site.urls),
-    # path('', views.index, name='index'),
     path('', views.IndexView.as_view(), name='index'),
     path('', include(router.urls)),
     path(
         'api/v1/structures/',
         StructuresApiView.as_view(),
         name='get_structures'
+    ),
+    path(
+        'api/v1/realty/',
+        RealtyApiView.as_view(),
+        name='get_realty'
     ),
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
