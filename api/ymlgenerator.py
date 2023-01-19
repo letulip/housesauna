@@ -17,6 +17,7 @@ def generate_offer_id(category: str, id: int) -> str:
 def generate_offer_price(price: str) -> str:
     return price.replace(' ', '')
 
+
 def generate_yml_market(structures: QuerySet) -> str:
     date = dt.now().strftime('%Y-%m-%dT%H:%M')
     catalog = Element('yml_catalog')
@@ -49,6 +50,7 @@ def generate_yml_market(structures: QuerySet) -> str:
     offers = SubElement(shop, 'offers')
 
     for structure in structures:
+
         offer = SubElement(offers, 'offer')
         offer_id = generate_offer_id(structure.class_name, structure.id)
         offer.set('id', f'{offer_id}')
@@ -57,10 +59,10 @@ def generate_yml_market(structures: QuerySet) -> str:
         offer_name.text = f'{structure.title}'
 
         offer_url = SubElement(offer, 'url')
-        offer_url.text = f'{DOMAIN}{structure.slug}'
+        offer_url.text = f'{DOMAIN}projects/{structure.class_name.lower()}s/{structure.slug}'
 
         offer_picture = SubElement(offer, 'picture')
-        offer_picture.text = f'{DOMAIN}{structure.slug}-0.jpg'
+        offer_picture.text = f'{DOMAIN}static/img/projects/{structure.short_name}/{structure.short_name}-0.jpeg'
 
         offer_price = SubElement(offer, 'price')
         offer_price.text = f'{generate_offer_price(structure.cost)}'
