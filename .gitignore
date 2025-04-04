@@ -7,8 +7,8 @@ db.sqlite3
 *.txt
 *.xml
 *.yml
-
+*__pycache__
 media/cache/
-
+.idea
 venv/
 .env

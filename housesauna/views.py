@@ -1,6 +1,8 @@
+from urllib.parse import urljoin
+
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.http import HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views import generic
 from django.core import serializers
@@ -10,7 +12,7 @@ from django.db import models
 
 from itertools import chain
 
-from houses.models import House, Sauna
+from houses.models import House, Sauna, Category
 from .forms import SubmitFormHandler
 from .utility import send_telegram
 
@@ -28,10 +30,12 @@ class IndexView(generic.ListView):
         )[:LAST_TO_VIEW]
 
     def get_queryset(self) -> list:
-        chain_list = list(chain(
-            self.get_object_list(House),
-            self.get_object_list(Sauna)
-        ))
+        chain_list = list(
+            chain(
+                self.get_object_list(House),
+                self.get_object_list(Sauna)
+            )
+        )
         result_list = sorted(
             chain_list,
             key=lambda instance: instance.pub_date,
@@ -46,11 +50,13 @@ class ObjectsYMLView(generic.View):
             pub_date__lte=timezone.now()
         )
 
-    def export_to_xml(self) -> None:
-        chain_list = list(chain(
-            self.get_object_list(House),
-            self.get_object_list(Sauna)
-        ))
+    def export_to_xml(self) -> list:
+        chain_list = list(
+            chain(
+                self.get_object_list(House),
+                self.get_object_list(Sauna)
+            )
+        )
         result_list = sorted(
             chain_list,
             key=lambda instance: instance.pub_date,
@@ -85,7 +91,7 @@ def submit_form(request: HttpRequest) -> render:
             Email: {form_email}
             Страница объекта: {form_page}'''
             sender = 'noreply@domizkleenogobrusa.ru'
-            
+
             send_telegram(message)
 
             recipients = ['ivladimirskiy@ya.ru', 'aslanov72@mail.ru']

@@ -1,0 +1,56 @@
+{% extends "common.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block title %}Дом Баня - Наши проекты{% endblock %}
+
+{% block content %}
+
+<section class="promo">
+  <article class="promo__wrapper">
+    <h1 class="promo__heading heading heading--h1 heading--uppercase heading--white">
+      Дома и бани из<br>клееного&nbsp;бруса
+    </h1>
+      <P class="promo__text text text--white">
+        Мы сторим дома из клееного бруса для постояного проживания
+        и делаем&nbsp;это&nbsp;качествено.
+      </P>
+      <div class="promo__buttons">
+        {% if categories %}
+          {% for category in categories %}
+            {% if curr_category %}
+              {% if saunas_list %}
+                <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
+                   class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+        `     {% else %}
+                <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
+                   class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+              {% endif %}
+            {% else %}
+              {% if saunas_list %}
+                <a href="{% url 'houses:sauna_sub' cat_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+              {% else %}
+                <a href="{% url 'houses:houses_sub' cat_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+  </article>
+</section>
+
+{% include 'includes/list_houses.html' %}
+
+{% endblock content %}
+
+{% block scripts %}
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/more.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/tabGroups/tabGroups.js' %}"></script>
+{% endblock scripts %}

@@ -1,10 +1,10 @@
-from django.http.response import Http404
+from django.core.cache import cache
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.utils import timezone
 from django.db import models
 from itertools import chain
-from .models import House, Sauna, Project
+from .models import House, Sauna, Project, Category
 
 
 # Create your views here.
@@ -19,7 +19,8 @@ class IndexView(generic.ListView):
         return model.objects.filter(pub_date__lte=timezone.now())
 
     def get_object_dir_name(self, model: models.Model) -> models.Model:
-        return model.objects.first().dir_name
+        obj = model.objects.first()
+        return obj.dir_name if obj else None
 
     def get_queryset(self) -> list:
         result_list = list(
@@ -41,6 +42,7 @@ class IndexView(generic.ListView):
         context['saunas_list'] = self.get_object_list(Sauna)
         context['projects_count'] = self.get_object_count(Project)
         context['projects_list'] = self.get_object_list(Project)
+        context['categories'] = Category.objects.prefetch_related('saunas', 'houses')
         return context
 
 
@@ -78,6 +80,86 @@ class ProjectDetailView(generic.DetailView):
             Project, slug=self.kwargs.get('slug')
         )
         return Project.objects.filter(full_name=self.project)
+
+
+class CategorySaunaView(generic.View):
+    template_name = "categories.html"
+
+    def get(self, request):
+        categories = Category.objects.filter(saunas__isnull=False).distinct()
+
+        context = {
+            "categories": categories,
+            "saunas_list": Sauna.objects.all()
+        }
+
+        return render(request, self.template_name, context)
+
+
+class CategoryHousesView(generic.View):
+    template_name = "categories.html"
+
+    def get(self, request):
+        categories = Category.objects.filter(houses__isnull=False).distinct()
+
+        context = {
+            "categories": categories,
+            "houses_list": House.objects.all()
+        }
+
+        return render(request, self.template_name, context)
+
+
+class SubcategoriesHousesView(generic.View):
+    template_name = "structure-index.html"
+    category_template_name = "categories.html"
+
+    def get(self, request, cat_slug, sub_slug=None):
+        category = Category.objects.get(slug=cat_slug)
+        houses = House.objects.filter(category=category)
+
+        if sub_slug:
+            subcategory = Category.objects.get(slug=sub_slug)
+            houses = houses.filter(category=subcategory)
+
+        if subcategories := category.subcategory.all():
+            context = {
+                "categories": subcategories,
+                "curr_category": category,
+                "houses_list": houses
+            }
+        else:
+            context = {"houses_list": houses}
+
+        template = self.category_template_name if subcategories and not sub_slug else self.template_name
+
+        return render(request, template, context)
+
+
+class SubcategoriesSaunasView(generic.View):
+    template_name = "structure-index.html"
+    category_template_name = "categories.html"
+
+    def get(self, request, cat_slug, sub_slug=None):
+        category = Category.objects.get(slug=cat_slug)
+        saunas = Sauna.objects.filter(category=category)
+
+        if sub_slug:
+            subcategory = Category.objects.get(slug=sub_slug)
+            saunas = saunas.filter(category=subcategory)
+
+        if subcategories := category.subcategory.all():
+            context = {
+                "categories": subcategories,
+                "curr_category": category,
+                "saunas_list": saunas
+            }
+        else:
+            context = {"saunas_list": saunas}
+
+        template = self.category_template_name if subcategories and not sub_slug else self.template_name
+
+        return render(request, template, context)
 
 
 # Legacy function for OLD URLs support

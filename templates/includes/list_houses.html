@@ -1,0 +1,111 @@
+{% load thumbnail %}
+{% if houses_list %}
+  <section id="houses" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{houses_dir_name}}</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three more">
+      {% for house in houses_list %}
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:house-detail' house.full_name %}">
+          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' as path %}
+            {% thumbnail path "357x240" crop="center" upscale=True as im %}
+              <picture class="img img--preview">
+                <img loading="lazy" src="{{ im.url }}" alt="{{house.title}}" class="img__img preview__img">
+              </picture>
+            {% endthumbnail %}
+          {% endwith %}
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{house.title}} {{house.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{house.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
+        </a>
+      {% endfor %}
+    </article>
+  </section>
+
+  <div class="hr"></div>
+{% endif %}
+
+{% if saunas_list %}
+  <section id="saunas" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">{{saunas_dir_name}}</h2>
+      </div>
+    </article>
+    <article class="grid__article grid__article--three more">
+      {% for sauna in saunas_list %}
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:sauna-detail' sauna.full_name %}">
+          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' as path %}
+            {% thumbnail path "357x240" crop="center" upscale=True as im %}
+              <picture class="img img--preview">
+                <img loading="lazy" src="{{ im.url }}" alt="{{sauna.title}}" class="img__img preview__img">
+              </picture>
+            {% endthumbnail %}
+          {% endwith %}
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{sauna.title}} {{sauna.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{sauna.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
+        </a>
+      {% endfor %}
+    </article>
+  </section>
+
+  <div class="hr"></div>
+{% endif %}
+
+{% if projects_list %}
+  <div id="projects-less-100" display="none"></div>
+  <div id="projects-100-200" display="none"></div>
+  <div id="projects-more-200" display="none"></div>
+  <div id="projects-saunas" display="none"></div>
+  <section id="projects-small" class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--bold heading--paddingBottom-50">Проекты домов и бань</h2>
+      </div>
+    </article>
+    <article class="grid__article">
+      <div class="tabGroups grid__element grid__element--wide grid__element--marginBottom-medium">
+        <input class="tabGroups__tabInput" data-tab="#projects-less-100" id="tab1" type="radio" name="tabs" checked>
+        <input class="tabGroups__tabInput" data-tab="#projects-100-200" id="tab2" type="radio" name="tabs">
+        <input class="tabGroups__tabInput" data-tab="#projects-more-200" id="tab3" type="radio" name="tabs">
+        <input class="tabGroups__tabInput" data-tab="#projects-saunas" id="tab4" type="radio" name="tabs">
+        <div class="tabGroups__tabs">
+          <div class="tabGroups__tabs tabGroups__tabs--desktop">
+            <label id="labelTab1" class="tabGroups__label button button--bold button--alt" for="tab1">до 100м²</label>
+            <label id="labelTab2" class="tabGroups__label button button--bold button--alt" for="tab2">100 &mdash; 200м²</label>
+            <label id="labelTab3" class="tabGroups__label button button--bold button--alt" for="tab3">от 200м²</label>
+            <label id="labelTab4" class="tabGroups__label button button--bold button--alt" for="tab4">Бани</label>
+          </div>
+
+          <select class="tabGroups__select" name="tabsSelect" id="tabsSelect" value="">
+            <option selected="">до 100м²</option>
+            <option>100 &mdash; 200м²</option>
+            <option>от 200м²</option>
+            <option>Бани</option>
+          </select>
+        </div>
+      </div>
+    </article>
+    <article id="projects-all" class="grid__article grid__article--three">
+      {% for project in projects_list %}
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:project-detail' project.slug %}" data-square="{{project.square}}" data-type="{{project.short_name}}">
+          {% with 'http://'|add:request.get_host|add:project.image.url as path %}
+            {% thumbnail path "357x240" crop="center" upscale=True as im %}
+              <picture class="img img--preview img--previewProject">
+                <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img img__img--project">
+              </picture>
+            {% endthumbnail %}
+          {% endwith %}
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}} {{project.square}}м<sup class="text__sup">2</sup></h5>
+          <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{project.dimensions}}м</b></p>
+          <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
+        </a>
+      {% endfor %}
+    </article>
+  </section>
+{% endif %}

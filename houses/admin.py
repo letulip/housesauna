@@ -1,8 +1,29 @@
 from django.contrib import admin
 
-# Register your models here.
-from .models import House, Sauna, Project
+from .models import House, Sauna, Project, Category
 
-admin.site.register(House)
-admin.site.register(Sauna)
 admin.site.register(Project)
+
+
+@admin.register(Sauna)
+class HouseAdmin(admin.ModelAdmin):
+    list_display = ['short_name', 'get_categories']
+
+    @admin.display()
+    def get_categories(self, obj):
+        return [category for category in obj.category.all()]
+
+
+@admin.register(House)
+class HouseAdmin(admin.ModelAdmin):
+    list_display = ['short_name', 'get_categories']
+
+    @admin.display()
+    def get_categories(self, obj):
+        return [category for category in obj.category.all()]
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    fields = ['priority', 'name', 'slug', 'subcategory']
+    prepopulated_fields = {'slug': ('name',)}
