@@ -25,8 +25,8 @@ class IndexView(generic.ListView):
     def get_queryset(self) -> list:
         result_list = list(
             chain(
-                self.get_object_list(House),
-                self.get_object_list(Sauna),
+                # self.get_object_list(House),
+                # self.get_object_list(Sauna),
                 self.get_object_list(Project)
             )
         )
@@ -34,15 +34,15 @@ class IndexView(generic.ListView):
 
     def get_context_data(self, **kwargs: dict) -> object:
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['house_count'] = self.get_object_count(House)
-        context['houses_dir_name'] = self.get_object_dir_name(House)
-        context['houses_list'] = self.get_object_list(House)
-        context['sauna_count'] = self.get_object_count(Sauna)
-        context['saunas_dir_name'] = self.get_object_dir_name(Sauna)
-        context['saunas_list'] = self.get_object_list(Sauna)
+        # context['house_count'] = self.get_object_count(House)
+        # context['houses_dir_name'] = self.get_object_dir_name(House)
+        # context['houses_list'] = self.get_object_list(House)
+        # context['sauna_count'] = self.get_object_count(Sauna)
+        # context['saunas_dir_name'] = self.get_object_dir_name(Sauna)
+        # context['saunas_list'] = self.get_object_list(Sauna)
         context['projects_count'] = self.get_object_count(Project)
         context['projects_list'] = self.get_object_list(Project)
-        context['categories'] = Category.objects.prefetch_related('saunas', 'houses')
+        # context['categories'] = Category.objects.prefetch_related('saunas', 'houses')
         return context
 
 

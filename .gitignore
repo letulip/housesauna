@@ -3,7 +3,6 @@
 .DS_Store
 dist
 data.py
-db.sqlite3
 *.txt
 *.xml
 *.yml
@@ -11,4 +10,5 @@ db.sqlite3
 media/cache/
 .idea
 venv/
+.venv/
 .env

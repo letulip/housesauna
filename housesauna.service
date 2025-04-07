@@ -1,0 +1,17 @@
+[Unit]
+Description="domizkleenogobrusa.ru"
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/housesauna
+Restart=always
+RestartSec=2s
+PermissionsStartOnly=true
+ExecStartPre=-/bin/mkdir -p /var/log/housesauna/webservices
+ExecStartPre=/bin/chown -R www-data:www-data /var/log/housesauna/webservices
+ExecStart=/usr/bin/python3 /opt/housesauna/manage.py runserver 0.0.0.0:8000
+
+[Install]
+WantedBy=multi-user.target
