@@ -37,6 +37,8 @@ class Category(models.Model):
         blank=True,
         related_name='parent'
     )
+    title = models.CharField('Title', max_length=255, null=True, blank=True)
+    description = models.TextField('Description', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
