@@ -2,12 +2,19 @@ from django.contrib import admin
 
 from .models import House, Sauna, Project, Category
 
-admin.site.register(Project)
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ['short_name', 'get_categories', 'title']
+
+    @admin.display()
+    def get_categories(self, obj):
+        return [category for category in obj.category.all()]
 
 
 @admin.register(Sauna)
 class HouseAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'get_categories']
+    list_display = ['short_name', 'get_categories', 'title']
 
     @admin.display()
     def get_categories(self, obj):
@@ -16,7 +23,7 @@ class HouseAdmin(admin.ModelAdmin):
 
 @admin.register(House)
 class HouseAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'get_categories']
+    list_display = ['short_name', 'get_categories', 'title']
 
     @admin.display()
     def get_categories(self, obj):

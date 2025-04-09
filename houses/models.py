@@ -144,6 +144,12 @@ class Project(models.Model):
         upload_to='projects/',
     )
     pub_date = models.DateTimeField('date published')
+    category = models.ManyToManyField(
+        Category,
+        verbose_name='category',
+        blank=True,
+        related_name='projects'
+    )
 
     def __str__(self):
         return self.full_name

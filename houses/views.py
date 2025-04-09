@@ -87,10 +87,12 @@ class CategorySaunaView(generic.View):
 
     def get(self, request):
         categories = Category.objects.filter(saunas__isnull=False).distinct()
+        projects = Project.objects.filter(short_name__icontains='sauna')
 
         context = {
             "categories": categories,
-            "saunas_list": Sauna.objects.all()
+            "saunas_list": Sauna.objects.all(),
+            'projects_list': projects
         }
 
         return render(request, self.template_name, context)
@@ -101,10 +103,12 @@ class CategoryHousesView(generic.View):
 
     def get(self, request):
         categories = Category.objects.filter(houses__isnull=False).distinct()
+        projects = Project.objects.filter(short_name__icontains='house')
 
         context = {
             "categories": categories,
-            "houses_list": House.objects.all()
+            "houses_list": House.objects.all(),
+            'projects_list': projects
         }
 
         return render(request, self.template_name, context)
@@ -117,19 +121,25 @@ class SubcategoriesHousesView(generic.View):
     def get(self, request, cat_slug, sub_slug=None):
         category = Category.objects.get(slug=cat_slug)
         houses = House.objects.filter(category=category)
+        projects = Project.objects.filter(category=category)
 
         if sub_slug:
             subcategory = Category.objects.get(slug=sub_slug)
             houses = houses.filter(category=subcategory)
+            projects = Project.objects.filter(category=subcategory)
 
         if subcategories := category.subcategory.all():
             context = {
                 "categories": subcategories,
                 "curr_category": category,
-                "houses_list": houses
+                "houses_list": houses,
+                "projects_list": projects
             }
         else:
-            context = {"houses_list": houses}
+            context = {
+                "houses_list": houses,
+                "projects_list": projects
+            }
 
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
 
@@ -143,19 +153,25 @@ class SubcategoriesSaunasView(generic.View):
     def get(self, request, cat_slug, sub_slug=None):
         category = Category.objects.get(slug=cat_slug)
         saunas = Sauna.objects.filter(category=category)
+        projects = Project.objects.filter(category=category)
 
         if sub_slug:
             subcategory = Category.objects.get(slug=sub_slug)
             saunas = saunas.filter(category=subcategory)
+            projects = Project.objects.filter(category=category)
 
         if subcategories := category.subcategory.all():
             context = {
                 "categories": subcategories,
                 "curr_category": category,
-                "saunas_list": saunas
+                "saunas_list": saunas,
+                "projects_list": projects
             }
         else:
-            context = {"saunas_list": saunas}
+            context = {
+                "saunas_list": saunas,
+                "projects_list": projects
+            }
 
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
 
