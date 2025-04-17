@@ -1,10 +1,23 @@
-from django.core.cache import cache
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.utils import timezone
 from django.db import models
 from itertools import chain
 from .models import House, Sauna, Project, Category
+
+METATAGS = {
+    'house': {
+        'title': 'Строительство домов из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим деревянные дома из клееного бруса для'
+                        ' постояного проживания и делаем это качественно.'
+                        ' Подберем для вас готовый проект или разработаем индивидуальный.'),
+    },
+    'sauna': {
+            'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
+            'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
+                            'Подберем для вас готовый проект или разработаем индивидуальный.'),
+        }
+}
 
 
 # Create your views here.
@@ -92,7 +105,10 @@ class CategorySaunaView(generic.View):
         context = {
             "categories": categories,
             "saunas_list": Sauna.objects.all(),
-            'projects_list': projects
+            "projects_list": projects,
+            "meta_url": request.build_absolute_uri(),
+            "category_title": METATAGS.get('sauna', {}).get('title', ''),
+            "category_description": METATAGS.get('sauna', {}).get('description', ''),
         }
 
         return render(request, self.template_name, context)
@@ -108,7 +124,10 @@ class CategoryHousesView(generic.View):
         context = {
             "categories": categories,
             "houses_list": House.objects.all(),
-            'projects_list': projects
+            'projects_list': projects,
+            "category_title": METATAGS.get('house', {}).get('title', ''),
+            "category_description": METATAGS.get('house', {}).get('description', ''),
+            "meta_url": request.build_absolute_uri()
         }
 
         return render(request, self.template_name, context)
@@ -124,22 +143,27 @@ class SubcategoriesHousesView(generic.View):
         projects = Project.objects.filter(category=category)
 
         if sub_slug:
+
             subcategory = Category.objects.get(slug=sub_slug)
             houses = houses.filter(category=subcategory)
             projects = Project.objects.filter(category=subcategory)
 
+        context = {
+            "houses_list": houses,
+            "projects_list": projects,
+            "category_description": category.description_house,
+            "category_title": category.title_house,
+            "meta_url": request.build_absolute_uri()
+        }
+
         if subcategories := category.subcategory.all():
-            context = {
-                "categories": subcategories,
-                "curr_category": category,
-                "houses_list": houses,
-                "projects_list": projects
-            }
-        else:
-            context = {
-                "houses_list": houses,
-                "projects_list": projects
-            }
+
+            context.update(
+                {
+                    "categories": subcategories,
+                    "curr_category": category,
+                }
+            )
 
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
 
@@ -160,18 +184,20 @@ class SubcategoriesSaunasView(generic.View):
             saunas = saunas.filter(category=subcategory)
             projects = Project.objects.filter(category=category)
 
+        context = {
+            "saunas_list": saunas,
+            "projects_list": projects,
+            "category_description": category.description_sauna,
+            "category_title": category.title_sauna,
+            "meta_url": request.build_absolute_uri()
+        }
         if subcategories := category.subcategory.all():
-            context = {
-                "categories": subcategories,
-                "curr_category": category,
-                "saunas_list": saunas,
-                "projects_list": projects
-            }
-        else:
-            context = {
-                "saunas_list": saunas,
-                "projects_list": projects
-            }
+            context.update(
+                {
+                    "categories": subcategories,
+                    "curr_category": category,
+                }
+            )
 
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
 

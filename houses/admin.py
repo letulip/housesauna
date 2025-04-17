@@ -32,5 +32,14 @@ class HouseAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    fields = ['priority', 'name', 'slug', 'subcategory', 'title', 'description']
+    fields = [
+        'priority',
+        'name',
+        'slug',
+        'subcategory',
+        'title_house',
+        'description_house',
+        'title_sauna',
+        'description_sauna',
+    ]
     prepopulated_fields = {'slug': ('name',)}
