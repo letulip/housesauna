@@ -3,10 +3,16 @@
 {% load thumbnail %}
 
 {% block head %}
-
+  <meta name="description" content="Если у вас есть идеи каким должен быть дом вашей мечты, наши проектировщики помогут вам реализовать вашу идею или предложат свою.">
+  <meta property="og:description" content="Если у вас есть идеи каким должен быть дом вашей мечты, наши проектировщики помогут вам реализовать вашу идею или предложат свою.">
+  <meta property="og:title" content="Проектирование домов из клееного бруса">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head%}
 
-{% block title %}Дом Баня - Проектирование{% endblock %}
+{% block title %}Проектирование домов из клееного бруса{% endblock %}
 
 {% block content %}
 <section class="promo promo--design">

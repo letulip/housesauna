@@ -2,11 +2,15 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %} Дом Баня - Добро пожаловать!{% endblock %}
+{% block title %}«Дом Баня» — Дома и бани из клееного бруса в Москве и области{% endblock %}
 
 {% block head %}
-<meta name="description" content="ДомБаня - Дома и бани из клееного бруса. Мы сторим дома из клееного бруса для постояного проживания 
+  <meta name="description" content="ДомБаня - Дома и бани из клееного бруса. Мы сторим дома из клееного бруса для постояного проживания
 и делаем это качествено.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head %}
 
 {% block content %}

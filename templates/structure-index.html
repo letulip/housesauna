@@ -3,10 +3,26 @@
 {% load thumbnail %}
 
 {% block head %}
-{% include 'includes/meta.html' %}
+  {% if category_title %}
+    {% include 'includes/meta.html' %}
+  {% else %}
+    <meta name="description" content="Проекты бань и домов из клееного бруса от компании «Дом Баня». Мы строим качественно.">
+    <meta property="og:description" content="Проекты бань и домов из клееного бруса от компании «Дом Баня». Мы строим качественно.">
+    <meta property="og:title" content="Все проекты компании «Дом Баня»">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Дом из клееного бруса">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
+  {% endif %}
 {% endblock head%}
 
-{% block title %}Дом Баня - Наши проекты{% endblock %}
+{% block title %}
+  {% if category_title %}
+    {{ category_title }}
+  {% else %}
+    Все проекты компании «Дом Баня»
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 

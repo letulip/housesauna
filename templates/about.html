@@ -3,10 +3,16 @@
 {% load thumbnail %}
 
 {% block head %}
-
+  <meta name="description" content="Ответственное отношение к поставленной задаче, соблюдение оговоренных сроков — мы ценим свою профессиональную репутацию и предлагаем клиентам только лучшее.">
+  <meta property="og:description" content="Ответственное отношение к поставленной задаче, соблюдение оговоренных сроков — мы ценим свою профессиональную репутацию и предлагаем клиентам только лучшее.">
+  <meta property="og:title" content="О компании «Дом Баня»">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head%}
 
-{% block title %}Дом Баня - О нас{% endblock %}
+{% block title %}О компании «Дом Баня»{% endblock %}
 
 {% block content %}
 <section class="promo promo--about">

@@ -1,9 +1,16 @@
 {% load static %}
 
-<meta name="description" content="{{ category_description }}">
-<meta property="og:url" content="{{ meta_url }}">
-<meta property="og:title" content="{{ category_title }}">
+{% if category_title %}
+  <meta name="description" content="{{ category_description }}">
+  <meta property="og:description" content="{{ category_description }}">
+  <meta property="og:title" content="{{ category_title }}">
+{% else %}
+  <meta name="description" content="{{ category_description }}">
+  <meta property="og:description" content="{{ category_description }}">
+  <meta property="og:title" content="{{ category_title }}">
+{% endif %}
+
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Дом из клееного бруса">
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
-<meta property="og:description" content="{{ category_description }}">
