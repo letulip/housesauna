@@ -2,10 +2,15 @@
 {% load static %}
 
 {% block head %}
-
+  <meta name="description" content="{{project.title}} {{project.square}}м². Размеры дома: {{project.dimensions}}м. Срок строительсттельства зависит от желаемого комплекта.">
+  <meta property="og:description" content="{{project.title}} {{project.square}}м². Размеры дома: {{project.dimensions}}м. Срок строительсттельства зависит от желаемого комплекта.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head%}
 
-{% block title %}Дом Баня - {{project.title}} {{project.square}}м²{% endblock %}
+{% block title %}{{project.title}} {{project.square}}м² - проект компании «Дом Баня».{% endblock %}
 
 {% block content %}
 
