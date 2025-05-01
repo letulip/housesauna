@@ -208,3 +208,18 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'sorl.thumbnail': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

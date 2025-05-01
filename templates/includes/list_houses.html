@@ -9,7 +9,7 @@
     <article class="grid__article grid__article--three more">
       {% for house in houses_list %}
         <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:house-detail' house.full_name %}">
-          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' as path %}
+          {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:house.short_name|add:'/'|add:house.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
                 <img loading="lazy" src="{{ im.url }}" alt="{{house.title}}" class="img__img preview__img">
@@ -38,7 +38,7 @@
     <article class="grid__article grid__article--three more">
       {% for sauna in saunas_list %}
         <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:sauna-detail' sauna.full_name %}">
-          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'/img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' as path %}
+          {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:sauna.short_name|add:'/'|add:sauna.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
                 <img loading="lazy" src="{{ im.url }}" alt="{{sauna.title}}" class="img__img preview__img">
@@ -94,7 +94,7 @@
     <article id="projects-all" class="grid__article grid__article--three">
       {% for project in projects_list %}
         <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:project-detail' project.slug %}" data-square="{{project.square}}" data-type="{{project.short_name}}">
-          {% with 'http://'|add:request.get_host|add:project.image.url as path %}
+          {% with request.scheme|add:'://'|add:request.get_host|add:project.image.url as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview img--previewProject">
                 <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img img__img--project">
