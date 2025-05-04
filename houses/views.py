@@ -100,12 +100,10 @@ class CategorySaunaView(generic.View):
 
     def get(self, request):
         categories = Category.objects.filter(saunas__isnull=False).distinct()
-        projects = Project.objects.filter(short_name__icontains='sauna')
 
         context = {
             "categories": categories,
             "saunas_list": Sauna.objects.all(),
-            "projects_list": projects,
             "category_title": METATAGS.get('sauna', {}).get('title', ''),
             "category_description": METATAGS.get('sauna', {}).get('description', ''),
         }
@@ -118,12 +116,10 @@ class CategoryHousesView(generic.View):
 
     def get(self, request):
         categories = Category.objects.filter(houses__isnull=False).distinct()
-        projects = Project.objects.filter(short_name__icontains='house')
 
         context = {
             "categories": categories,
             "houses_list": House.objects.all(),
-            'projects_list': projects,
             "category_title": METATAGS.get('house', {}).get('title', ''),
             "category_description": METATAGS.get('house', {}).get('description', '')
         }
@@ -138,7 +134,6 @@ class SubcategoriesHousesView(generic.View):
     def get(self, request, cat_slug, sub_slug=None):
         category = Category.objects.get(slug=cat_slug)
         houses = House.objects.filter(category=category)
-        projects = Project.objects.filter(category=category)
 
         if sub_slug:
 
@@ -148,7 +143,6 @@ class SubcategoriesHousesView(generic.View):
 
         context = {
             "houses_list": houses,
-            "projects_list": projects,
             "category_description": category.description_house,
             "category_title": category.title_house,
         }
@@ -174,16 +168,13 @@ class SubcategoriesSaunasView(generic.View):
     def get(self, request, cat_slug, sub_slug=None):
         category = Category.objects.get(slug=cat_slug)
         saunas = Sauna.objects.filter(category=category)
-        projects = Project.objects.filter(category=category)
 
         if sub_slug:
             subcategory = Category.objects.get(slug=sub_slug)
             saunas = saunas.filter(category=subcategory)
-            projects = Project.objects.filter(category=category)
 
         context = {
             "saunas_list": saunas,
-            "projects_list": projects,
             "category_description": category.description_sauna,
             "category_title": category.title_sauna
         }
