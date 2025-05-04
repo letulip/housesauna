@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 # DEBUG = False
 # ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
 # ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
-
+CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 # Application definition
 
