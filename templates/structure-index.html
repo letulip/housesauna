@@ -25,68 +25,15 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- <section class="content-slider content-slider--top">
-  <div class="content-slider__control content-slider__control-left"></div>
-  <div class="content-slider__control content-slider__control-right"></div>
-  <div class="content-slider__wrapper content-slider__wrapper--top">
-    <article class="content-slider__item promo promo--half content-slider__item--houses">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Дома из клееного бруса</h1>
-        <p class="content-slider__text text text--white">Мы успешно реализовали уже {{house_count}} проектов домов из клееного бруса.</p>
-        <div class="promo__buttons">
-          <a href="#houses" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-    <article class="content-slider__item promo promo--half content-slider__item--projectsSmall">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Бани из клееного бруса</h1>
-        <p class="content-slider__text text text--white">Мы успешно реализовали уже {{sauna_count}} проектов бань из клееного бруса.
-        </p>
-        <div class="promo__buttons">
-          <a href="#saunas" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-    <article class="content-slider__item promo promo--half content-slider__item--projects">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Проекты небольших домов</h1>
-        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса до 100м²</p>
-        <div class="promo__buttons">
-          <a href="#projects-less-100" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-    <article class="content-slider__item promo promo--half content-slider__item--projectsBig">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Проекты домов из<br>клееного бруса</h1>
-        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса от 100м² до 200м²</p>
-        <div class="promo__buttons">
-          <a href="#projects-100-200" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-    <article class="content-slider__item promo promo--half content-slider__item--saunas">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Проекты больших домов из клееного&nbsp;бруса</h1>
-        <p class="content-slider__text text text--white">Типовые проекты домов из клееного бруса от 200м²</p>
-        <div class="promo__buttons">
-          <a href="#projects-more-200" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-    <article class="content-slider__item promo promo--half content-slider__item--saunas">
-      <div class="promo__wrapper">
-        <h1 class="heading heading--h1 heading--white">Проекты бань из клееного&nbsp;бруса</h1>
-        <p class="content-slider__text text text--white">Типовые проекты бань из клееного бруса разной площади</p>
-        <div class="promo__buttons">
-          <a href="#projects-saunas" class="button button--uppercase button--bold button--big">Смотреть все</a>
-        </div>
-      </div>
-    </article>
-  </div>
-</section> -->
+<section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h1 class="heading heading--h2 heading--bold">
+        {{ category_title }}
+      </h1>
+    </div>
+  </article>
+</section>
 
 {% include 'includes/list_houses.html' %}
 
