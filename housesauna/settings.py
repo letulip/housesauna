@@ -27,7 +27,7 @@ with open('./housesauna/djsecret.txt') as f:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']
 
 # PROD SETTINGS
 # DEBUG = False

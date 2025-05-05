@@ -17,13 +17,13 @@
         <span class="mainNav__link">Проекты</span>
         <ul class="mainNav__listSub">
           <li class="mainNav__item">
-            <a href="/projects/houses-categories/" class="mainNav__link mainNav__link--sub">Дома</a>
+            <a href="{% url 'houses:houses_categories' %}" class="mainNav__link mainNav__link--sub">Дома</a>
           </li>
           <li class="mainNav__item">
-            <a href="/projects/saunas-categories/" class="mainNav__link mainNav__link--sub">Бани</a>
+            <a href="{% url 'houses:sauna_categories' %}" class="mainNav__link mainNav__link--sub">Бани</a>
           </li>
           <li class="mainNav__item">
-            <a href="/projects/" class="mainNav__link mainNav__link--sub">Проекты</a>
+            <a href="{% url 'houses:index' %}" class="mainNav__link mainNav__link--sub">Проекты</a>
           </li>
         </ul>
       </li>
