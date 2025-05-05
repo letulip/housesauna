@@ -4,10 +4,15 @@
 {% load houses_filters %}
 
 {% block head %}
+  <meta name="description" content="{{structure.title}} {{structure.square}}м². Размеры дома: {{structure.dimensions}}м. Базовая стоимость: {{structure.cost}} ₽. Срок строительства {{structure.construction}}">
+  <meta property="og:description" content="{{structure.title}} {{structure.square}}м². Размеры дома: {{structure.dimensions}}м. Базовая стоимость: {{structure.cost}} ₽. Срок строительства {{structure.construction}}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
+{% endblock head %}
 
-{% endblock head%}
-
-{% block title %}Дом Баня - {{structure.title}} {{structure.square}}м²{% endblock %}
+{% block title %}{{structure.title}} {{structure.square}}м² - проект компании «Дом Баня»{% endblock %}
 
 {% block content %}
 
@@ -107,7 +112,7 @@
 
       <a class="gallery__link" href="{% static ''|add:img_link %}">
 
-        {% with 'https://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
+        {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
           {% thumbnail path "357x240" crop="center" upscale=True as im %}
             <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{counter}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{counter}}" tabindex="0" />
           {% endthumbnail %}

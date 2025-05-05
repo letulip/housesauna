@@ -27,13 +27,13 @@ with open('./housesauna/djsecret.txt') as f:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']
 
 # PROD SETTINGS
 # DEBUG = False
 # ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
 # ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
-
+CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 # Application definition
 
@@ -207,4 +207,19 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'sorl.thumbnail': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
 }

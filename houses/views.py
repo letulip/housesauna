@@ -1,10 +1,23 @@
-from django.http.response import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.utils import timezone
 from django.db import models
 from itertools import chain
-from .models import House, Sauna, Project
+from .models import House, Sauna, Project, Category
+
+METATAGS = {
+    'house': {
+        'title': 'Строительство домов из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим деревянные дома из клееного бруса для'
+                        ' постояного проживания и делаем это качественно.'
+                        ' Подберем для вас готовый проект или разработаем индивидуальный.'),
+    },
+    'sauna': {
+            'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
+            'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
+                            'Подберем для вас готовый проект или разработаем индивидуальный.'),
+        }
+}
 
 
 # Create your views here.
@@ -19,13 +32,14 @@ class IndexView(generic.ListView):
         return model.objects.filter(pub_date__lte=timezone.now())
 
     def get_object_dir_name(self, model: models.Model) -> models.Model:
-        return model.objects.first().dir_name
+        obj = model.objects.first()
+        return obj.dir_name if obj else None
 
     def get_queryset(self) -> list:
         result_list = list(
             chain(
-                self.get_object_list(House),
-                self.get_object_list(Sauna),
+                # self.get_object_list(House),
+                # self.get_object_list(Sauna),
                 self.get_object_list(Project)
             )
         )
@@ -33,14 +47,15 @@ class IndexView(generic.ListView):
 
     def get_context_data(self, **kwargs: dict) -> object:
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['house_count'] = self.get_object_count(House)
-        context['houses_dir_name'] = self.get_object_dir_name(House)
-        context['houses_list'] = self.get_object_list(House)
-        context['sauna_count'] = self.get_object_count(Sauna)
-        context['saunas_dir_name'] = self.get_object_dir_name(Sauna)
-        context['saunas_list'] = self.get_object_list(Sauna)
+        # context['house_count'] = self.get_object_count(House)
+        # context['houses_dir_name'] = self.get_object_dir_name(House)
+        # context['houses_list'] = self.get_object_list(House)
+        # context['sauna_count'] = self.get_object_count(Sauna)
+        # context['saunas_dir_name'] = self.get_object_dir_name(Sauna)
+        # context['saunas_list'] = self.get_object_list(Sauna)
         context['projects_count'] = self.get_object_count(Project)
         context['projects_list'] = self.get_object_list(Project)
+        # context['categories'] = Category.objects.prefetch_related('saunas', 'houses')
         return context
 
 
@@ -78,6 +93,102 @@ class ProjectDetailView(generic.DetailView):
             Project, slug=self.kwargs.get('slug')
         )
         return Project.objects.filter(full_name=self.project)
+
+
+class CategorySaunaView(generic.View):
+    template_name = "categories.html"
+
+    def get(self, request):
+        categories = Category.objects.filter(saunas__isnull=False).distinct()
+
+        context = {
+            "categories": categories,
+            "saunas_list": Sauna.objects.all(),
+            "category_title": METATAGS.get('sauna', {}).get('title', ''),
+            "category_description": METATAGS.get('sauna', {}).get('description', ''),
+        }
+
+        return render(request, self.template_name, context)
+
+
+class CategoryHousesView(generic.View):
+    template_name = "categories.html"
+
+    def get(self, request):
+        categories = Category.objects.filter(houses__isnull=False).distinct()
+
+        context = {
+            "categories": categories,
+            "houses_list": House.objects.all(),
+            "category_title": METATAGS.get('house', {}).get('title', ''),
+            "category_description": METATAGS.get('house', {}).get('description', '')
+        }
+
+        return render(request, self.template_name, context)
+
+
+class SubcategoriesHousesView(generic.View):
+    template_name = "structure-index.html"
+    category_template_name = "categories.html"
+
+    def get(self, request, cat_slug, sub_slug=None):
+        category = Category.objects.get(slug=cat_slug)
+        houses = House.objects.filter(category=category)
+
+        if sub_slug:
+
+            subcategory = Category.objects.get(slug=sub_slug)
+            houses = houses.filter(category=subcategory)
+            projects = Project.objects.filter(category=subcategory)
+
+        context = {
+            "houses_list": houses,
+            "category_description": category.description_house,
+            "category_title": category.title_house,
+        }
+
+        if subcategories := category.subcategory.all():
+
+            context.update(
+                {
+                    "categories": subcategories,
+                    "curr_category": category,
+                }
+            )
+
+        template = self.category_template_name if subcategories and not sub_slug else self.template_name
+
+        return render(request, template, context)
+
+
+class SubcategoriesSaunasView(generic.View):
+    template_name = "structure-index.html"
+    category_template_name = "categories.html"
+
+    def get(self, request, cat_slug, sub_slug=None):
+        category = Category.objects.get(slug=cat_slug)
+        saunas = Sauna.objects.filter(category=category)
+
+        if sub_slug:
+            subcategory = Category.objects.get(slug=sub_slug)
+            saunas = saunas.filter(category=subcategory)
+
+        context = {
+            "saunas_list": saunas,
+            "category_description": category.description_sauna,
+            "category_title": category.title_sauna
+        }
+        if subcategories := category.subcategory.all():
+            context.update(
+                {
+                    "categories": subcategories,
+                    "curr_category": category,
+                }
+            )
+
+        template = self.category_template_name if subcategories and not sub_slug else self.template_name
+
+        return render(request, template, context)
 
 
 # Legacy function for OLD URLs support

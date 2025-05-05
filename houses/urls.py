@@ -1,12 +1,18 @@
 from django.urls import path
 
+from houses.views import CategorySaunaView, CategoryHousesView, SubcategoriesHousesView, SubcategoriesSaunasView
 from . import views
 
 app_name = 'houses'
 
 urlpatterns = [
-    # path('', views.index, name='index'),
-    path('', views.IndexView.as_view(), name='index'),
+    path('projects/', views.IndexView.as_view(), name='index'),
+    path('saunas-categories/', CategorySaunaView.as_view(), name="sauna_categories"),
+    path('houses-categories/', CategoryHousesView.as_view(), name="houses_categories"),
+    path('saunas-categories/<slug:cat_slug>/', SubcategoriesSaunasView.as_view(), name="sauna_sub"),
+    path('houses-categories/<slug:cat_slug>/', SubcategoriesHousesView.as_view(), name="houses_sub"),
+    path('saunas-categories/<slug:cat_slug>/<slug:sub_slug>', SubcategoriesSaunasView.as_view(), name="sauna_sub_list"),
+    path('houses-categories/<slug:cat_slug>/<slug:sub_slug>', SubcategoriesHousesView.as_view(), name="houses_sub_list"),
     path(
         '<str:structure_name>/',
         views.detail,
@@ -27,5 +33,6 @@ urlpatterns = [
         views.SaunaDetailView.as_view(),
         name='sauna-detail'
     ),
+
     # path('sumbit/', views.SubmitFormHandler.as_view(), name='submit'),
 ]

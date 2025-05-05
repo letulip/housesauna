@@ -3,10 +3,7 @@ from django.utils import timezone
 from django.db import models
 
 
-# Create your models here.
-class House(models.Model):
-    dir_name = 'Построенные дома'
-    class_name = 'House'
+class AbstractHouse(models.Model):
     full_name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=300, unique=True)
     short_name = models.CharField(max_length=200, unique=True)
@@ -25,6 +22,43 @@ class House(models.Model):
     brus = models.CharField(max_length=20)
     images_count = models.IntegerField()
     pub_date = models.DateTimeField('date published')
+
+    class Meta:
+        abstract = True
+
+
+class Category(models.Model):
+    name = models.CharField('Category\'s name', max_length=60, unique=True)
+    slug = models.SlugField('Category\'s slug', blank=True, null=True)
+    priority = models.SmallIntegerField('Priority', default=1)
+    subcategory = models.ManyToManyField(
+        'Category',
+        verbose_name='Subcategory',
+        blank=True,
+        related_name='parent'
+    )
+    title_house = models.CharField('Title (house)', max_length=255, null=True, blank=True)
+    description_house = models.TextField('Description (house)', null=True, blank=True)
+    title_sauna = models.CharField('Title (sauna)', max_length=255, null=True, blank=True)
+    description_sauna = models.TextField('Description (sauna)', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+        ordering = ('priority', 'name')
+
+    def __str__(self):
+        return self.name
+
+
+class House(AbstractHouse):
+    dir_name = 'Построенные дома'
+    class_name = 'House'
+    category = models.ManyToManyField(
+        Category,
+        verbose_name='category',
+        blank=True,
+        related_name='houses'
+    )
 
     '''
     House object example:
@@ -47,38 +81,26 @@ class House(models.Model):
     pub_date=timezone.now()
     '''
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.full_name
 
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
-    class Meta():
+    class Meta:
         ordering = ['-pub_date']
 
 
-class Sauna(models.Model):
+class Sauna(AbstractHouse):
     dir_name = 'Построенные дома-бани'
     class_name = 'Sauna'
-    full_name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=300, unique=True)
-    short_name = models.CharField(max_length=200)
-    title = models.CharField(max_length=200)
-    dimensions = models.CharField(max_length=15)
-    square = models.CharField(max_length=15)
-    square1 = models.CharField(max_length=15, null=True, blank=True)
-    square2 = models.CharField(max_length=15, null=True, blank=True)
-    cost = models.CharField(max_length=15)
-    video_url = models.CharField(max_length=20)
-    cover = models.CharField(max_length=30, null=True, blank=True)
-    description1 = models.TextField(null=True, blank=True)
-    description2 = models.TextField(null=True, blank=True)
-    complex = models.TextField(serialize=True, null=True, blank=True)
-    construction = models.CharField(max_length=20)
-    brus = models.CharField(max_length=20)
-    images_count = models.IntegerField()
-    pub_date = models.DateTimeField('date published')
+    category = models.ManyToManyField(
+        Category,
+        verbose_name='category',
+        blank=True,
+        related_name='saunas'
+    )
 
     '''
     Sauna object example:
@@ -101,14 +123,14 @@ class Sauna(models.Model):
     pub_date=timezone.now()
     '''
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.full_name
 
     def was_published_recently(self) -> bool:
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
-    class Meta():
+    class Meta:
         ordering = ['-pub_date']
 
 
@@ -124,8 +146,14 @@ class Project(models.Model):
         upload_to='projects/',
     )
     pub_date = models.DateTimeField('date published')
+    category = models.ManyToManyField(
+        Category,
+        verbose_name='category',
+        blank=True,
+        related_name='projects'
+    )
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.full_name
 
     class Meta():
