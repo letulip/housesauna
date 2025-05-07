@@ -12,6 +12,7 @@ DEBUG = True
 # PROD SETTINGS
 # DEBUG = False
 ALLOWED_HOSTS = [
+    '158.160.183.146',
     '80.249.149.81',
     'demo.domizkleenogobrusa.ru',
     'www.domizkleenogobrusa.ru',
