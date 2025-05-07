@@ -33,6 +33,4 @@ urlpatterns = [
         views.SaunaDetailView.as_view(),
         name='sauna-detail'
     ),
-
-    # path('sumbit/', views.SubmitFormHandler.as_view(), name='submit'),
 ]

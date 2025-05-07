@@ -139,7 +139,6 @@ class SubcategoriesHousesView(generic.View):
 
             subcategory = Category.objects.get(slug=sub_slug)
             houses = houses.filter(category=subcategory)
-            projects = Project.objects.filter(category=subcategory)
 
         context = {
             "houses_list": houses,

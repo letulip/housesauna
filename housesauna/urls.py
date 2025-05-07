@@ -1,20 +1,18 @@
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 
-from rest_framework import routers
-
 from api.views import RealtyApiView, StructuresApiView
+from houses.sitemaps import sitemaps
 from . import views
 
 handler404 = views.handler404
-router = routers.DefaultRouter()
 
 urlpatterns = [
     path('saunaman/', admin.site.urls),
     path('', views.IndexView.as_view(), name='index'),
-    path('', include(router.urls)),
     path(
         'api/v1/structures/',
         StructuresApiView.as_view(),
@@ -30,9 +28,9 @@ urlpatterns = [
     path('design/', views.design, name='design'),
     path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),
-    path('', include(('houses.urls', 'houses'), namespace='houses')
-    ),
     path('submit/', views.submit_form, name='submit'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('', include(('houses.urls', 'houses'), namespace='houses')),
 ]
 
 if settings.DEBUG:
