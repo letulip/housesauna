@@ -13,10 +13,10 @@ METATAGS = {
                         ' Подберем для вас готовый проект или разработаем индивидуальный.'),
     },
     'sauna': {
-            'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
-            'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
-                            'Подберем для вас готовый проект или разработаем индивидуальный.'),
-        }
+        'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
+                        'Подберем для вас готовый проект или разработаем индивидуальный.'),
+    }
 }
 
 
@@ -136,18 +136,24 @@ class SubcategoriesHousesView(generic.View):
         houses = House.objects.filter(category=category)
 
         if sub_slug:
-
             subcategory = Category.objects.get(slug=sub_slug)
+            header = subcategory.subcategories_description.get(cat_slug, {}).get('header')
+            title = subcategory.subcategories_description.get(cat_slug, {}).get('title')
+            description = subcategory.subcategories_description.get(cat_slug, {}).get('description')
             houses = houses.filter(category=subcategory)
+        else:
+            header = category.header_house
+            title = category.title_house
+            description = category.description_house
 
         context = {
             "houses_list": houses,
-            "category_description": category.description_house,
-            "category_title": category.title_house,
+            "category_description": description,
+            "category_title": title,
+            "category_header": header
         }
 
         if subcategories := category.subcategory.all():
-
             context.update(
                 {
                     "categories": subcategories,
@@ -175,7 +181,8 @@ class SubcategoriesSaunasView(generic.View):
         context = {
             "saunas_list": saunas,
             "category_description": category.description_sauna,
-            "category_title": category.title_sauna
+            "category_title": category.title_sauna,
+            "category_header": category.header_sauna
         }
         if subcategories := category.subcategory.all():
             context.update(

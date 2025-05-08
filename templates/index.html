@@ -139,8 +139,12 @@
     <article class="grid__article grid__article--three">
       <!-- <div class="grid__element"> -->
       {% for project in recent_projects %}
-        <a class="preview" href="/projects/{{project.full_name}}">
-          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
+        {% if project.structure == 'house' %}
+          <a class="preview" href="/houses/{{project.full_name}}">
+        {% else %}
+          <a class="preview" href="/saunas/{{project.full_name}}">
+        {% endif %}
+          {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
                 <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img">

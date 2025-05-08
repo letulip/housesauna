@@ -41,5 +41,8 @@ class CategoryAdmin(admin.ModelAdmin):
         'description_house',
         'title_sauna',
         'description_sauna',
+        'header_sauna',
+        'header_house',
+        'subcategories_description'
     ]
     prepopulated_fields = {'slug': ('name',)}

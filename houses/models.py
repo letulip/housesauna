@@ -41,6 +41,9 @@ class Category(models.Model):
     description_house = models.TextField('Description (house)', null=True, blank=True)
     title_sauna = models.CharField('Title (sauna)', max_length=255, null=True, blank=True)
     description_sauna = models.TextField('Description (sauna)', null=True, blank=True)
+    header_sauna = models.TextField('Header (sauna)', null=True, blank=True)
+    header_house = models.TextField('Header (house)', null=True, blank=True)
+    subcategories_description = models.JSONField('Subcategories description', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = 'Categories'

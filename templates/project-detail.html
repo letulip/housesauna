@@ -10,7 +10,7 @@
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head%}
 
-{% block title %}{{project.title}} {{project.square}}м² - проект компании «Дом Баня».{% endblock %}
+{% block title %}{{ project.title }} {{ project.square }}м² - проект компании «Дом Баня».{% endblock %}
 
 {% block content %}
 
@@ -18,16 +18,13 @@
     <article class="grid__article">
       <div class="grid__element grid__element--wide">
         <h1 class="heading heading--h2 heading--bold">
-          {{project.title}} {{project.square}}м<sup class="text__sup">2</sup>
+          {{ project.title }} {{ project.square }}м<sup class="text__sup">2</sup>
         </h1>
         <p class="text">
           Размеры: <b>{{project.dimensions}}м</b><br>
           Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b>
         </p>
-        <!-- <p class="text">
-          #TODO short descriprion in model
-        </p> -->
-        <picture class="img">
+       <picture class="img">
           <img loading="lazy" src="{% static '../'|add:project.image.url|add:'' %}" alt="" class="img__img preview__img">
         </picture>
       </div>
