@@ -1,17 +1,16 @@
-from urllib.parse import urljoin
+from itertools import chain
 
 from django.db.models import CharField, Value, QuerySet
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.http import HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
 from django.core import serializers
 from django.core.files import File
 from django.core.mail import send_mail
 from django.db import models
-
-from itertools import chain
+from rest_framework import status
 
 from houses.models import House, Sauna, Category
 from .forms import SubmitFormHandler
@@ -20,7 +19,6 @@ from .utility import send_telegram
 LAST_TO_VIEW = 3
 
 
-# Create your views here.
 class IndexView(generic.ListView):
     template_name = 'index.html'
     context_object_name = 'recent_projects'
@@ -28,7 +26,9 @@ class IndexView(generic.ListView):
     def get_object_list(self, model: models.Model, structure: str) -> QuerySet:
         return model.objects.filter(
             pub_date__lte=timezone.now()
-        ).annotate(structure=Value(structure, output_field=CharField()))[:LAST_TO_VIEW]
+        ).annotate(
+            structure=Value(
+                structure, output_field=CharField()))[:LAST_TO_VIEW]
 
     def get_queryset(self) -> list:
         houses = self.get_object_list(House, 'house')
@@ -121,18 +121,28 @@ def production(request: HttpRequest) -> render:
 
 
 def notfound(request: HttpRequest) -> render:
-    return render(request, '404.html')
+    return render(request, '404.html', status=status.HTTP_404_NOT_FOUND)
 
 
 def handler404(request: HttpRequest, exception) -> render:
     context = {
         'exception': exception,
     }
-    return render(request, '404.html', context)
+    return render(
+        request,
+        '404.html',
+        context,
+        status=status.HTTP_404_NOT_FOUND
+    )
 
 
 def handler500(request: HttpRequest, exception) -> render:
     context = {
         'exception': exception,
     }
-    return render(request, '500.html', context)
+    return render(
+        request,
+        '500.html',
+        context,
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )

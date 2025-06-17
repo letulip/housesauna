@@ -137,9 +137,15 @@ class SubcategoriesHousesView(generic.View):
 
         if sub_slug:
             subcategory = Category.objects.get(slug=sub_slug)
-            header = subcategory.subcategories_description.get(cat_slug, {}).get('header')
-            title = subcategory.subcategories_description.get(cat_slug, {}).get('title')
-            description = subcategory.subcategories_description.get(cat_slug, {}).get('description')
+
+            desc_data = {}
+            if category.subcategories_description:
+                desc_data = category.subcategories_description.get(str(subcategory.id), {})
+
+            header = desc_data.get('header') or subcategory.header_house
+            title = desc_data.get('title') or subcategory.title_house
+            description = desc_data.get('description') or subcategory.description_house
+
             houses = houses.filter(category=subcategory)
         else:
             header = category.header_house

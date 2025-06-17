@@ -1,25 +1,18 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = None
-with open('./housesauna/djsecret.txt') as f:
-    SECRET_KEY = f.read().strip()
+load_dotenv()
+
+SECRET_KEY = os.getenv('DJANGO_SECRET', '')
 
 DEBUG = True
 
 # PROD SETTINGS
 # DEBUG = False
-ALLOWED_HOSTS = [
-    '158.160.183.146',
-    '80.249.149.81',
-    'demo.domizkleenogobrusa.ru',
-    'www.domizkleenogobrusa.ru',
-    'domizkleenogobrusa.ru',
-    'localhost',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 INSTALLED_APPS = [
@@ -180,8 +173,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'ivladimirskiy@ya.ru'
 EMAIL_HOST_PASSWORD = None
-with open('./housesauna/smtp.txt') as f:
-    EMAIL_HOST_PASSWORD = f.read().strip()
+EMAIL_HOST_PASSWORD = os.getenv('SMTP_TEST', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'noreply@domizkleenogobrusa.ru'

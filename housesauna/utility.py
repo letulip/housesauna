@@ -1,12 +1,14 @@
+import os
+
+from dotenv import load_dotenv
 import telepot
 
-my_token = None
-with open('./housesauna/token.txt') as f:
-    my_token = f.read().strip()
+load_dotenv()
 
-my_chat_id = None
-with open('./housesauna/chat.txt') as f:
-    my_chat_id = f.read().strip()
+
+my_token = os.getenv('TELEGRAM_TOKEN_PROD', '')
+
+my_chat_id = os.getenv('TELEGRAM_CHAT_PROD', '')
 
 
 def send_telegram(msg: str) -> None:
