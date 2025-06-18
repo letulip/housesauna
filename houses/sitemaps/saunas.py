@@ -5,8 +5,11 @@ from houses.models import Sauna
 
 
 class SaunaSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.8
+    """
+    Sitemap для карточек построенных бань.
+    """
+    changefreq = "monthly"
+    priority = 0.6
 
     def items(self):
         return Sauna.objects.all()

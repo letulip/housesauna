@@ -5,8 +5,8 @@ from houses.models import Project
 
 
 class ProjectSitemap(Sitemap):
-    changefreq = "weekly"
-    priority = 0.8
+    changefreq = "monthly"
+    priority = 0.5
 
     def items(self):
         return Project.objects.all()

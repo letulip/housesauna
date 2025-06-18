@@ -3,8 +3,11 @@ from django.urls import reverse
 
 
 class IndexViewSiteMap(Sitemap):
-    changefreq = 'always'
-    priority = 1
+    """
+    Sitemap для главной страницы.
+    """
+    changefreq = 'weekly'
+    priority = 0.9
 
     def items(self):
         return ['index']

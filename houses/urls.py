@@ -1,6 +1,11 @@
 from django.urls import path
 
-from houses.views import CategorySaunaView, CategoryHousesView, SubcategoriesHousesView, SubcategoriesSaunasView
+from houses.views import (
+    CategorySaunaView,
+    CategoryHousesView,
+    SubcategoriesHousesView,
+    SubcategoriesSaunasView
+)
 from . import views
 
 app_name = 'houses'

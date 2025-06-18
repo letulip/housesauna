@@ -5,8 +5,11 @@ from houses.models import Category
 
 
 class CategoryHouseSitemap(Sitemap):
-    changefreq = "daily"
-    priority = 0.9
+    """
+    Sitemap для категорий домов.
+    """
+    changefreq = "monthly"
+    priority = 0.7
 
     def items(self):
         return Category.objects.filter(houses__isnull=False).distinct()
@@ -16,8 +19,8 @@ class CategoryHouseSitemap(Sitemap):
 
 
 class CategorySaunaSitemap(Sitemap):
-    changefreq = "daily"
-    priority = 0.9
+    changefreq = "monthly"
+    priority = 0.7
 
     def items(self):
         return Category.objects.filter(saunas__isnull=False).distinct()
