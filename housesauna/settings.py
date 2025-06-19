@@ -189,15 +189,35 @@ CACHES = {
 
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} [{name}] {message}',
+            'style': '{',
+        },
+    },
+
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/project.log'),
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
     },
+
     'loggers': {
-        'sorl.thumbnail': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
+        'housesauna': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
         },
-    },
+        'houses': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    }
 }

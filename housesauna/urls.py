@@ -29,7 +29,12 @@ urlpatterns = [
     path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),
     path('submit/', views.submit_form, name='submit'),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path(
+        'sitemap.xml',
+        sitemap,
+        {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap'
+    ),
     path('', include(('houses.urls', 'houses'), namespace='houses')),
 ]
 

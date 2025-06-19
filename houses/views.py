@@ -1,4 +1,5 @@
 from itertools import chain
+import logging
 
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -6,6 +7,8 @@ from django.utils import timezone
 from django.db import models
 
 from .models import House, Sauna, Project, Category
+
+logger = logging.getLogger(__name__)
 
 METATAGS = {
     'house': {
@@ -111,7 +114,7 @@ class CategorySaunaView(generic.View):
     """
     Категории для бань.
     """
-    template_name = "categories.html"
+    template_name = 'categories.html'
 
     def get(self, request):
         categories = Category.objects.filter(saunas__isnull=False).distinct()
