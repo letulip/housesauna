@@ -2,11 +2,15 @@
 {% load static %}
 {% load thumbnail %}
 
-{% block title %} Дом Баня - Добро пожаловать!{% endblock %}
+{% block title %}«Дом Баня» — Дома и бани из клееного бруса в Москве и области{% endblock %}
 
 {% block head %}
-<meta name="description" content="ДомБаня - Дома и бани из клееного бруса. Мы сторим дома из клееного бруса для постояного проживания 
-и делаем это качествено.">
+  <meta name="description" content="Компания «Дом Баня» — Мы строим дома и бани из клееного бруса и делаем это качественно.">
+  <meta property="og:description" content="Компания «Дом Баня» — Мы строим дома и бани из клееного бруса и делаем это качественно.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head %}
 
 {% block content %}
@@ -20,8 +24,8 @@
         и делаем&nbsp;это&nbsp;качествено.
       </P>
       <div class="promo__buttons">
-        <a href="/projects/#houses" class="button button--uppercase button--bold button--big">дома</a>
-        <a href="/projects/#saunas" class="button button--uppercase button--bold button--big">бани</a>
+        <a href="{% url 'houses:houses_categories' %}" class="button button--uppercase button--bold button--big">дома</a>
+        <a href="{% url 'houses:sauna_categories' %}" class="button button--uppercase button--bold button--big">бани</a>
       </div>
   </article>
 </section>
@@ -135,8 +139,12 @@
     <article class="grid__article grid__article--three">
       <!-- <div class="grid__element"> -->
       {% for project in recent_projects %}
-        <a class="preview" href="/projects/{{project.full_name}}">
-          {% with 'http://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
+        {% if project.structure == 'house' %}
+          <a class="preview" href="/houses/{{project.full_name}}">
+        {% else %}
+          <a class="preview" href="/saunas/{{project.full_name}}">
+        {% endif %}
+          {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
             {% thumbnail path "357x240" crop="center" upscale=True as im %}
               <picture class="img img--preview">
                 <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img">

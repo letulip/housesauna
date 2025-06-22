@@ -2,10 +2,16 @@
 {% load static %}
 
 {% block head %}
-
+  <meta name="description" content="Краткая справка о технологии производства клееного бруса, применяемого в наших домах.">
+  <meta property="og:description" content="Краткая справка о технологии производства клееного бруса, применяемого в наших домах.">
+  <meta property="og:title" content="Технология производства клееного бруса">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Дом из клееного бруса">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
 {% endblock head%}
 
-{% block title %}Дом Баня - Производство{% endblock %}
+{% block title %}Технология производства клееного бруса{% endblock %}
 
 {% block content %}
 <section class="promo promo--production">

@@ -32,6 +32,7 @@ class Migration(migrations.Migration):
                 ('brus', models.CharField(max_length=20)),
                 ('images_count', models.IntegerField()),
                 ('pub_date', models.DateTimeField(verbose_name='date published')),
+                ('slug', models.SlugField(verbose_name='Slug'))
             ],
         ),
         migrations.CreateModel(
@@ -55,6 +56,7 @@ class Migration(migrations.Migration):
                 ('brus', models.CharField(max_length=20)),
                 ('images_count', models.IntegerField()),
                 ('pub_date', models.DateTimeField(verbose_name='date published')),
+                ('slug', models.SlugField(verbose_name='Slug'))
             ],
         ),
     ]
