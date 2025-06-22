@@ -35,15 +35,15 @@
             <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
             <form action="/submit/" class="form form--house" method="POST">
               <label for="" class="form__label">
-                <input type="email" name="email" class="form__input" placeholder=" " required>
+                <input type="email" name="email" class="form__input" required>
                 <span class="form__placeholder">Ваш email</span>
               </label>
               <label for="" class="form__label">
-                <input type="text" name="name" class="form__input" placeholder=" " required>
+                <input type="text" name="name" class="form__input" required>
                 <span class="form__placeholder">Ваше имя</span>
               </label>
               <label for="" class="form__label">
-                <input type="tel" name="phone" class="form__input" placeholder=" " required>
+                <input type="tel" name="phone" class="form__input" required>
                 <span class="form__placeholder">Ваш телефон</span>
               </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">

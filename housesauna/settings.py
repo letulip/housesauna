@@ -8,11 +8,14 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('DJANGO_SECRET', '')
 
-DEBUG = True
+DEBUG = False
+
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']
 
 # PROD SETTINGS
 # DEBUG = False
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
+ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 INSTALLED_APPS = [
@@ -135,6 +138,7 @@ CSP_SCRIPT_SRC = [
 CSP_SCRIPT_SRC_ELEM = [
   "'self'",
   "'unsafe-inline'",
+  "https://mc.yandex.ru",
   "https://api-maps.yandex.ru",
   "https://yandex.st",
   "https://yastatic.net",
@@ -145,6 +149,7 @@ CSP_SCRIPT_SRC_ELEM = [
 CSP_FRAME_SRC = [
   "'self'",
   "'unsafe-inline'",
+  "https://mc.yandex.ru/",
   "https://yandex.ru",
   "https://www.yandex.ru",
   "https://youtube.com",
@@ -158,10 +163,15 @@ CSP_IMG_SRC = [
   "'self'",
   "http://www.w3.org",
   "data:",
+  "https://mc.yandex.ru",
   "https://api-maps.yandex.ru",
   "https://core-renderer-tiles.maps.yandex.net",
   "https://core-jams-rdr-cache.maps.yandex.net",
   "https://core-road-events-renderer.maps.yandex.net",
+]
+CSP_CONNECT_SRC = [
+  "'self'",
+  "https://mc.yandex.ru",
 ]
 CSP_FONT_SRC = [
   "'self'",
@@ -187,6 +197,10 @@ CACHES = {
     }
 }
 
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -202,7 +216,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/project.log'),
+            'filename': os.path.join(LOG_DIR, 'project.log'),
             'formatter': 'verbose',
             'encoding': 'utf-8',
         },

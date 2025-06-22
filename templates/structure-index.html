@@ -26,29 +26,26 @@
 
 {% block content %}
 
-<section class="content-slider content-slider--top">
-  <div class="content-slider__wrapper content-slider__wrapper--top">
-    <article class="content-slider__item promo promo--half content-slider__item--houses">
-      <div class="promo__wrapper">
+<section class="promo promo--half promo--background">
+  <div class="promo__wrapper">
 
-        <h1 class="heading heading--h1 heading--white"
-            style="max-width: 98%; display: inline-block; margin-left: auto; margin-right: auto;">
-          {{ category_header|default:"Дома из клееного бруса" }}
-        </h1>
+    <h1 class="heading heading--h1 heading--white"
+        style="max-width: 98%; display: inline-block; margin-left: auto; margin-right: auto;">
+      {{ category_header|default:"Дома из клееного бруса" }}
+    </h1>
 
-        {% if saunas_list or houses_list %}
-          <div class="promo__buttons">
-            <a href="{% url 'houses:houses_categories' %}"
-              class="button button--white button--small button--bold">
-              ← Назад к категориям
-            </a>
-          </div>
-        {% endif %}
-
+    {% if saunas_list or houses_list %}
+      <div class="promo__buttons">
+        <a href="{% url 'houses:houses_categories' %}"
+           class="button button--white button--small button--bold">
+          ← Назад к категориям
+        </a>
       </div>
-    </article>
+    {% endif %}
+
   </div>
 </section>
+
 
 {% include 'includes/list_houses.html' %}
 
