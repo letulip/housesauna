@@ -8,6 +8,9 @@ class ProjectSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.5
 
+    def get_protocol(self, request=None):
+        return "https"
+
     def items(self):
         return Project.objects.all()
 

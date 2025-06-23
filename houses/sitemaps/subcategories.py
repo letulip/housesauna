@@ -14,6 +14,9 @@ class BaseSubCategorySitemap(Sitemap):
     model_name = ''
     url_name = ''
 
+    def get_protocol(self, request=None):
+        return "https"
+
     def get_queryset(self):
         return Category.objects.prefetch_related('parent').filter(
             parent__isnull=False

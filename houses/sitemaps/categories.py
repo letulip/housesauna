@@ -11,6 +11,9 @@ class CategoryHouseSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.7
 
+    def get_protocol(self, request=None):
+        return "https"
+
     def items(self):
         return Category.objects.filter(houses__isnull=False).distinct()
 
@@ -21,6 +24,9 @@ class CategoryHouseSitemap(Sitemap):
 class CategorySaunaSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.7
+
+    def get_protocol(self, request=None):
+        return "https"
 
     def items(self):
         return Category.objects.filter(saunas__isnull=False).distinct()

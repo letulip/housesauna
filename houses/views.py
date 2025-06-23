@@ -67,6 +67,7 @@ class IndexView(generic.ListView):
         # context['saunas_list'] = self.get_object_list(Sauna)
         context['projects_count'] = self.get_object_count(Project)
         context['projects_list'] = self.get_object_list(Project)
+        context['category_header'] = "Проекты домов и бань"
         # context['categories'] = Category.objects.prefetch_related('saunas', 'houses')
         return context
 
@@ -78,10 +79,12 @@ class HouseDetailView(generic.DetailView):
     model = House
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
 
-    def get_queryset(self):
-        """Возвращает queryset по slug дома."""
-        return House.objects.filter(full_name=self.kwargs.get('slug'))
+    # def get_queryset(self):
+    #     """Возвращает queryset по slug дома."""
+    #     return House.objects.filter(full_name=self.kwargs.get('slug'))
 
 
 class SaunaDetailView(generic.DetailView):
@@ -91,10 +94,12 @@ class SaunaDetailView(generic.DetailView):
     model = Sauna
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
 
-    def get_queryset(self):
-        """Возвращает queryset по slug бани."""
-        return Sauna.objects.filter(full_name=self.kwargs.get('slug'))
+    # def get_queryset(self):
+    #     """Возвращает queryset по slug бани."""
+    #     return Sauna.objects.filter(full_name=self.kwargs.get('slug'))
 
 
 class ProjectDetailView(generic.DetailView):
@@ -104,10 +109,12 @@ class ProjectDetailView(generic.DetailView):
     model = Project
     template_name = 'project-detail.html'
     context_object_name = 'project'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
 
-    def get_queryset(self):
-        """Возвращает queryset по slug проекта."""
-        return Project.objects.filter(slug=self.kwargs.get('slug'))
+    # def get_queryset(self):
+    #     """Возвращает queryset по slug проекта."""
+    #     return Project.objects.filter(slug=self.kwargs.get('slug'))
 
 
 class CategorySaunaView(generic.View):

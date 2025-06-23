@@ -9,6 +9,9 @@ class IndexViewSiteMap(Sitemap):
     changefreq = 'weekly'
     priority = 0.9
 
+    def get_protocol(self, request=None):
+        return "https"
+
     def items(self):
         return ['index']
 

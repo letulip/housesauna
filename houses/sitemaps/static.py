@@ -17,6 +17,9 @@ class StaticViewSiteMap(Sitemap):
             {'name': 'houses:sauna_categories', 'changefreq': 'monthly', 'priority': 0.7},
             {'name': 'houses:houses_categories', 'changefreq': 'monthly', 'priority': 0.7},
         ]
+    
+    def get_protocol(self, request=None):
+        return "https"
 
     def location(self, item):
         return reverse(item['name'])

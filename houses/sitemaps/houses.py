@@ -11,6 +11,9 @@ class HouseSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.6
 
+    def get_protocol(self, request=None):
+        return "https"
+
     def items(self):
         return House.objects.all()
 
