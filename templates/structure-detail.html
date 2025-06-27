@@ -43,7 +43,7 @@
                 <span class="form__placeholder">Ваше имя</span>
               </label>
               <label for="" class="form__label">
-                <input type="tel" name="phone" class="form__input" required>
+                <input type="tel" name="phone" class="form__input" required pattern="^\+?[0-9\s\-]{7,20}$" title="Введите корректный номер телефона">
                 <span class="form__placeholder">Ваш телефон</span>
               </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">

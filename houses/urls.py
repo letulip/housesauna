@@ -1,6 +1,6 @@
 from django.urls import path
 
-from houses.views import (
+from .views import (
     CategorySaunaView,
     CategoryHousesView,
     SubcategoriesHousesView,
@@ -33,20 +33,20 @@ urlpatterns = [
         name='houses_sub'
     ),
     path(
-        'saunas-categories/<slug:cat_slug>/<slug:sub_slug>',
+        'saunas-categories/<slug:cat_slug>/<slug:sub_slug>/',
         SubcategoriesSaunasView.as_view(),
         name='sauna_sub_list'
     ),
     path(
-        'houses-categories/<slug:cat_slug>/<slug:sub_slug>',
+        'houses-categories/<slug:cat_slug>/<slug:sub_slug>/',
         SubcategoriesHousesView.as_view(),
         name='houses_sub_list'
     ),
-    path(
-        '<str:structure_name>/',
-        views.detail,
-        name='detail'
-    ),
+    # path(
+    #     '<str:structure_name>/',
+    #     views.detail,
+    #     name='detail'
+    # ),
     path(
         'projects/<slug:slug>/',
         views.ProjectDetailView.as_view(),

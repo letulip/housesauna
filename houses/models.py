@@ -7,23 +7,23 @@ class AbstractHouse(models.Model):
     """
     Базовая модель для домов и бань.
     """
-    full_name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=300, unique=True)
-    short_name = models.CharField(max_length=200, unique=True)
-    title = models.CharField(max_length=200)
-    dimensions = models.CharField(max_length=15)
-    square = models.CharField(max_length=15)
-    square1 = models.CharField(max_length=15, null=True, blank=True)
-    square2 = models.CharField(max_length=15, null=True, blank=True)
-    cost = models.CharField(max_length=15)
-    video_url = models.CharField(max_length=20)
-    cover = models.CharField(max_length=30, null=True, blank=True)
-    description1 = models.TextField(null=True, blank=True)
-    description2 = models.TextField(null=True, blank=True)
-    complex = models.TextField(serialize=True, null=True, blank=True)
-    construction = models.CharField(max_length=20)
-    brus = models.CharField(max_length=20)
-    images_count = models.IntegerField()
+    full_name = models.CharField('URL название', max_length=200, unique=True)
+    slug = models.SlugField('Короткий тег', max_length=300, unique=True)
+    short_name = models.CharField('URL сокращ. название',max_length=200, unique=True)
+    title = models.CharField('Заголовок', max_length=200)
+    dimensions = models.CharField('Габариты', max_length=15)
+    square = models.CharField('Общая площадь (м²)', max_length=15)
+    square1 = models.CharField('Доп. площадь 1', max_length=15, null=True, blank=True)
+    square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
+    cost = models.CharField('Стоимость', max_length=15)
+    video_url = models.CharField('Youtube URL видео', max_length=20)
+    cover = models.CharField('Обложка', max_length=30, null=True, blank=True)
+    description1 = models.TextField('Описание 1', null=True, blank=True)
+    description2 = models.TextField('Описание 2', null=True, blank=True)
+    complex = models.TextField('Комплектация', null=True, blank=True)
+    construction = models.CharField('Тип конструкции', max_length=20)
+    brus = models.CharField('Характеристика бруса', max_length=20)
+    images_count = models.IntegerField('Количество изображений')
     pub_date = models.DateTimeField('date published')
 
     class Meta:
@@ -70,8 +70,9 @@ class Category(models.Model):
         'Subcategories description', null=True, blank=True)
 
     class Meta:
-        verbose_name_plural = 'Categories'
         ordering = ('priority', 'name')
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
@@ -113,6 +114,8 @@ class House(AbstractHouse):
 
     class Meta:
         ordering = ['-pub_date']
+        verbose_name = 'Дом'
+        verbose_name_plural = 'Дома'
 
 
 class Sauna(AbstractHouse):
@@ -151,6 +154,8 @@ class Sauna(AbstractHouse):
 
     class Meta:
         ordering = ['-pub_date']
+        verbose_name = 'Баня'
+        verbose_name_plural = 'Бани'
 
 
 class Project(models.Model):
@@ -173,12 +178,12 @@ class Project(models.Model):
     - category: Категории проекта.
     """
 
-    full_name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=300, unique=True)
-    short_name = models.CharField(max_length=200)
-    title = models.CharField(max_length=200)
-    dimensions = models.CharField(max_length=15)
-    square = models.FloatField(max_length=15)
+    full_name = models.CharField('URL название', max_length=200)
+    slug = models.SlugField('Короткий тег', max_length=300, unique=True)
+    short_name = models.CharField('URL сокращ. название',max_length=200)
+    title = models.CharField('Заголовок', max_length=200)
+    dimensions = models.CharField('Габариты', max_length=15)
+    square = models.FloatField('Общая площадь (м²)')
     image = models.ImageField(
         'Превью проекта',
         upload_to='projects/',
@@ -196,3 +201,5 @@ class Project(models.Model):
 
     class Meta():
         ordering = ['square']
+        verbose_name = 'Проект'
+        verbose_name_plural = 'Проекты'

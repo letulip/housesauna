@@ -8,7 +8,7 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('DJANGO_SECRET', '')
 
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']
 
@@ -179,7 +179,10 @@ CSP_FONT_SRC = [
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'ivladimirskiy@ya.ru'
 EMAIL_HOST_PASSWORD = None
@@ -214,7 +217,7 @@ LOGGING = {
 
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOG_DIR, 'project.log'),
             'formatter': 'verbose',
@@ -225,13 +228,29 @@ LOGGING = {
     'loggers': {
         'housesauna': {
             'handlers': ['file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'houses': {
             'handlers': ['file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': False,
         },
+    }
+}
+
+LAST_TO_VIEW = 3
+
+METATAGS = {
+    'house': {
+        'title': 'Строительство домов из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим деревянные дома из клееного бруса для'
+                        ' постояного проживания и делаем это качественно.'
+                        ' Подберем для вас готовый проект или разработаем индивидуальный.'),
+    },
+    'sauna': {
+        'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
+                        'Подберем для вас готовый проект или разработаем индивидуальный.'),
     }
 }

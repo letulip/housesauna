@@ -3,6 +3,8 @@ import logging
 import urllib3
 import socket
 import smtplib
+import os
+from datetime import datetime
 
 from django.db.models import CharField, Value, QuerySet
 from django.http.response import HttpResponseRedirect, HttpResponse
@@ -11,14 +13,18 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
 from django.core import serializers
-from django.core.files import File
 from django.core.mail import send_mail
 from django.db import models
 from rest_framework import status
+from django.conf import settings
 
 from houses.models import House, Sauna
 from .forms import SubmitFormHandler
-from .utility import send_telegram
+from .utility import (
+    send_telegram,
+    save_failed_submission,
+    send_email_notification
+)
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +83,7 @@ class ObjectsYMLView(generic.View):
         """
         Объединяет и сортирует объекты домов и бань,
         сериализует их в XML и сохраняет в файл.
+        Файл при создании будет лежать в media/catalog.xml
         """
         chain_list = list(
             chain(
@@ -90,12 +97,13 @@ class ObjectsYMLView(generic.View):
             reverse=True
         )
         data = serializers.serialize('xml', result_list)
-        f = open('catalog.xml', 'w')
-        logger.debug('Записываем в catalog.xml...')
-        myfile = File(f)
-        myfile.write(data)
-        myfile.close()
-        logger.debug('Запись в catalog.xml завершена.')
+        output_path = os.path.join(settings.MEDIA_ROOT, 'catalog.xml')
+        try:
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(data)
+            logger.info(f'XML успешно записан в {output_path}')
+        except Exception as e:
+            logger.error(f'Не удалось записать XML: {e}')
         return result_list
 
     def get(self, request):
@@ -123,23 +131,27 @@ def submit_form(request: HttpRequest) -> render:
                 f'Страница объекта: {form_page}'
             )
             sender = 'noreply@domizkleenogobrusa.ru'
+            recipients = ['ivladimirskiy@ya.ru', 'aslanov72@mail.ru']
+            failed = False
             try:
                 send_telegram(message)
-            except (
-                urllib3.exceptions.HTTPError,
-                urllib3.exceptions.SSLError,
-                socket.error,
-                TimeoutError
-            ) as e:
-                logger.warning(f'Ошибка отправки сообщения в телеграм: {e}')
-                logger.info(f'Неотправленное сообщение: {message}')
-
-            recipients = ['ivladimirskiy@ya.ru', 'aslanov72@mail.ru']
+            except Exception:
+                failed = True
             try:
-                send_mail(subject, message, sender, recipients)
-            except (smtplib.SMTPException, socket.error, TimeoutError) as e:
-                logger.warning(f'Ошибка при отправке email: {e}')
-                logger.info(f'Неотправленное сообщение: {message}')
+                send_email_notification(subject, message, sender, recipients)
+            except Exception:
+                failed = True
+            if failed:
+                logger.info('[SUBMIT] Сохраняем неотправленную заявку')
+                save_failed_submission({
+                    'Имя': form_client,
+                    'Email': form_email,
+                    'Телефон': form_phone,
+                    'Объект': form_object,
+                    'Страница': form_page,
+                    'Сообщение': message,
+                    'Дата/время': datetime.datetime.now().isoformat()
+                })
             return HttpResponseRedirect(request.path_info)
 
     return render(request, 'submit.html')

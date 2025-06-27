@@ -7,3 +7,9 @@ class SubmitFormHandler(forms.Form):
     phone = forms.CharField(label='Телефон', max_length=100)
     form_name = forms.CharField(max_length=200)
     form_link = forms.URLField(max_length=300)
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone']
+        if not phone.replace('+', '').replace('-', '').isdigit():
+            raise forms.ValidationError('Некорректный номер телефона.')
+        return phone
