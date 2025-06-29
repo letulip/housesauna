@@ -191,7 +191,7 @@ class Project(models.Model):
     pub_date = models.DateTimeField('date published')
     category = models.ManyToManyField(
         Category,
-        verbose_name='category',
+        verbose_name='Категории',
         blank=True,
         related_name='projects'
     )

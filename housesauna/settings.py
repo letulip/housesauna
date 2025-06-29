@@ -10,12 +10,11 @@ SECRET_KEY = os.getenv('DJANGO_SECRET', '')
 
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']  # ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
 
 # PROD SETTINGS
 # DEBUG = False
-# ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
-ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
+# ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 INSTALLED_APPS = [
@@ -229,12 +228,12 @@ LOGGING = {
         'housesauna': {
             'handlers': ['file'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
         'houses': {
             'handlers': ['file'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
     }
 }

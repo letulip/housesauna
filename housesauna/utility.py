@@ -45,20 +45,21 @@ def send_email_notification(subject, message, sender, recipients):
 
 def save_failed_submission(data: dict):
     """
-    Сохраняет данные заявки в файл, если ни телега, ни email не сработали.
+    Сохраняет данные неотправленной заявки в один лог-файл.
     """
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    file_name = f'failed_submission_{timestamp}.txt'
+    file_name = 'failed_submissions.log'
     save_dir = os.path.join(settings.BASE_DIR, 'failed_submissions')
     os.makedirs(save_dir, exist_ok=True)
 
     file_path = os.path.join(save_dir, file_name)
-    logger.info(f"Сохраняю файл по пути: {file_path}")
+    logger.info(f'Добавляется запись в файл: {file_path}')
 
     try:
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write('Неотправленная заявка:\n')
+        with open(file_path, 'a', encoding='utf-8') as f:
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            f.write(f'=== Заявка от {timestamp} ===\n')
             for key, value in data.items():
-                f.write(f"{key}: {value}\n")
+                f.write(f'{key}: {value}\n')
+            f.write('\n')
     except Exception as e:
-        logger.error(f"Не удалось сохранить файл заявки: {e}")
+        logger.error(f'Не удалось сохранить заявку: {e}')

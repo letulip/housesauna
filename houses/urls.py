@@ -42,11 +42,6 @@ urlpatterns = [
         SubcategoriesHousesView.as_view(),
         name='houses_sub_list'
     ),
-    # path(
-    #     '<str:structure_name>/',
-    #     views.detail,
-    #     name='detail'
-    # ),
     path(
         'projects/<slug:slug>/',
         views.ProjectDetailView.as_view(),
