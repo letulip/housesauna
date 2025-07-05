@@ -2,19 +2,16 @@ import os
 import logging
 from datetime import datetime
 
-from dotenv import load_dotenv
 from django.conf import settings
 from django.core.mail import send_mail
 import telepot
 
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 
 
-my_token = os.getenv('TELEGRAM_TOKEN_PROD', '')
-
-my_chat_id = os.getenv('TELEGRAM_CHAT_PROD', '')
+TOKEN_TG = os.getenv('TELEGRAM_TOKEN_PROD', '')
+CHAT_ID_TG = os.getenv('TELEGRAM_CHAT_PROD', '')
 
 
 def send_telegram(msg: str) -> None:
@@ -22,12 +19,13 @@ def send_telegram(msg: str) -> None:
     Отправка сообщения в телеграм.
     """
     try:
-        bot = telepot.Bot(my_token)
-        bot.sendMessage(chat_id=my_chat_id, text=msg)
+        bot = telepot.Bot(TOKEN_TG)
+        bot.sendMessage(chat_id=CHAT_ID_TG, text=msg)
         logger.info(f'[Telegram] Отправлено: {msg}')
     except Exception as e:
         logger.warning(f'[Telegram] Ошибка: {e}')
         logger.warning(f'[Telegram] Сообщение не отправлено: {msg}')
+        raise
 
 
 def send_email_notification(subject, message, sender, recipients):
@@ -41,6 +39,7 @@ def send_email_notification(subject, message, sender, recipients):
     except Exception as e:
         logger.warning(f'[Email] Ошибка: {e}')
         logger.warning(f'[Email] Сообщение не отправлено: {message}')
+        raise
 
 
 def save_failed_submission(data: dict):
@@ -48,10 +47,7 @@ def save_failed_submission(data: dict):
     Сохраняет данные неотправленной заявки в один лог-файл.
     """
     file_name = 'failed_submissions.log'
-    save_dir = os.path.join(settings.BASE_DIR, 'failed_submissions')
-    os.makedirs(save_dir, exist_ok=True)
-
-    file_path = os.path.join(save_dir, file_name)
+    file_path = os.path.join(settings.LOG_DIR, file_name)
     logger.info(f'Добавляется запись в файл: {file_path}')
 
     try:
@@ -61,5 +57,6 @@ def save_failed_submission(data: dict):
             for key, value in data.items():
                 f.write(f'{key}: {value}\n')
             f.write('\n')
+            logger.info('Неотправленная заявка сохранена.')
     except Exception as e:
         logger.error(f'Не удалось сохранить заявку: {e}')

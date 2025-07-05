@@ -1,10 +1,8 @@
-from itertools import chain
 import logging
 
 from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
-from django.db import models
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
@@ -13,40 +11,23 @@ from .models import House, Sauna, Project, Category
 logger = logging.getLogger(__name__)
 
 
-class IndexView(generic.ListView):
+class ProjectsView(generic.ListView):
     """
     Страница, отображающая список всех проектов.
     """
     template_name = 'structure-index.html'
     context_object_name = 'all_structures'
 
-    def get_object_count(self, model: models.Model) -> models.Model:
-        """Возвращает количество объектов модели."""
-        return model.objects.all().count()
+    def get_queryset(self):
+        """Возвращает список опубликованных проектов."""
+        return Project.objects.filter(pub_date__lte=timezone.now())
 
-    def get_object_list(self, model: models.Model) -> models.Model:
-        """Возвращает объекты модели, опубликованные на текущий момент."""
-        return model.objects.filter(pub_date__lte=timezone.now())
-
-    def get_object_dir_name(self, model: models.Model) -> models.Model:
-        """Возвращает наименование категории объекта (дом или баня)."""
-        obj = model.objects.first()
-        return obj.dir_name if obj else None
-
-    def get_queryset(self) -> list:
-        """Объединяет все структуры (сейчас только проекты)."""
-        result_list = list(
-            chain(
-                self.get_object_list(Project)
-            )
-        )
-        return result_list
-
-    def get_context_data(self, **kwargs: dict) -> object:
-        """Добавляет в контекст количество и список проектов."""
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['projects_count'] = self.get_object_count(Project)
-        context['projects_list'] = self.get_object_list(Project)
+    def get_context_data(self, **kwargs):
+        """Добавляет в контекст количество и заголовок."""
+        context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
+        context['projects_count'] = queryset.count()
+        context['projects_list'] = queryset
         context['category_header'] = "Проекты домов и бань"
         return context
 
@@ -84,51 +65,60 @@ class ProjectDetailView(generic.DetailView):
     slug_url_kwarg = 'slug'
 
 
-class CategorySaunaView(generic.View):
+class BaseCategoryView(generic.View):
     """
-    Категории для бань.
+    Базовая вьюха категорий для рендера categories.html
+    related_name = 'saunas' или 'houses'
+    object_model = Sauna или House,
+    meta_key = 'sauna' или 'house'
+    list_context_key = 'saunas_list' или 'houses_list'
     """
     template_name = 'categories.html'
+    related_name = ''
+    object_model = None
+    meta_key = ''
+    list_context_key = ''
 
     def get(self, request):
-        categories = Category.objects.filter(saunas__isnull=False).distinct()
-
+        categories = Category.objects.filter(
+            **{f"{self.related_name}__isnull": False}
+        ).distinct()
+        object_list = self.object_model.objects.all()
         context = {
             "categories": categories,
-            "saunas_list": Sauna.objects.all(),
+            self.list_context_key: object_list,
             "category_title": settings.METATAGS.get(
-                'sauna', {}).get('title', ''),
+                self.meta_key, {}).get('title', ''),
             "category_description": settings.METATAGS.get(
-                'sauna', {}).get('description', ''),
+                self.meta_key, {}).get('description', ''),
         }
 
         return render(request, self.template_name, context)
 
 
-class CategoryHousesView(generic.View):
+class CategorySaunaView(BaseCategoryView):
     """
-    Категории для домов.
+    Страница категории бань.
     """
-    template_name = "categories.html"
+    related_name = 'saunas'
+    object_model = Sauna
+    meta_key = 'sauna'
+    list_context_key = 'saunas_list'
 
-    def get(self, request):
-        categories = Category.objects.filter(houses__isnull=False).distinct()
 
-        context = {
-            "categories": categories,
-            "houses_list": House.objects.all(),
-            "category_title": settings.METATAGS.get(
-                'house', {}).get('title', ''),
-            "category_description": settings.METATAGS.get(
-                'house', {}).get('description', '')
-        }
-
-        return render(request, self.template_name, context)
+class CategoryHousesView(BaseCategoryView):
+    """
+    Страница категории домов.
+    """
+    related_name = 'houses'
+    object_model = House
+    meta_key = 'house'
+    list_context_key = 'houses_list'
 
 
 class BaseSubcategoryView(generic.View):
     """
-    Базовая модель подкатегорий
+    Базовая вьюха подкатегорий
     model = House или Sauna
     category_field_prefix = 'house' или 'sauna',
     list_context_key = 'houses_list' или 'saunas_list'

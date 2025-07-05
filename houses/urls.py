@@ -11,7 +11,7 @@ from . import views
 app_name = 'houses'
 
 urlpatterns = [
-    path('projects/', views.IndexView.as_view(), name='index'),
+    path('projects/', views.ProjectsView.as_view(), name='index'),
     path(
         'saunas-categories/',
         CategorySaunaView.as_view(),

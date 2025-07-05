@@ -11,5 +11,5 @@ class SubmitFormHandler(forms.Form):
     def clean_phone(self):
         phone = self.cleaned_data['phone']
         if not phone.replace('+', '').replace('-', '').isdigit():
-            raise forms.ValidationError('Некорректный номер телефона.')
+            raise forms.ValidationError('Введите корректный номер телефона из цифр, допускаются + и -.')
         return phone

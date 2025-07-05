@@ -13,7 +13,6 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
 from django.core import serializers
-from django.core.mail import send_mail
 from django.db import models
 from rest_framework import status
 from django.conf import settings
@@ -26,9 +25,8 @@ from .utility import (
     send_email_notification
 )
 
-logger = logging.getLogger(__name__)
 
-LAST_TO_VIEW = 3
+logger = logging.getLogger(__name__)
 
 
 class IndexView(generic.ListView):
@@ -53,7 +51,7 @@ class IndexView(generic.ListView):
             pub_date__lte=timezone.now()
         ).annotate(
             structure=Value(
-                structure, output_field=CharField()))[:LAST_TO_VIEW]
+                structure, output_field=CharField()))[:settings.LAST_TO_VIEW]
 
     def get_queryset(self) -> list:
         """
@@ -130,19 +128,25 @@ def submit_form(request: HttpRequest) -> render:
                 f'Телефон: {form_phone}\nEmail: {form_email}\n'
                 f'Страница объекта: {form_page}'
             )
-            sender = 'noreply@domizkleenogobrusa.ru'
-            recipients = ['ivladimirskiy@ya.ru', 'aslanov72@mail.ru']
+            sender = settings.DEFAULT_FROM_EMAIL
+            recipients_emails = os.getenv('RECIPIENTS', '')
+            recipients = [email.strip() for email in recipients_emails.split(',') if email.strip()]
             failed = False
+            errors = []
             try:
                 send_telegram(message)
-            except Exception:
+            except Exception as e:
+                logger.error('[SUBMIT] Ошибка при отправке в Telegram: %s', e, exc_info=True)
                 failed = True
+                errors.append('telegram')
             try:
                 send_email_notification(subject, message, sender, recipients)
-            except Exception:
+            except Exception as e:
+                logger.error('[SUBMIT] Ошибка при отправке email: %s', e, exc_info=True)
                 failed = True
+                errors.append('email')
             if failed:
-                logger.info('[SUBMIT] Сохраняем неотправленную заявку')
+                logger.info('[SUBMIT] Сохраняем неотправленную заявку (%s)', ', '.join(errors))
                 save_failed_submission({
                     'Имя': form_client,
                     'Email': form_email,
@@ -150,7 +154,7 @@ def submit_form(request: HttpRequest) -> render:
                     'Объект': form_object,
                     'Страница': form_page,
                     'Сообщение': message,
-                    'Дата/время': datetime.datetime.now().isoformat()
+                    'Дата/время': datetime.now().isoformat()
                 })
             return HttpResponseRedirect(request.path_info)
 
