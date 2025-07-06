@@ -8,12 +8,9 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('DJANGO_SECRET', '')
 
-DEBUG = True
-
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '158.160.183.146']  # ALLOWED_HOSTS = ['37.228.117.208', 'hs.letulip.ru', 'localhost']
+DEBUG = False
 
 # PROD SETTINGS
-# DEBUG = False
 ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
@@ -167,10 +164,10 @@ EMAIL_HOST_PASSWORD = os.getenv('SMTP_TEST', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL', '')
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# else:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -207,21 +204,11 @@ LOGGING = {
         },
     },
 
-    'root': {
-        'handlers': ['file'],
-        'level': 'DEBUG',
-    },
-
     'loggers': {
         'housesauna': {
             'handlers': ['file'],
             'level': 'DEBUG',
-            'propagate': True,
-        },
-        'houses': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     }
 }

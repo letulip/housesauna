@@ -9,7 +9,7 @@ class AbstractHouse(models.Model):
     """
     full_name = models.CharField('URL название', max_length=200, unique=True)
     slug = models.SlugField('Короткий тег', max_length=300, unique=True)
-    short_name = models.CharField('URL сокращ. название',max_length=200, unique=True)
+    short_name = models.CharField('URL сокращ. название', max_length=200, unique=True)
     title = models.CharField('Заголовок', max_length=200)
     dimensions = models.CharField('Габариты', max_length=15)
     square = models.CharField('Общая площадь (м²)', max_length=15)

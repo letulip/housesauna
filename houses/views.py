@@ -1,5 +1,3 @@
-import logging
-
 from django.shortcuts import render
 from django.views import generic
 from django.utils import timezone
@@ -7,8 +5,6 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 
 from .models import House, Sauna, Project, Category
-
-logger = logging.getLogger(__name__)
 
 
 class ProjectsView(generic.ListView):

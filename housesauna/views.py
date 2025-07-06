@@ -1,8 +1,4 @@
 from itertools import chain
-import logging
-import urllib3
-import socket
-import smtplib
 import os
 from datetime import datetime
 
@@ -24,9 +20,7 @@ from .utility import (
     save_failed_submission,
     send_email_notification
 )
-
-
-logger = logging.getLogger(__name__)
+from housesauna.logger import logger
 
 
 class IndexView(generic.ListView):
@@ -148,11 +142,6 @@ def submit_form(request: HttpRequest) -> render:
             if failed:
                 logger.info('[SUBMIT] Сохраняем неотправленную заявку (%s)', ', '.join(errors))
                 save_failed_submission({
-                    'Имя': form_client,
-                    'Email': form_email,
-                    'Телефон': form_phone,
-                    'Объект': form_object,
-                    'Страница': form_page,
                     'Сообщение': message,
                     'Дата/время': datetime.now().isoformat()
                 })

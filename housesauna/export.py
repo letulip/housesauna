@@ -1,14 +1,12 @@
 from datetime import timezone
 from itertools import chain
-import logging
 
 from django.core import serializers
 from django.core.files import File
 from django.db import models
 
 from houses.models import House, Sauna
-
-logger = logging.getLogger(__name__)
+from housesauna.logger import logger
 
 
 def get_object_list(self, model: models.Model) -> models.Model:

@@ -1,13 +1,13 @@
 import os
-import logging
 from datetime import datetime
+import smtplib
+import socket
 
 from django.conf import settings
 from django.core.mail import send_mail
 import telepot
-
-
-logger = logging.getLogger(__name__)
+from telepot.exception import TelegramError, BadHTTPResponse
+from housesauna.logger import logger
 
 
 TOKEN_TG = os.getenv('TELEGRAM_TOKEN_PROD', '')
@@ -22,7 +22,7 @@ def send_telegram(msg: str) -> None:
         bot = telepot.Bot(TOKEN_TG)
         bot.sendMessage(chat_id=CHAT_ID_TG, text=msg)
         logger.info(f'[Telegram] Отправлено: {msg}')
-    except Exception as e:
+    except (TelegramError, BadHTTPResponse) as e:
         logger.warning(f'[Telegram] Ошибка: {e}')
         logger.warning(f'[Telegram] Сообщение не отправлено: {msg}')
         raise
@@ -36,7 +36,13 @@ def send_email_notification(subject, message, sender, recipients):
     try:
         send_mail(subject, message, sender, recipients)
         logger.info(f'[Email] Отправлено сообщение: {message}')
-    except Exception as e:
+    except (
+        smtplib.SMTPException,
+        socket.error,
+        UnicodeEncodeError,
+        ConnectionRefusedError,
+        TimeoutError
+    ) as e:
         logger.warning(f'[Email] Ошибка: {e}')
         logger.warning(f'[Email] Сообщение не отправлено: {message}')
         raise
