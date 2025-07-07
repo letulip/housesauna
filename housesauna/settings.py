@@ -1,25 +1,17 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = None
-with open('./housesauna/djsecret.txt') as f:
-    SECRET_KEY = f.read().strip()
+load_dotenv()
 
-DEBUG = True
+SECRET_KEY = os.getenv('DJANGO_SECRET', '')
+
+DEBUG = False
 
 # PROD SETTINGS
-# DEBUG = False
-ALLOWED_HOSTS = [
-    '158.160.183.146',
-    '80.249.149.81',
-    'demo.domizkleenogobrusa.ru',
-    'www.domizkleenogobrusa.ru',
-    'domizkleenogobrusa.ru',
-    'localhost',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = ['80.249.149.81', 'demo.domizkleenogobrusa.ru', 'www.domizkleenogobrusa.ru', 'domizkleenogobrusa.ru', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://80.249.149.81', 'https://www.domizkleenogobrusa.ru', 'https://domizkleenogobrusa.ru']
 
 INSTALLED_APPS = [
@@ -70,20 +62,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'housesauna.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,9 +85,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Moscow'
@@ -114,19 +95,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
   os.path.join(BASE_DIR, 'static'),
 ]
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -142,6 +116,7 @@ CSP_SCRIPT_SRC = [
 CSP_SCRIPT_SRC_ELEM = [
   "'self'",
   "'unsafe-inline'",
+  "https://mc.yandex.ru",
   "https://api-maps.yandex.ru",
   "https://yandex.st",
   "https://yastatic.net",
@@ -152,6 +127,7 @@ CSP_SCRIPT_SRC_ELEM = [
 CSP_FRAME_SRC = [
   "'self'",
   "'unsafe-inline'",
+  "https://mc.yandex.ru/",
   "https://yandex.ru",
   "https://www.yandex.ru",
   "https://youtube.com",
@@ -165,10 +141,15 @@ CSP_IMG_SRC = [
   "'self'",
   "http://www.w3.org",
   "data:",
+  "https://mc.yandex.ru",
   "https://api-maps.yandex.ru",
   "https://core-renderer-tiles.maps.yandex.net",
   "https://core-jams-rdr-cache.maps.yandex.net",
   "https://core-road-events-renderer.maps.yandex.net",
+]
+CSP_CONNECT_SRC = [
+  "'self'",
+  "https://mc.yandex.ru",
 ]
 CSP_FONT_SRC = [
   "'self'",
@@ -176,15 +157,17 @@ CSP_FONT_SRC = [
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-relay.sendinblue.com'
-EMAIL_HOST_USER = 'ivladimirskiy@ya.ru'
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = None
-with open('./housesauna/smtp.txt') as f:
-    EMAIL_HOST_PASSWORD = f.read().strip()
+EMAIL_HOST_PASSWORD = os.getenv('SMTP_TEST', '')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'noreply@domizkleenogobrusa.ru'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_EMAIL', '')
+# if DEBUG:
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# else:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -195,17 +178,53 @@ CACHES = {
     }
 }
 
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} [{name}] {message}',
+            'style': '{',
+        },
+    },
+
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'sorl.thumbnail': {
-            'handlers': ['console'],
+        'file': {
             'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'project.log'),
+            'formatter': 'verbose',
+            'encoding': 'utf-8',
         },
     },
+
+    'loggers': {
+        'housesauna': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
+
+LAST_TO_VIEW = 3
+
+METATAGS = {
+    'house': {
+        'title': 'Строительство домов из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим деревянные дома из клееного бруса для'
+                        ' постояного проживания и делаем это качественно.'
+                        ' Подберем для вас готовый проект или разработаем индивидуальный.'),
+    },
+    'sauna': {
+        'title': 'Строительство бань из клееного бруса под ключ в Москве и области — проекты и цены',
+        'description': ('Мы строим бани из клееного бруса и делаем это качественно. '
+                        'Подберем для вас готовый проект или разработаем индивидуальный.'),
+    }
 }

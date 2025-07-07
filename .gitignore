@@ -12,3 +12,7 @@ media/cache/
 venv/
 .venv/
 .env
+*\__pycache__
+\media
+\static
+\logs

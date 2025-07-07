@@ -25,15 +25,30 @@
 {% endblock %}
 
 {% block content %}
-<section class="grid">
-  <article class="grid__article">
-    <div class="grid__element grid__element--wide">
-      <h1 class="heading heading--h2 heading--bold">
-        {{ category_header }}
-      </h1>
-    </div>
-  </article>
+
+<section class="promo promo--half promo--background">
+  <div class="promo__wrapper">
+
+    <h1 class="heading heading--h1 heading--white"
+        style="max-width: 98%; display: inline-block; margin-left: auto; margin-right: auto;">
+      {{ category_header|default:"Дома из клееного бруса" }}
+    </h1>
+
+    {% if saunas_list %}
+      <a href="{% url 'houses:sauna_categories' %}"
+        class="button button--white button--small button--bold">
+        ← Назад к категориям
+      </a>
+    {% elif houses_list %}
+      <a href="{% url 'houses:houses_categories' %}"
+        class="button button--white button--small button--bold">
+        ← Назад к категориям
+      </a>
+    {% endif %}
+
+  </div>
 </section>
+
 
 {% include 'includes/list_houses.html' %}
 

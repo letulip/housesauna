@@ -13,7 +13,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(Sauna)
-class HouseAdmin(admin.ModelAdmin):
+class SaunaAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'get_categories', 'title']
 
     @admin.display()
