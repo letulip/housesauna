@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 
 
@@ -10,6 +12,7 @@ class SubmitFormHandler(forms.Form):
 
     def clean_phone(self):
         phone = self.cleaned_data['phone']
-        if not phone.replace('+', '').replace('-', '').isdigit():
+        cleaned = re.sub(r'[^\d+-]', '', phone).replace('+', '').replace('-', '')
+        if not cleaned.replace('+', '').replace('-', '').isdigit():
             raise forms.ValidationError('Введите корректный номер телефона из цифр, допускаются + и -.')
-        return phone
+        return '+7' + cleaned
