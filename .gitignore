@@ -16,3 +16,4 @@ venv/
 \media
 \static
 \logs
+\static\admin\css
