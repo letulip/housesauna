@@ -1,6 +1,7 @@
 {% extends "common.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load spaced_price %}
 
 {% block title %}«Дом Баня» — Дома и бани из клееного бруса в Москве и области{% endblock %}
 
@@ -155,9 +156,9 @@
             <img src="{% static 'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
           </picture> -->
           <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}}</h5>
-          <p class="text text--sm text--nopadding">Размеры дома: <b>{{project.dimensions}}м</b></p>
-          <p class="text text--sm text--nopadding">Общая площадь: <b>{{project.square}}м<sup class="text__sup">2</sup></b></p>
-          <p class="text text--sm text--nopadding">Стоимость: <b>{{project.cost}} ₽</b></p>
+          <p class="text text--sm text--nopadding">Размеры дома: <b>{{ project.dimensions }}м</b></p>
+          <p class="text text--sm text--nopadding">Общая площадь: <b>{{ project.square }}м<sup class="text__sup">2</sup></b></p>
+          <p class="text text--sm text--nopadding">Стоимость: <b>{{ project.cost|spaced_price }} ₽</b></p>
           <div class="button button--alt button--marginTop-15 button--marginBottom-20">Подробнее о доме</div>
         </a>
       {% endfor %}

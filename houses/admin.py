@@ -23,11 +23,17 @@ class SaunaAdmin(admin.ModelAdmin):
 
 @admin.register(House)
 class HouseAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'get_categories', 'title']
+    list_display = ['short_name', 'get_categories', 'title', 'square', 'price_per_m2', 'cost']
+    fields = ['short_name', 'title', 'square', 'price_per_m2', 'cost', 'category']
+    readonly_fields = ['cost']
 
     @admin.display()
     def get_categories(self, obj):
         return [category for category in obj.category.all()]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        obj.update_cost()
 
 
 @admin.register(Category)

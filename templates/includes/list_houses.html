@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% load spaced_price %}
 {% if houses_list %}
   <section id="houses" class="grid">
     <article class="grid__article">
@@ -19,7 +20,7 @@
           <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{house.title}} {{house.square}}м<sup class="text__sup">2</sup></h5>
           <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{house.dimensions}}м</b></p>
           <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{house.square}}м<sup class="text__sup">2</sup></b></p>
-          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{house.cost}} ₽</b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{ house.cost|spaced_price }} ₽</b></p>
         </a>
       {% endfor %}
     </article>
@@ -48,7 +49,7 @@
           <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{sauna.title}} {{sauna.square}}м<sup class="text__sup">2</sup></h5>
           <p class="text text--sm text--nopadding text--grey">Размеры дома: <b>{{sauna.dimensions}}м</b></p>
           <p class="text text--sm text--nopadding text--grey">Общая площадь: <b>{{sauna.square}}м<sup class="text__sup">2</sup></b></p>
-          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost}} ₽</b></p>
+          <p class="text text--sm text--nopadding text--grey">Стоимость: <b>{{sauna.cost|spaced_price}} ₽</b></p>
         </a>
       {% endfor %}
     </article>

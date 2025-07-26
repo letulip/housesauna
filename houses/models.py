@@ -1,6 +1,12 @@
 import datetime
+
 from django.utils import timezone
 from django.db import models
+
+
+PRICE_PER_M2_UNDER_70 = 100_000
+PRICE_PER_M2_70_TO_150 = 90_000
+PRICE_PER_M2_OVER_150 = 80_000
 
 
 class AbstractHouse(models.Model):
@@ -12,10 +18,10 @@ class AbstractHouse(models.Model):
     short_name = models.CharField('URL сокращ. название', max_length=200, unique=True)
     title = models.CharField('Заголовок', max_length=200)
     dimensions = models.CharField('Габариты', max_length=15)
-    square = models.CharField('Общая площадь (м²)', max_length=15)
+    square = models.FloatField('Общая площадь (м²)')
     square1 = models.CharField('Доп. площадь 1', max_length=15, null=True, blank=True)
     square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
-    cost = models.CharField('Стоимость', max_length=15)
+    cost = models.IntegerField('Стоимость')
     video_url = models.CharField('Youtube URL видео', max_length=20)
     cover = models.CharField('Обложка', max_length=30, null=True, blank=True)
     description1 = models.TextField('Описание 1', null=True, blank=True)
@@ -24,7 +30,8 @@ class AbstractHouse(models.Model):
     construction = models.CharField('Тип конструкции', max_length=20)
     brus = models.CharField('Характеристика бруса', max_length=20)
     images_count = models.IntegerField('Количество изображений')
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('Дата публикации')
+    price_per_m2 = models.IntegerField(default=0, verbose_name='Цена за м²')
 
     class Meta:
         abstract = True
@@ -35,6 +42,35 @@ class AbstractHouse(models.Model):
         """
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    def update_cost(self):
+        """
+        Метод для обновления основной цены при изменении стоимости за кв.м.
+        Вызываем в shell в цикле вручную по всем домам один раз
+        после изменения цены за кв.м.
+
+        python manage.py shell
+        from houses.models import Sauna/House
+        for house in Sauna/House.objects.all():
+            house.assign_initial_price_per_m2()
+            house.update_cost()
+        """
+        if self.square and self.price_per_m2:
+            self.cost = self.square * self.price_per_m2
+            self.save(update_fields=["cost"])
+
+    def assign_initial_price_per_m2(self):
+        """
+        Однократная логика назначения цены за м² в БД на основе площади.
+        Логика распределения цены предоставлена заказчиком.
+        """
+        if self.square < 70:
+            self.price_per_m2 = PRICE_PER_M2_UNDER_70
+        elif self.square <= 150:
+            self.price_per_m2 = PRICE_PER_M2_70_TO_150
+        else:
+            self.price_per_m2 = PRICE_PER_M2_OVER_150
+        self.save(update_fields=["price_per_m2"])
 
     def __str__(self) -> str:
         return self.full_name
