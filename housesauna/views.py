@@ -146,6 +146,8 @@ def submit_form(request: HttpRequest) -> render:
                     'Дата/время': datetime.now().isoformat()
                 })
             return HttpResponseRedirect(request.path_info)
+        else:
+            logger.warning('[SUBMIT] Ошибка валидации формы: %s', form.errors)
 
     return render(request, 'submit.html')
 
