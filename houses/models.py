@@ -27,7 +27,7 @@ class AbstractHouse(models.Model):
     description1 = models.TextField('Описание 1', null=True, blank=True)
     description2 = models.TextField('Описание 2', null=True, blank=True)
     complex = models.TextField('Комплектация', null=True, blank=True)
-    construction = models.CharField('Тип конструкции', max_length=20)
+    construction = models.CharField('Время изготовления', max_length=20)
     brus = models.CharField('Характеристика бруса', max_length=20)
     images_count = models.IntegerField('Количество изображений')
     pub_date = models.DateTimeField('Дата публикации')

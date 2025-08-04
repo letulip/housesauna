@@ -58,7 +58,8 @@ class IndexView(generic.ListView):
         ]
         return sorted(
             chain.from_iterable(combined),
-            key=lambda instance: instance.pub_date
+            key=lambda instance: instance.pub_date,
+            reverse=True
         )
 
 

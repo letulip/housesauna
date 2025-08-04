@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 from .views import (
     CategorySaunaView,
@@ -12,6 +13,8 @@ app_name = 'houses'
 
 urlpatterns = [
     path('projects/', views.ProjectsView.as_view(), name='index'),
+    path('houses/', RedirectView.as_view(url='/houses-categories/', permanent=True)),
+    path('saunas/', RedirectView.as_view(url='/saunas-categories/', permanent=True)),
     path(
         'saunas-categories/',
         CategorySaunaView.as_view(),
