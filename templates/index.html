@@ -138,31 +138,32 @@
     </article>
 
     <article class="grid__article grid__article--three">
-      <!-- <div class="grid__element"> -->
       {% for project in recent_projects %}
         {% if project.structure == 'house' %}
-          <a class="preview" href="/houses/{{project.full_name}}">
+          <a class="preview" href="/houses/{{ project.full_name }}">
         {% else %}
-          <a class="preview" href="/saunas/{{project.full_name}}">
+          <a class="preview" href="/saunas/{{ project.full_name }}">
         {% endif %}
-          {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' as path %}
-            {% thumbnail path "357x240" crop="center" upscale=True as im %}
-              <picture class="img img--preview">
-                <img loading="lazy" src="{{ im.url }}" alt="{{project.title}}" class="img__img preview__img">
-              </picture>
-            {% endthumbnail %}
+
+          {% with photos=project.cover_images|default:project.prefetched_images %}
+            {% with cover=photos|first %}
+              {% if cover %}
+                {% thumbnail cover.image "357x240" crop="center" upscale=True as im %}
+                  <picture class="img img--preview">
+                    <img loading="lazy" src="{{ im.url }}" alt="{{ cover.alt|default:project.title }}" class="img__img preview__img">
+                  </picture>
+                {% endthumbnail %}
+              {% endif %}
+            {% endwith %}
           {% endwith %}
-          <!-- <picture class="img img--preview">
-            <img src="{% static 'img/projects/'|add:project.short_name|add:'/'|add:project.short_name|add:'-0.jpeg' %}" alt="" class="img__img preview__img">
-          </picture> -->
-          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{project.title}}</h5>
+
+          <h5 class="heading heading--h5 heading--left heading--paddingBottom-10 heading--paddingTop-15">{{ project.title }}</h5>
           <p class="text text--sm text--nopadding">Размеры дома: <b>{{ project.dimensions }}м</b></p>
           <p class="text text--sm text--nopadding">Общая площадь: <b>{{ project.square }}м<sup class="text__sup">2</sup></b></p>
           <p class="text text--sm text--nopadding">Стоимость: <b>{{ project.cost|spaced_price }} ₽</b></p>
           <div class="button button--alt button--marginTop-15 button--marginBottom-20">Подробнее о доме</div>
         </a>
       {% endfor %}
-      <!-- </div> -->
     </article>
   </section>
 {% endif %}

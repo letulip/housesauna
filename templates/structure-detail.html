@@ -10,7 +10,21 @@
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Дом из клееного бруса">
-  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
+
+  {% with photos=structure.cover_images|default:structure.prefetched_images %}
+    {% with hero=photos|first %}
+      {% if hero %}
+        {# делаем корректный размер для соцсетей (1200x630) #}
+        {% thumbnail hero.image "1200x630" crop="center" as og %}
+          <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og.url }}">
+          <meta property="og:image:width" content="1200">
+          <meta property="og:image:height" content="630">
+        {% endthumbnail %}
+      {% else %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg' %}">
+      {% endif %}
+    {% endwith %}
+  {% endwith %}
 {% endblock head %}
 
 {% block title %}{{structure.title}} {{structure.square}}м² - проект компании «Дом Баня»{% endblock %}
@@ -105,31 +119,26 @@
       <p class="text text--left">
         Срок строительства <b>{{structure.construction}}</b>.
       </p>
-      <!-- <p class="text text--left">
-        Стоимость проекта меняется в зависимости от сечения бруса, фундамента, комплектации и выбора отделочных материалов.
-      </p> -->
     </div>
   </article>
 </section>
 
 <section class="gallery" id="lightgallery">
-
-  {% with ''|center:structure.images_count as range %}
-    {% for i in range %}
-      {% with img_link='img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-'|concat:forloop.counter0|add:'.jpeg' counter=forloop.counter0 %}
-
-      <a class="gallery__link" href="{% static ''|add:img_link %}">
-
-        {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
-            {% thumbnail path "357x240" crop="center" upscale=True as im %}
-              <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{counter}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{counter}}" tabindex="0" />
-            {% endthumbnail %}
-        {% endwith %}
+  {% with items=structure.prefetched_images %}
+    {% for photo in items %}
+      <a class="gallery__link" href="{{ photo.image.url }}" data-sub-html="{{ photo.alt }}">
+        {# генерим миниатюру через sorl-thumbnail #}
+        {% thumbnail photo.image "357x240" crop="center" upscale=True as im %}
+          <img loading="lazy"
+               class="gallery__img"
+               src="{{ im.url }}"
+               alt="{{ photo.alt|default:structure.title }}"
+               data-img-index="{{ forloop.counter0 }}"
+               tabindex="0" />
+        {% endthumbnail %}
       </a>
-      {% endwith %}
     {% endfor %}
   {% endwith %}
-  
 </section>
 
 {% endblock content %}

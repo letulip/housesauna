@@ -17,3 +17,4 @@ venv/
 \static
 \logs
 \static\admin\css
+db-latest.sqlite3

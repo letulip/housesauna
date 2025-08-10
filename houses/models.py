@@ -2,11 +2,26 @@ import datetime
 
 from django.utils import timezone
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.db.models import Max
 
 
 PRICE_PER_M2_UNDER_70 = 100_000
 PRICE_PER_M2_70_TO_150 = 90_000
 PRICE_PER_M2_OVER_150 = 80_000
+
+
+def _upload_to_structure(instance, filename: str) -> str:
+    """
+    Формирует путь: <short_name>/<short_name>-<order>.jpeg
+    Расширение всегда .jpeg, чтобы URL был стабильным.
+    """
+    struct = instance.structure
+    slug = getattr(struct, 'short_name', None) or getattr(struct, 'slug', None)
+    if not slug:
+        raise ValidationError('У объекта нет short_name/slug для формирования пути.')
+    order = instance.order if instance.order is not None else 0
+    return f'{slug}/{slug}-{order}.jpeg'
 
 
 class AbstractHouse(models.Model):
@@ -23,7 +38,6 @@ class AbstractHouse(models.Model):
     square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
     cost = models.IntegerField('Стоимость')
     video_url = models.CharField('Youtube URL видео', max_length=20)
-    cover = models.CharField('Обложка', max_length=30, null=True, blank=True)
     description1 = models.TextField('Описание 1', null=True, blank=True)
     description2 = models.TextField('Описание 2', null=True, blank=True)
     complex = models.TextField('Комплектация', null=True, blank=True)
@@ -153,6 +167,10 @@ class House(AbstractHouse):
         verbose_name = 'Дом'
         verbose_name_plural = 'Дома'
 
+    @property
+    def cover_image(self):
+        return self.images.filter(is_cover=True).first() or self.images.order_by('order').first()
+
 
 class Sauna(AbstractHouse):
     """
@@ -192,6 +210,10 @@ class Sauna(AbstractHouse):
         ordering = ['-pub_date']
         verbose_name = 'Баня'
         verbose_name_plural = 'Бани'
+
+    @property
+    def cover_image(self):
+        return self.images.filter(is_cover=True).first() or self.images.order_by('order').first()
 
 
 class Project(models.Model):
@@ -239,3 +261,85 @@ class Project(models.Model):
         ordering = ['square']
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
+
+
+class AbstractStructureImage(models.Model):
+    """Абстрактный класс для изображений строений."""
+    image = models.ImageField(
+        'Изображение',
+        upload_to=_upload_to_structure
+    )
+    alt = models.CharField(
+        'alt-текст',
+        max_length=255,
+        blank=True
+    )
+    order = models.PositiveIntegerField(
+        'Порядок отображения',
+        null=True,
+        blank=True,
+        db_index=True
+    )
+    is_cover = models.BooleanField('Обложка', default=False)
+
+    class Meta:
+        abstract = True
+        ordering = ['order']
+
+    def clean(self):
+        if self.image and hasattr(self.image, 'file'):
+            try:
+                from PIL import Image
+                self.image.file.seek(0)
+                img = Image.open(self.image.file)
+                if img.format not in ('JPEG', 'JPG'):
+                    raise ValidationError('Только JPEG изображения допускаются.')
+            except Exception:
+                raise ValidationError('Невалидное изображение. Загрузите JPEG.')
+
+    def _next_order(self) -> int:
+        """
+        Найти следующий order для конкретного объекта (House/Sauna).
+        """
+        qs = self.__class__.objects.filter(structure=self.structure)
+        m = qs.aggregate(m=Max('order'))['m']
+        return 0 if m is None else (m + 1)
+
+    def save(self, *args, **kwargs):
+        creating = self.pk is None
+        if self.order is None:
+            self.order = self._next_order()
+        super().save(*args, **kwargs)
+        if self.is_cover:
+            self.__class__.objects.filter(structure=self.structure) \
+                .exclude(pk=self.pk).update(is_cover=False)
+
+
+class HouseImage(AbstractStructureImage):
+    """Изображения домов."""
+    structure = models.ForeignKey(
+        'House',
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name='Дом',
+    )
+
+    class Meta:
+        verbose_name = 'Фото дома'
+        verbose_name_plural = 'Фото дома'
+        unique_together = [('structure', 'order')]
+
+
+class SaunaImage(AbstractStructureImage):
+    """Изображения бань."""
+    structure = models.ForeignKey(
+        'Sauna',
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name='Баня',
+    )
+
+    class Meta:
+        verbose_name = 'Фото бани'
+        verbose_name_plural = 'Фото бани'
+        unique_together = [('structure', 'order')]
