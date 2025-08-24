@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models import Max
+from django.db.models import Q, UniqueConstraint
 
 
 PRICE_PER_M2_UNDER_70 = 100_000
@@ -276,15 +277,22 @@ class AbstractStructureImage(models.Model):
     )
     order = models.PositiveIntegerField(
         'Порядок отображения',
-        null=True,
-        blank=True,
+        default=0,
         db_index=True
     )
     is_cover = models.BooleanField('Обложка', default=False)
 
     class Meta:
         abstract = True
-        ordering = ['order']
+        ordering = ['-is_cover', 'order', 'id']
+
+    def __str__(self):
+        """Отображение имени фото в админке."""
+        struct = getattr(self, 'structure', None)
+        struct_name = str(struct) if struct else '—'
+        role = 'обложка' if self.is_cover else f'#{self.order if self.order is not None else "—"}'
+        name = (self.alt or (self.image.name.split('/')[-1] if self.image else 'без файла'))
+        return f'{struct_name} · {role} · {name}'
 
     def clean(self):
         if self.image and hasattr(self.image, 'file'):
@@ -306,7 +314,6 @@ class AbstractStructureImage(models.Model):
         return 0 if m is None else (m + 1)
 
     def save(self, *args, **kwargs):
-        creating = self.pk is None
         if self.order is None:
             self.order = self._next_order()
         super().save(*args, **kwargs)
@@ -327,7 +334,16 @@ class HouseImage(AbstractStructureImage):
     class Meta:
         verbose_name = 'Фото дома'
         verbose_name_plural = 'Фото дома'
-        unique_together = [('structure', 'order')]
+        constraints = [
+            UniqueConstraint(
+                fields=['structure'],
+                condition=Q(is_cover=True),
+                name='unique_house_cover_per_structure',
+            ),
+            UniqueConstraint(
+                fields=['structure', 'order'],
+                name='unique_house_structure_order'),
+        ]
 
 
 class SaunaImage(AbstractStructureImage):
@@ -342,4 +358,13 @@ class SaunaImage(AbstractStructureImage):
     class Meta:
         verbose_name = 'Фото бани'
         verbose_name_plural = 'Фото бани'
-        unique_together = [('structure', 'order')]
+        constraints = [
+            UniqueConstraint(
+                fields=['structure'],
+                condition=Q(is_cover=True),
+                name='unique_sauna_cover_per_structure',
+            ),
+            UniqueConstraint(
+                fields=['structure', 'order'],
+                name='unique_sauna_structure_order'),
+        ]
