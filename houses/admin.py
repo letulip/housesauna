@@ -144,6 +144,29 @@ class SaunaImageInline(admin.TabularInline):
         return formset
 
 
+class BaseStructureAdmin(admin.ModelAdmin):
+    """
+    Единые настройки для Домов и Бань.
+    """
+    list_display = ['short_name', 'get_categories', 'title', 'square', 'price_per_m2', 'cost']
+    readonly_fields = ['cost']
+
+    @admin.display(description="Категории")
+    def get_categories(self, obj):
+        return ", ".join(map(str, obj.category.all()))
+
+    def save_model(self, request, obj, form, change):
+        """
+        1) При первом сохранении можно назначить цену за м² по правилам,
+           если она не выбрана.
+        2) Пересчитать общую стоимость по формуле модели.
+        """
+        if not obj.price_per_m2:
+            obj.assign_initial_price_per_m2()
+        super().save_model(request, obj, form, change)
+        obj.update_cost()
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['short_name', 'get_categories', 'title']
@@ -153,30 +176,14 @@ class ProjectAdmin(admin.ModelAdmin):
         return [category for category in obj.category.all()]
 
 
-@admin.register(Sauna)
-class SaunaAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'get_categories', 'title']
-    inlines = [SaunaImageInline]
-
-    @admin.display()
-    def get_categories(self, obj):
-        return [category for category in obj.category.all()]
-
-
 @admin.register(House)
-class HouseAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'get_categories', 'title', 'square', 'price_per_m2', 'cost']
-    fields = ['short_name', 'title', 'square', 'price_per_m2', 'cost', 'category']
-    readonly_fields = ['cost']
+class HouseAdmin(BaseStructureAdmin):
     inlines = [HouseImageInline]
 
-    @admin.display()
-    def get_categories(self, obj):
-        return [category for category in obj.category.all()]
 
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        obj.update_cost()
+@admin.register(Sauna)
+class SaunaAdmin(BaseStructureAdmin):
+    inlines = [SaunaImageInline]
 
 
 @admin.register(Category)

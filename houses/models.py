@@ -11,6 +11,12 @@ PRICE_PER_M2_UNDER_70 = 100_000
 PRICE_PER_M2_70_TO_150 = 90_000
 PRICE_PER_M2_OVER_150 = 80_000
 
+PRICE_PER_M2_CHOICES = [
+    (PRICE_PER_M2_UNDER_70, "100 000 ₽/м² (до 70 м²)"),
+    (PRICE_PER_M2_70_TO_150, "90 000 ₽/м² (70–150 м²)"),
+    (PRICE_PER_M2_OVER_150, "80 000 ₽/м² (свыше 150 м²)"),
+]
+
 
 def _upload_to_structure(instance, filename: str) -> str:
     """
@@ -37,16 +43,20 @@ class AbstractHouse(models.Model):
     square = models.FloatField('Общая площадь (м²)')
     square1 = models.CharField('Доп. площадь 1', max_length=15, null=True, blank=True)
     square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
-    cost = models.IntegerField('Стоимость')
+    cost = models.IntegerField('Стоимость', null=True, blank=True)
     video_url = models.CharField('Youtube URL видео', max_length=20)
     description1 = models.TextField('Описание 1', null=True, blank=True)
     description2 = models.TextField('Описание 2', null=True, blank=True)
     complex = models.TextField('Комплектация', null=True, blank=True)
     construction = models.CharField('Время изготовления', max_length=20)
     brus = models.CharField('Характеристика бруса', max_length=20)
-    images_count = models.IntegerField('Количество изображений')
+    images_count = models.IntegerField('Количество изображений, не заполнять', null=True, blank=True)
     pub_date = models.DateTimeField('Дата публикации')
-    price_per_m2 = models.IntegerField(default=0, verbose_name='Цена за м²')
+    price_per_m2 = models.IntegerField(
+        choices=PRICE_PER_M2_CHOICES,
+        default=PRICE_PER_M2_UNDER_70,
+        verbose_name="Цена за м²"
+    )
 
     class Meta:
         abstract = True
