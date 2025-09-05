@@ -57,6 +57,8 @@ class AbstractHouse(models.Model):
         default=PRICE_PER_M2_UNDER_70,
         verbose_name="Цена за м²"
     )
+    vk_video_url = models.URLField('VK видео для фрейма', blank=True, null=True)
+    rutube_video_url = models.URLField('Rutube видео', blank=True, null=True)
 
     class Meta:
         abstract = True

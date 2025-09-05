@@ -21,7 +21,7 @@
   <title>{% block title %}Дом Баня{% endblock %}</title>
   <meta name="google-site-verification" content="ViI4fbL1Zfa9b6c-ABd4nMqrisVRCZwqxdra_uNywcM" />
   <meta name="yandex-verification" content="f49305fee71f40fe" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   {% block head %}
   {% endblock head %}
   <!-- PRELOADS START -->
@@ -77,7 +77,11 @@
   </script> -->
 
   
-  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/main2.js' %}"></script>
+  <link rel="modulepreload" href="{% static 'js/modulepreload-polyfill.js' %}" crossorigin>
+  <link rel="modulepreload" href="{% static 'js/burger.js' %}" crossorigin>
+  <link rel="modulepreload" href="{% static 'js/content-slider.js' %}" crossorigin>
+  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/main.js' %}"></script>
+  <script nonce="{{ CSP_NONCE }}" type="module" src="{% static 'js/contact_form.js' %}"></script>
   <!-- <script nonce="{{ CSP_NONCE }}" src="{% static 'js/mainNav/mainNav.js' %}"></script> -->
 
   <script nonce="{{ CSP_NONCE }}"  src="https://yandex.st/jquery/2.2.3/jquery.min.js" type="text/javascript"></script>

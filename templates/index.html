@@ -11,7 +11,7 @@
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Дом из клееного бруса">
-  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg' %}">
 {% endblock head %}
 
 {% block content %}
@@ -243,6 +243,20 @@
   <div class="hr"></div>
 
   <section class="grid">
+  <article class="grid__article">
+    <div class="grid__element grid__element--wide">
+      <h2 class="heading heading--h2">Наш RuTube канал</h2>
+      <a class="" href="https://rutube.ru/channel/26904642/" target="_blank">
+        <svg class="social__icon social__icon--rt" width="100" height="100">
+          <use href="{% static '/img/icon-rutube-big.svg' %}" class="img img--rutube"></use>
+        </svg>
+      </a>
+      <p class="text">Расскажем и покажем про наши проекты со всеми нюансами.<br>Убедитесь сами!</p>
+    </div>
+  </article>
+</section>
+
+  <!-- <section class="grid">
     <article class="grid__article">
       <div class="grid__element grid__element--wide">
         <h2 class="heading heading--h2 heading--bold">Наш YouTube канал</h2>
@@ -252,10 +266,13 @@
         <p class="text">Расскажем и покажем про наши проекты со всеми нюансами.<br>Убедитесь сами!</p>
       </div>
     </article>
-  </section>
+  </section> -->
 
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/burger.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/modulepreload-polyfill.js' %}"></script>
+
 {% endblock scripts %}
