@@ -95,7 +95,11 @@
               </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
               <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
-              <button type="submit" class="form__submit button button--big">Позвоните мне</button>
+              <button type="submit"
+                      class="form__submit button button--big button--bold"
+                      style="color:#fff;">
+                Позвоните мне
+              </button>
               {% csrf_token %}
             </form>
             <p class="text text--white text--sm">Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
@@ -175,14 +179,32 @@
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lightgallery.js' %}"></script>
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lg-thumbnail.js' %}"></script>
-<script type="text/javascript">
-  lightGallery(document.getElementById('lightgallery'), {
-      plugins: [lgThumbnail],
-      thumbnail: true,
-      licenseKey: 'your_license_key',
-      speed: 500,
-  });
-</script>
+  <!-- Ядро (UMD) -->
+  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/lightgallery/lightgallery.js' %}"></script>
+  <!-- Плагин миниатюр (UMD) — твой house.js, создаёт window.lgThumbnail -->
+  <script nonce="{{ CSP_NONCE }}" src="{% static 'js/house.js' %}"></script>
+
+  <script nonce="{{ CSP_NONCE }}">
+    (function () {
+      var root = document.getElementById('lightgallery');
+      if (!root) return;
+
+      // Сносим предыдущий инстанс, если вдруг был
+      if (root.lg && root.lg.destroy) { try { root.lg.destroy(true); } catch(e){} }
+
+      // Инициализация по селектору (как раньше)
+      root.lg = window.lightGallery(root, {
+        selector: '.gallery__link',
+        plugins: window.lgThumbnail ? [window.lgThumbnail] : [],
+        thumbnail: true,
+
+        /* Ключевое: рисуем миниатюры прямо в .lg-outer, тогда они видны сразу */
+        appendThumbnailsTo: '.lg-outer',
+        toggleThumb: false,
+
+        speed: 300,
+        licenseKey: '0000-0000-000-0000'
+      });
+    })();
+  </script>
 {% endblock scripts %}

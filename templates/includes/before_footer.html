@@ -7,10 +7,9 @@
 
       <ul style="list-style:none;display:flex;gap:16px;margin:0 0 30px;padding:0;justify-content:center;align-items:center;">
         <li>
-          <a href="https://t.me/Dombanya1" target="_blank" rel="noopener" aria-label="Telegram"
-             style="color:#1F57C8;display:inline-flex;align-items:center;justify-content:center;">
-            <svg width="40" height="40" style="display:block;fill:currentColor;">
-              <use href="{% static 'img/sprite.svg' %}#icon-telegram"></use>
+          <a href="https://t.me/Dombanya1" target="_blank" rel="noopener" aria-label="Telegram">
+            <svg class="social__icon social__icon--tg" width="40" height="40">
+              <use href="{% static 'img/icon-tg.svg' %}"></use>
             </svg>
           </a>
         </li>
@@ -35,8 +34,8 @@
         <li>
           <a href="https://vk.com/domizkleenogobrusa" target="_blank" rel="noopener" aria-label="VK"
              style="color:#1F57C8;display:inline-flex;align-items:center;justify-content:center;">
-            <svg width="40" height="40" style="display:block;fill:currentColor;">
-              <use href="{% static 'img/sprite.svg' %}#icon-vk"></use>
+            <svg class="social__icon social__icon--vk" width="40" height="40">
+              <use href="{% static 'img/icon-vk.svg' %}"></use>
             </svg>
           </a>
         </li>
@@ -53,7 +52,7 @@
           <span class="form__placeholder form__placeholder--dark">Ваше имя</span>
         </label>
         <label class="form__label" style="width:100%;max-width:400px;">
-          <input type="tel" name="phone" class="form__input form__input--dark" required style="width:100%;">
+          <input type="tel" name="phone" class="form__input form__input--dark" required style="width:100%;" maxlength="15">
           <span class="form__placeholder form__placeholder--dark">Ваш телефон</span>
         </label>
 
@@ -62,7 +61,7 @@
 
         <button type="submit"
                 class="form__submit form__submit--dark form__submit--wide form__submit--center button button--big"
-                style="background:#1F57C8;color:#fff;border:1px solid #1F57C8;padding:14px 24px;cursor:pointer;">
+                style="background:#1F57C8;color:#fff;border:1px solid #1F57C8;padding:14px 24px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">
           Позвоните мне
         </button>
         {% csrf_token %}
