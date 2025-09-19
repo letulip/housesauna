@@ -140,6 +140,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def children(self):
+        return self.subcategory.all()
+
+    def parents(self):
+        return self.parent.all()
+
 
 class House(AbstractHouse):
     """
@@ -380,3 +386,13 @@ class SaunaImage(AbstractStructureImage):
                 fields=['structure', 'order'],
                 name='unique_sauna_structure_order'),
         ]
+
+
+def filter_by_all_categories(qs, *categories):
+    """
+    Вернуть объекты qs, которым назначены ВСЕ переданные категории.
+    Работает для House/Sauna/Project (любой модели с полем category M2M).
+    """
+    for c in categories:
+        qs = qs.filter(category=c)
+    return qs.distinct()

@@ -3,9 +3,25 @@ from django.views import generic
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Case, When, Value, IntegerField
 
-from .models import House, Sauna, Project, Category, HouseImage, SaunaImage
+from .models import House, Sauna, Project, Category, HouseImage, SaunaImage, filter_by_all_categories
+
+
+def order_categories(qs):
+    """
+    Числовые названия (^\d) идут первыми, затем по priority и name.
+    """
+    return (
+        qs.annotate(
+            _num_first=Case(
+                When(name__regex=r'^\d', then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by('_num_first', 'priority', 'name')
+        .distinct())
 
 
 house_images_prefetch = Prefetch(
@@ -115,6 +131,7 @@ class BaseCategoryView(generic.View):
         categories = Category.objects.filter(
             **{f"{self.related_name}__isnull": False}
         ).distinct()
+        categories = order_categories(categories)
         qs = self.object_model.objects.filter(pub_date__lte=timezone.now())
         if self.object_model is House:
             qs = qs.prefetch_related(
@@ -168,16 +185,14 @@ class BaseSubcategoryView(generic.View):
 
     def get(self, request, cat_slug, sub_slug=None):
         category = get_object_or_404(Category, slug=cat_slug)
-        objects = self.model.objects.filter(
-            pub_date__lte=timezone.now(),
-            category=category,
-        )
+        base_qs = self.model.objects.filter(pub_date__lte=timezone.now())
         if sub_slug:
-            subcategory = get_object_or_404(Category, slug=sub_slug)
-            objects = self.model.objects.filter(
-                pub_date__lte=timezone.now(),
-                category=subcategory,
+            subcategory = get_object_or_404(
+                Category,
+                slug=sub_slug,
+                parent=category,
             )
+            objects = filter_by_all_categories(base_qs, category, subcategory)
             desc_data = category.subcategories_description.get(
                 str(subcategory.id), {}
             ) if category.subcategories_description else {}
@@ -192,6 +207,8 @@ class BaseSubcategoryView(generic.View):
                 subcategory, f'description_{self.category_field_prefix}'
             )
         else:
+            objects = base_qs.filter(category=category).distinct()
+
             header = getattr(category, f'header_{self.category_field_prefix}')
             title = getattr(category, f'title_{self.category_field_prefix}')
             description = getattr(category, f'description_{self.category_field_prefix}')
@@ -205,16 +222,16 @@ class BaseSubcategoryView(generic.View):
             "category_title": title,
             "category_header": header,
         }
-
         subcategories = category.subcategory.all()
+        subcategories = order_categories(subcategories)
         if subcategories:
             context.update({
                 "categories": subcategories,
                 "curr_category": category,
             })
-
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
         return render(request, template, context)
+
 
 
 class SubcategoriesHousesView(BaseSubcategoryView):

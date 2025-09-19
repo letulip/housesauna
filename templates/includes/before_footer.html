@@ -44,10 +44,6 @@
       <form action="/submit/" class="form form--wide" method="POST"
             style="display:flex;flex-direction:column;align-items:center;gap:12px;">
         <label class="form__label" style="width:100%;max-width:400px;">
-          <input type="email" name="email" class="form__input form__input--dark" required style="width:100%;">
-          <span class="form__placeholder form__placeholder--dark">Ваш email</span>
-        </label>
-        <label class="form__label" style="width:100%;max-width:400px;">
           <input type="text" name="name" class="form__input form__input--dark" required style="width:100%;">
           <span class="form__placeholder form__placeholder--dark">Ваше имя</span>
         </label>
@@ -55,7 +51,10 @@
           <input type="tel" name="phone" class="form__input form__input--dark" required style="width:100%;" maxlength="15">
           <span class="form__placeholder form__placeholder--dark">Ваш телефон</span>
         </label>
-
+        <label class="form__label" style="width:100%;max-width:400px;">
+          <input type="email" name="email" class="form__input form__input--dark" style="width:100%;">
+          <span class="form__placeholder form__placeholder--dark">Ваш email (необязательно)</span>
+        </label>
         <input type="hidden" name="form_name" value="запросу с общей формы сбора заявок">
         <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru">
 

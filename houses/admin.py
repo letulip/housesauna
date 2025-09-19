@@ -166,6 +166,12 @@ class BaseStructureAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
         obj.update_cost()
 
+        selected = list(obj.category.all())
+        parents = Category.objects.filter(subcategory__in=selected)
+        to_add = [p for p in parents if p not in selected]
+        if to_add:
+            obj.category.add(*to_add)
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
