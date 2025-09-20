@@ -140,9 +140,9 @@
     <article class="grid__article grid__article--three">
       {% for project in recent_projects %}
         {% if project.structure == 'house' %}
-          <a class="preview" href="/houses/{{ project.full_name }}">
+          <a class="preview" href="/houses/{{ project.id }}">
         {% else %}
-          <a class="preview" href="/saunas/{{ project.full_name }}">
+          <a class="preview" href="/saunas/{{ project.id }}">
         {% endif %}
 
           {% with photos=project.cover_images|default:project.prefetched_images %}
@@ -271,8 +271,8 @@
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static 'js/content-slider.js' %}"></script>
-<script nonce="{{ CSP_NONCE }}" src="{% static 'js/burger.js' %}"></script>
-<script nonce="{{ CSP_NONCE }}" src="{% static 'js/modulepreload-polyfill.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/blocks/content-slider/content-slider.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static 'js/blocks/burger/burger.js' %}"></script>
+<!-- <script nonce="{{ CSP_NONCE }}" src="{% static 'js/modulepreload-polyfill.js' %}"></script> -->
 
 {% endblock scripts %}

@@ -44,7 +44,7 @@ class AbstractHouse(models.Model):
     square1 = models.CharField('Доп. площадь 1', max_length=15, null=True, blank=True)
     square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
     cost = models.IntegerField('Стоимость', null=True, blank=True)
-    video_url = models.CharField('Youtube URL видео', max_length=20)
+    video_url = models.CharField('Youtube URL видео', max_length=20, null=True, blank=True)
     description1 = models.TextField('Описание 1', null=True, blank=True)
     description2 = models.TextField('Описание 2', null=True, blank=True)
     complex = models.TextField('Комплектация', null=True, blank=True)

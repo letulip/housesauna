@@ -30,6 +30,8 @@
 
 {% block content %}
 
+{% with is_project=structure|has_category:"Проект" %} {# <!-- CHANGED: локальный флаг --> #}
+
   <section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({{ structure.images.first.image.url }});">
     <article class="promo__wrapper">
       <h1 class="heading heading--h2 heading--bold heading--white">
@@ -40,8 +42,11 @@
         Общая площадь: <b>{{structure.square}}м<sup class="text__sup">2</sup></b><br>
         Базовая стоимость: <b>{{ structure.cost|spaced_price }} ₽</b>
       </p>
+
       <div class="grid grid--marginTop-0">
-        <div class="grid__article grid__article--two grid__article--gap-big">
+        <div class="grid__article {% if is_project %}grid__article{% else %}grid__article--two grid__article--gap-big{% endif %}" style="display:flex;justify-content:center"> {# <!-- CHANGED --> #}
+
+          {% if not is_project %}
           <div class="grid__element">
             {% if structure.vk_video_url %}
               <iframe loading="lazy" class="quote__video" width="560" height="315"
@@ -78,7 +83,9 @@
               {% endif %}
             </ul>
           </div>
-          <div class="grid__element">
+          {% endif %}
+
+          <div class="grid__element" {% if is_project %}style="max-width:680px;margin:0 auto;"{% endif %}> {# <!-- CHANGED: центрируем форму --> #}
             <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
             <form action="/submit/" class="form form--house" method="POST">
               <label for="" class="form__label">
@@ -104,83 +111,91 @@
             </form>
             <p class="text text--white text--sm">Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
           </div>
+
         </div>
       </div>
-  </article>
-</section>
+    </article>
+  </section>
 
-<section class="grid">
-  <article class="grid__article">
-    <div class="grid__element grid__element--wide">
-      <h2 class="heading heading--h2 heading--paddingBottom-50">{{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup></h2>
-      <p class="text text--left">
-        Размеры дома: <b>{{structure.dimensions}} м</b><br>
-        {% if structure.square1 %}
-        Площадь 1-го этажа: <b>{{structure.square1}} м²</b><br>
-        {% endif %}
-        {% if structure.square1 %}
-        Площадь 2-го этажа: <b>{{structure.square2}} м²</b><br>
-        {% endif %}
-        Общая площадь: <b>{{structure.square}} м²</b>
-      </p>
-      <p class="text text--left">
-        В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
-      </p>
-      <div>
-        <p class="text text--left text--nopadding">
-          Тепловой контур (базовый комплект дома) включает в себя:
+  <section class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--paddingBottom-50">{{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup></h2>
+        <p class="text text--left">
+          Размеры дома: <b>{{structure.dimensions}} м</b><br>
+          {% if structure.square1 %}
+          Площадь 1-го этажа: <b>{{structure.square1}} м²</b><br>
+          {% endif %}
+          {% if structure.square1 %}
+          Площадь 2-го этажа: <b>{{structure.square2}} м²</b><br>
+          {% endif %}
+          Общая площадь: <b>{{structure.square}} м²</b>
         </p>
-        <ul class="text text--left list list--paddingLeft-small">
-          <li>устройство свайно-забивного фундамента,</li>
-          <li>монтаж стен из клееного бруса,</li>
-          <li>использование сухого строганного пиломатериала в конструкции,</li>
-          <li>монтаж балок перекрытия 1-ого и 2-ого этажа с утеплением 200 мм,</li>
-          <li>монтаж стропильно-балочной системы,</li>
-          <li>устройство кровли — металлочерепица или мягкая кровля,</li>
-          <li>монтаж кровли с утеплением 200 мм и установкой водосточной системы,</li>
-          <li>обработку стен шлифовкой и покраской в два слоя защитным составом,</li>
-          <li>обшивку свесов карнизов отделочной рейкой,</li>
-          <li>монтаж пластиковых окон (профиль Rehau 70 мм, двухкамерный стеклопакет с энергосберегающим и мультифункциональным стеклом),</li>
-          <li>монтаж входной двери,</li>
-          <li>установку оконных и дверных блоков с москитными сетками, ограничителями открывания, подоконниками и отливами,</li>
-          <li>сверловку кабель-каналов под последующий монтаж электропроводки.</li>
-        </ul>
-      </div>
-      <p class="text text--left">
-        Стоимость базового комплекта, включая материалы и работы: <b>{{ structure.cost|spaced_price }} руб.</b>.
-      </p>
-      <p class="text text--left">
-        Цена под ключ зависит от индивидуальных предпочтений заказчика. Окончательную цену данного проекта Вы можете уточнить по телефону.
-      </p>
-      <p class="text text--left">
-        Срок строительства <b>{{structure.construction}}</b>.
-      </p>
-    </div>
-  </article>
-</section>
 
-<section class="gallery" id="lightgallery">
-  {% with items=structure.prefetched_images %}
-    {% for photo in items %}
-      <a class="gallery__link" href="{{ photo.image.url }}" data-sub-html="{{ photo.alt }}">
-        {% thumbnail photo.image "357x240" crop="center" upscale=True as im %}
-          <img loading="lazy"
-               class="gallery__img"
-               src="{{ im.url }}"
-               alt="{{ photo.alt|default:structure.title }}"
-               data-img-index="{{ forloop.counter0 }}"
-               tabindex="0" />
-        {% endthumbnail %}
-      </a>
-    {% endfor %}
-  {% endwith %}
-</section>
+        {# <!-- CHANGED: скрываем строку про брус для "Проект" --> #}
+        {% if not is_project %}
+        <p class="text text--left">
+          В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
+        </p>
+        {% endif %}
+
+        <div>
+          <p class="text text--left text--nopadding">
+            Тепловой контур (базовый комплект дома) включает в себя:
+          </p>
+          <ul class="text text--left list list--paddingLeft-small">
+            <li>устройство свайно-забивного фундамента,</li>
+            <li>монтаж стен из клееного бруса,</li>
+            <li>использование сухого строганного пиломатериала в конструкции,</li>
+            <li>монтаж балок перекрытия 1-ого и 2-ого этажа с утеплением 200 мм,</li>
+            <li>монтаж стропильно-балочной системы,</li>
+            <li>устройство кровли — металлочерепица или мягкая кровля,</li>
+            <li>монтаж кровли с утеплением 200 мм и установкой водосточной системы,</li>
+            <li>обработку стен шлифовкой и покраской в два слоя защитным составом,</li>
+            <li>обшивку свесов карнизов отделочной рейкой,</li>
+            <li>монтаж пластиковых окон (профиль Rehau 70 мм, двухкамерный стеклопакет с энергосберегающим и мультифункциональным стеклом),</li>
+            <li>монтаж входной двери,</li>
+            <li>установку оконных и дверных блоков с москитными сетками, ограничителями открывания, подоконниками и отливами,</li>
+            <li>сверловку кабель-каналов под последующий монтаж электропроводки.</li>
+          </ul>
+        </div>
+        <p class="text text--left">
+          Стоимость базового комплекта, включая материалы и работы: <b>{{ structure.cost|spaced_price }} руб.</b>.
+        </p>
+        <p class="text text--left">
+          Цена под ключ зависит от индивидуальных предпочтений заказчика. Окончательную цену данного проекта Вы можете уточнить по телефону.
+        </p>
+        <p class="text text--left">
+          Срок строительства <b>{{structure.construction}}</b>.
+        </p>
+      </div>
+    </article>
+  </section>
+
+  <section class="gallery" id="lightgallery">
+    {% with items=structure.prefetched_images %}
+      {% for photo in items %}
+        <a class="gallery__link" href="{{ photo.image.url }}" data-sub-html="{{ photo.alt }}">
+          {% thumbnail photo.image "357x240" crop="center" upscale=True as im %}
+            <img loading="lazy"
+                 class="gallery__img"
+                 src="{{ im.url }}"
+                 alt="{{ photo.alt|default:structure.title }}"
+                 data-img-index="{{ forloop.counter0 }}"
+                 tabindex="0" />
+          {% endthumbnail %}
+        </a>
+      {% endfor %}
+    {% endwith %}
+  </section>
+
+{% endwith %} {# <!-- CHANGED: закрываем with --> #}
 
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lightgallery.js' %}"></script>
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lg-thumbnail.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/blocks/lightgallery/lightgallery.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/blocks/lightgallery/lg-thumbnail.js' %}"></script>
 <script type="text/javascript">
   lightGallery(document.getElementById('lightgallery'), {
       plugins: [lgThumbnail],

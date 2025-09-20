@@ -75,8 +75,8 @@ class HouseDetailView(generic.DetailView):
     model = House
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+    # slug_field = 'full_name'
+    # slug_url_kwarg = 'slug'
 
     def get_queryset(self):
         return (
@@ -92,8 +92,8 @@ class SaunaDetailView(generic.DetailView):
     model = Sauna
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+    # slug_field = 'full_name'
+    # slug_url_kwarg = 'slug'
 
     def get_queryset(self):
         return (
@@ -102,15 +102,15 @@ class SaunaDetailView(generic.DetailView):
             .prefetch_related(sauna_images_prefetch, sauna_cover_prefetch))
 
 
-class ProjectDetailView(generic.DetailView):
-    """
-    Детальная страница проекта.
-    """
-    model = Project
-    template_name = 'project-detail.html'
-    context_object_name = 'project'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+# class ProjectDetailView(generic.DetailView):
+#     """
+#     Детальная страница проекта.
+#     """
+#     model = Project
+#     template_name = 'project-detail.html'
+#     context_object_name = 'project'
+#     slug_field = 'full_name'
+#     slug_url_kwarg = 'slug'
 
 
 class BaseCategoryView(generic.View):

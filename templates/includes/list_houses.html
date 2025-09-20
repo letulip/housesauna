@@ -10,7 +10,7 @@
 
     <article class="grid__article grid__article--three more">
       {% for house in houses_list %}
-        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:house-detail' house.full_name %}">
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:house-detail' house.id %}">
           {% with photos=house.cover_images|default:house.prefetched_images %}
             {% with cover=photos|first %}
               {% if cover %}
@@ -46,7 +46,7 @@
 
     <article class="grid__article grid__article--three more">
       {% for sauna in saunas_list %}
-        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:sauna-detail' sauna.full_name %}">
+        <a class="preview grid__element--marginBottom-medium" href="{% url 'houses:sauna-detail' sauna.id %}">
           {% with photos=sauna.cover_images|default:sauna.prefetched_images %}
             {% with cover=photos|first %}
               {% if cover %}
