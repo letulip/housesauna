@@ -10,50 +10,43 @@
 
 {% block content %}
 
-<section class="content-slider content-slider--top">
-  <div class="content-slider__wrapper content-slider__wrapper--top">
-    
-    <article class="content-slider__item promo promo--half content-slider__item--houses">
-      <div class="promo__wrapper">
+<section class="promo promo--half"
+         style="background-image: linear-gradient(0deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 100%), url({% static 'img/projects-promo-houses.jpg' %});">
+  <div class="promo__wrapper">
+    {% if category_header %}
+      <h1 class="heading heading--h1 heading--white">{{ category_header }}</h1>
+    {% elif saunas_list %}
+      <h1 class="heading heading--h1 heading--white">Бани из клееного бруса</h1>
+    {% else %}
+      <h1 class="heading heading--h1 heading--white">Дома из клееного бруса</h1>
+    {% endif %}
 
-        {% if saunas_list %}
-          <h1 class="heading heading--h1 heading--white">Бани из клееного бруса</h1>
-        {% else %}
-          <h1 class="heading heading--h1 heading--white">
-            {{ category_header|default:"Дома из клееного бруса" }}
-          </h1>
-        {% endif %}
-
-        <!-- <p class="content-slider__text text text--white">Мы успешно реализовали уже {{house_count}} проектов домов из клееного бруса.</p> -->
-        
-        <div class="promo__buttons">
-          {% if categories %}
-            {% for category in categories %}
-              {% if curr_category %}
-                {% if saunas_list %}
-                  <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
-                     class="button button--uppercase button--bold button--big">{{ category.name }}</a>
-                {% else %}
-                  <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
-                     class="button button--uppercase button--bold button--big">{{ category.name }}</a>
-                {% endif %}
-              {% else %}
-                {% if saunas_list %}
-                  <a href="{% url 'houses:sauna_sub' cat_slug=category.slug %}"
-                   class="button button--uppercase button--bold button--big">{{ category.name }}</a>
-                {% else %}
-                  <a href="{% url 'houses:houses_sub' cat_slug=category.slug %}"
-                   class="button button--uppercase button--bold button--big">{{ category.name }}</a>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
+    <div class="promo__buttons">
+      {% if categories %}
+        {% for category in categories %}
+          {% if curr_category %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+            {% endif %}
+          {% else %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub' cat_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub' cat_slug=category.slug %}"
+                 class="button button--uppercase button--bold button--big">{{ category.name }}</a>
+            {% endif %}
           {% endif %}
-        </div>
-      </div>
-    </article>
-    
+        {% endfor %}
+      {% endif %}
+    </div>
   </div>
 </section>
+
 
 <!-- <section class="promo">
   <article class="promo__wrapper">

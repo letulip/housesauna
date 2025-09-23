@@ -1,4 +1,6 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
+from django.shortcuts import get_object_or_404, redirect
 
 from .views import (
     CategorySaunaView,
@@ -7,11 +9,14 @@ from .views import (
     SubcategoriesSaunasView
 )
 from . import views
+from .models import House, Sauna
 
 app_name = 'houses'
 
 urlpatterns = [
-    path('projects/', views.ProjectsView.as_view(), name='index'),
+    # path('projects/', views.ProjectsView.as_view(), name='index'),
+    path('houses/', RedirectView.as_view(url='/houses-categories/', permanent=True)),
+    path('saunas/', RedirectView.as_view(url='/saunas-categories/', permanent=True)),
     path(
         'saunas-categories/',
         CategorySaunaView.as_view(),
@@ -42,19 +47,35 @@ urlpatterns = [
         SubcategoriesHousesView.as_view(),
         name='houses_sub_list'
     ),
+    # path(
+    #     'projects/<slug:slug>/',
+    #     views.ProjectDetailView.as_view(),
+    #     name='project-detail'
+    # ),
     path(
-        'projects/<slug:slug>/',
-        views.ProjectDetailView.as_view(),
-        name='project-detail'
-    ),
-    path(
-        'houses/<slug:slug>/',
+        'houses/<int:pk>/',
         views.HouseDetailView.as_view(),
         name='house-detail'
     ),
     path(
-        'saunas/<slug:slug>/',
+        'saunas/<int:pk>/',
         views.SaunaDetailView.as_view(),
         name='sauna-detail'
     ),
+]
+
+
+def house_slug_redirect(request, slug):
+    obj = get_object_or_404(House, full_name=slug)
+    return redirect('houses:house_detail', pk=obj.pk, permanent=True)
+
+
+def sauna_slug_redirect(request, slug):
+    obj = get_object_or_404(Sauna, full_name=slug)
+    return redirect('houses:sauna_detail', pk=obj.pk, permanent=True)
+
+
+urlpatterns += [
+    path('house/<slug:slug>/', house_slug_redirect, name='house_slug_redirect'),
+    path('sauna/<slug:slug>/', sauna_slug_redirect, name='sauna_slug_redirect'),
 ]

@@ -10,14 +10,29 @@
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Дом из клееного бруса">
-  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg'%}">
+
+  {% with photos=structure.cover_images|default:structure.prefetched_images %}
+    {% with hero=photos|first %}
+      {% if hero %}
+        {% thumbnail hero.image "1200x630" crop="center" as og %}
+          <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og.url }}">
+          <meta property="og:image:width" content="1200">
+          <meta property="og:image:height" content="630">
+        {% endthumbnail %}
+      {% else %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/main-promo-house.jpg' %}">
+      {% endif %}
+    {% endwith %}
+  {% endwith %}
 {% endblock head %}
 
 {% block title %}{{structure.title}} {{structure.square}}м² - проект компании «Дом Баня»{% endblock %}
 
 {% block content %}
 
-  <section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({% static 'img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-0.jpeg' %});">
+{% with is_project=structure|has_category:"Проект" %} {# <!-- CHANGED: локальный флаг --> #}
+
+  <section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({{ structure.images.first.image.url }});">
     <article class="promo__wrapper">
       <h1 class="heading heading--h2 heading--bold heading--white">
         {{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup>
@@ -27,18 +42,52 @@
         Общая площадь: <b>{{structure.square}}м<sup class="text__sup">2</sup></b><br>
         Базовая стоимость: <b>{{ structure.cost|spaced_price }} ₽</b>
       </p>
+
       <div class="grid grid--marginTop-0">
-        <div class="grid__article grid__article--two grid__article--gap-big">
+        <div class="grid__article {% if is_project %}grid__article{% else %}grid__article--two grid__article--gap-big{% endif %}" style="display:flex;justify-content:center"> {# <!-- CHANGED --> #}
+
+          {% if not is_project %}
           <div class="grid__element">
-            <iframe loading="lazy" class="quote__video" width="560" height="315" src="https://www.youtube.com/embed/{{structure.video_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {% if structure.vk_video_url %}
+              <iframe loading="lazy" class="quote__video" width="560" height="315"
+                      src="{{ structure.vk_video_url }}"
+                      frameborder="0"
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen></iframe>
+            {% elif structure.video_url %}
+              <iframe loading="lazy" class="quote__video" width="560" height="315"
+                      src="https://www.youtube.com/embed/{{ structure.video_url }}"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen></iframe>
+            {% endif %}
+            <ul class="social pageFooter__social">
+              {% if structure.rutube_video_url %}
+                <li class="social__item social__item--big">
+                  <a href="{{ structure.rutube_video_url }}" target="_blank" rel="noopener">
+                    <svg class="social__icon social__icon--rt" width="40" height="40">
+                          <use href="{% static 'img/icon-rutube-big.svg' %}"></use>
+                    </svg>
+                  </a>
+                </li>
+              {% endif %}
+              {% if structure.vk_video_url and structure.video_url %}
+                <li class="social__item social__item--big">
+                  <a href="https://www.youtube.com/watch?v={{ structure.video_url }}" target="_blank" rel="noopener">
+                    <svg class="social__icon social__icon--yt" width="40" height="40">
+                      <use href="{% static 'img/icon-youtube.svg' %}"></use>
+                    </svg>
+                  </a>
+                </li>
+              {% endif %}
+            </ul>
           </div>
-          <div class="grid__element">
+          {% endif %}
+
+          <div class="grid__element" {% if is_project %}style="max-width:680px;margin:0 auto;"{% endif %}> {# <!-- CHANGED: центрируем форму --> #}
             <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
             <form action="/submit/" class="form form--house" method="POST">
-              <label for="" class="form__label">
-                <input placeholder="example@example.ru" type="email" name="email" class="form__input form__input--email" required>
-                <span class="form__placeholder">Ваш email</span>
-              </label>
               <label for="" class="form__label">
                 <input type="text" name="name" class="form__input" required>
                 <span class="form__placeholder">Ваше имя</span>
@@ -47,92 +96,106 @@
                 <input placeholder="(ххх) xxx-xx-xx" maxlength="15" name="phone" type="tel" class="form__input form__input--phone" required>
                 <span class="form__placeholder">Ваш телефон</span>
               </label>
+              <label for="" class="form__label">
+                <input placeholder="example@example.ru" type="email" name="email" class="form__input form__input--email">
+                <span class="form__placeholder">Ваш email (необязательно)</span>
+              </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
               <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
-              <button type="submit" class="form__submit button button--big">Позвоните мне</button>
+              <button type="submit"
+                      class="form__submit button button--big button--bold"
+                      style="color:#fff;">
+                Позвоните мне
+              </button>
               {% csrf_token %}
             </form>
             <p class="text text--white text--sm">Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
           </div>
+
         </div>
       </div>
-  </article>
-</section>
+    </article>
+  </section>
 
-<section class="grid">
-  <article class="grid__article">
-    <div class="grid__element grid__element--wide">
-      <h2 class="heading heading--h2 heading--paddingBottom-50">{{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup></h2>
-      <p class="text text--left">
-        Размеры дома: <b>{{structure.dimensions}} м</b><br>
-        {% if structure.square1 %}
-        Площадь 1-го этажа: <b>{{structure.square1}} м²</b><br>
-        {% endif %}
-        {% if structure.square1 %}
-        Площадь 2-го этажа: <b>{{structure.square2}} м²</b><br>
-        {% endif %}
-        Общая площадь: <b>{{structure.square}} м²</b>
-      </p>
-      <p class="text text--left">
-        В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
-      </p>
-      <div>
-        <p class="text text--left text--nopadding">
-          Тепловой контур (базовый комплект дома) включает в себя:
+  <section class="grid">
+    <article class="grid__article">
+      <div class="grid__element grid__element--wide">
+        <h2 class="heading heading--h2 heading--paddingBottom-50">{{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup></h2>
+        <p class="text text--left">
+          Размеры дома: <b>{{structure.dimensions}} м</b><br>
+          {% if structure.square1 %}
+          Площадь 1-го этажа: <b>{{structure.square1}} м²</b><br>
+          {% endif %}
+          {% if structure.square1 %}
+          Площадь 2-го этажа: <b>{{structure.square2}} м²</b><br>
+          {% endif %}
+          Общая площадь: <b>{{structure.square}} м²</b>
         </p>
-        <ul class="text text--left list list--paddingLeft-small">
-          <li>устройство фундамента,</li>
-          <li>монтаж стен из клееного бруса,</li>
-          <li>монтаж балок перекрытия 1-ого и 2-ого этажа с утеплением 200 мм,</li>
-          <li>монтаж стропильно-балочной системы,</li>
-          <li>металлочерепицу,</li>
-          <li>монтаж кровли с утеплением 200 мм,</li>
-          <li>обработку стен из бруса защитным составом (покраска) в два слоя,</li>
-          <li>обшивку свесов карнизов отделочной рейкой,</li>
-          <li>монтаж оконных и дверных блоков в комплекте с москитными сетками, ограничителями открывания, подоконниками, отливами.</li>
-        </ul>
+
+        {# <!-- CHANGED: скрываем строку про брус для "Проект" --> #}
+        {% if not is_project %}
+        <p class="text text--left">
+          В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
+        </p>
+        {% endif %}
+
+        <div>
+          <p class="text text--left text--nopadding">
+            Тепловой контур (базовый комплект дома) включает в себя:
+          </p>
+          <ul class="text text--left list list--paddingLeft-small">
+            <li>устройство свайно-забивного фундамента,</li>
+            <li>монтаж стен из клееного бруса,</li>
+            <li>использование сухого строганного пиломатериала в конструкции,</li>
+            <li>монтаж балок перекрытия 1-ого и 2-ого этажа с утеплением 200 мм,</li>
+            <li>монтаж стропильно-балочной системы,</li>
+            <li>устройство кровли — металлочерепица или мягкая кровля,</li>
+            <li>монтаж кровли с утеплением 200 мм и установкой водосточной системы,</li>
+            <li>обработку стен шлифовкой и покраской в два слоя защитным составом,</li>
+            <li>обшивку свесов карнизов отделочной рейкой,</li>
+            <li>монтаж пластиковых окон (профиль Rehau 70 мм, двухкамерный стеклопакет с энергосберегающим и мультифункциональным стеклом),</li>
+            <li>монтаж входной двери,</li>
+            <li>установку оконных и дверных блоков с москитными сетками, ограничителями открывания, подоконниками и отливами,</li>
+            <li>сверловку кабель-каналов под последующий монтаж электропроводки.</li>
+          </ul>
+        </div>
+        <p class="text text--left">
+          Стоимость базового комплекта, включая материалы и работы: <b>{{ structure.cost|spaced_price }} руб.</b>.
+        </p>
+        <p class="text text--left">
+          Цена под ключ зависит от индивидуальных предпочтений заказчика. Окончательную цену данного проекта Вы можете уточнить по телефону.
+        </p>
+        <p class="text text--left">
+          Срок строительства <b>{{structure.construction}}</b>.
+        </p>
       </div>
-      <p class="text text--left">
-        Стоимость базового комплекта, включая материалы и работы: <b>{{ structure.cost|spaced_price }} ₽</b>.
-      </p>
-      <p class="text text--left">
-        Цена под ключ зависит от индивидуальных предпочтений заказчика. Окончательную цену данного проекта Вы можете уточнить по телефону.
-      </p>
-      <p class="text text--left">
-        Срок строительства <b>{{structure.construction}}</b>.
-      </p>
-      <!-- <p class="text text--left">
-        Стоимость проекта меняется в зависимости от сечения бруса, фундамента, комплектации и выбора отделочных материалов.
-      </p> -->
-    </div>
-  </article>
-</section>
+    </article>
+  </section>
 
-<section class="gallery" id="lightgallery">
+  <section class="gallery" id="lightgallery">
+    {% with items=structure.prefetched_images %}
+      {% for photo in items %}
+        <a class="gallery__link" href="{{ photo.image.url }}" data-sub-html="{{ photo.alt }}">
+          {% thumbnail photo.image "357x240" crop="center" upscale=True as im %}
+            <img loading="lazy"
+                 class="gallery__img"
+                 src="{{ im.url }}"
+                 alt="{{ photo.alt|default:structure.title }}"
+                 data-img-index="{{ forloop.counter0 }}"
+                 tabindex="0" />
+          {% endthumbnail %}
+        </a>
+      {% endfor %}
+    {% endwith %}
+  </section>
 
-  {% with ''|center:structure.images_count as range %}
-    {% for i in range %}
-      {% with img_link='img/projects/'|add:structure.short_name|add:'/'|add:structure.short_name|add:'-'|concat:forloop.counter0|add:'.jpeg' counter=forloop.counter0 %}
-
-      <a class="gallery__link" href="{% static ''|add:img_link %}">
-
-        {% with request.scheme|add:'://'|add:request.get_host|add:STATIC_URL|add:img_link as path %}
-            {% thumbnail path "357x240" crop="center" upscale=True as im %}
-              <img loading="lazy" alt="Изображение {{structure.title}} {{structure.square}}м² {{counter}}" src="{{ im.url }}" class="gallery__img" data-img-index="{{counter}}" tabindex="0" />
-            {% endthumbnail %}
-        {% endwith %}
-      </a>
-      {% endwith %}
-    {% endfor %}
-  {% endwith %}
-  
-</section>
+{% endwith %} {# <!-- CHANGED: закрываем with --> #}
 
 {% endblock content %}
 
 {% block scripts %}
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lightgallery.js' %}"></script>
-<script nonce="{{ CSP_NONCE }}" src="{% static '/js/lightgallery/lg-thumbnail.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/blocks/lightgallery/lightgallery.js' %}"></script>
+<script nonce="{{ CSP_NONCE }}" src="{% static '/js/blocks/lightgallery/lg-thumbnail.js' %}"></script>
 <script type="text/javascript">
   lightGallery(document.getElementById('lightgallery'), {
       plugins: [lgThumbnail],

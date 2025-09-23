@@ -2,11 +2,33 @@ import datetime
 
 from django.utils import timezone
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.db.models import Max
+from django.db.models import Q, UniqueConstraint
 
 
 PRICE_PER_M2_UNDER_70 = 100_000
 PRICE_PER_M2_70_TO_150 = 90_000
 PRICE_PER_M2_OVER_150 = 80_000
+
+PRICE_PER_M2_CHOICES = [
+    (PRICE_PER_M2_UNDER_70, "100 000 ₽/м² (до 70 м²)"),
+    (PRICE_PER_M2_70_TO_150, "90 000 ₽/м² (70–150 м²)"),
+    (PRICE_PER_M2_OVER_150, "80 000 ₽/м² (свыше 150 м²)"),
+]
+
+
+def _upload_to_structure(instance, filename: str) -> str:
+    """
+    Формирует путь: <short_name>/<short_name>-<order>.jpeg
+    Расширение всегда .jpeg, чтобы URL был стабильным.
+    """
+    struct = instance.structure
+    slug = getattr(struct, 'short_name', None) or getattr(struct, 'slug', None)
+    if not slug:
+        raise ValidationError('У объекта нет short_name/slug для формирования пути.')
+    order = instance.order if instance.order is not None else 0
+    return f'{slug}/{slug}-{order}.jpeg'
 
 
 class AbstractHouse(models.Model):
@@ -21,17 +43,22 @@ class AbstractHouse(models.Model):
     square = models.FloatField('Общая площадь (м²)')
     square1 = models.CharField('Доп. площадь 1', max_length=15, null=True, blank=True)
     square2 = models.CharField('Доп. площадь 2', max_length=15, null=True, blank=True)
-    cost = models.IntegerField('Стоимость')
-    video_url = models.CharField('Youtube URL видео', max_length=20)
-    cover = models.CharField('Обложка', max_length=30, null=True, blank=True)
+    cost = models.IntegerField('Стоимость', null=True, blank=True)
+    video_url = models.CharField('Youtube URL видео', max_length=20, null=True, blank=True)
     description1 = models.TextField('Описание 1', null=True, blank=True)
     description2 = models.TextField('Описание 2', null=True, blank=True)
     complex = models.TextField('Комплектация', null=True, blank=True)
-    construction = models.CharField('Тип конструкции', max_length=20)
+    construction = models.CharField('Время изготовления', max_length=20)
     brus = models.CharField('Характеристика бруса', max_length=20)
-    images_count = models.IntegerField('Количество изображений')
+    images_count = models.IntegerField('Количество изображений, не заполнять', null=True, blank=True)
     pub_date = models.DateTimeField('Дата публикации')
-    price_per_m2 = models.IntegerField(default=0, verbose_name='Цена за м²')
+    price_per_m2 = models.IntegerField(
+        choices=PRICE_PER_M2_CHOICES,
+        default=PRICE_PER_M2_UNDER_70,
+        verbose_name="Цена за м²"
+    )
+    vk_video_url = models.URLField('VK видео для фрейма', blank=True, null=True)
+    rutube_video_url = models.URLField('Rutube видео', blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -113,6 +140,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def children(self):
+        return self.subcategory.all()
+
+    def parents(self):
+        return self.parent.all()
+
 
 class House(AbstractHouse):
     """
@@ -153,6 +186,10 @@ class House(AbstractHouse):
         verbose_name = 'Дом'
         verbose_name_plural = 'Дома'
 
+    @property
+    def cover_image(self):
+        return self.images.filter(is_cover=True).first() or self.images.order_by('order').first()
+
 
 class Sauna(AbstractHouse):
     """
@@ -192,6 +229,10 @@ class Sauna(AbstractHouse):
         ordering = ['-pub_date']
         verbose_name = 'Баня'
         verbose_name_plural = 'Бани'
+
+    @property
+    def cover_image(self):
+        return self.images.filter(is_cover=True).first() or self.images.order_by('order').first()
 
 
 class Project(models.Model):
@@ -239,3 +280,119 @@ class Project(models.Model):
         ordering = ['square']
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
+
+
+class AbstractStructureImage(models.Model):
+    """Абстрактный класс для изображений строений."""
+    image = models.ImageField(
+        'Изображение',
+        upload_to=_upload_to_structure
+    )
+    alt = models.CharField(
+        'alt-текст',
+        max_length=255,
+        blank=True
+    )
+    order = models.PositiveIntegerField(
+        'Порядок отображения',
+        default=0,
+        db_index=True
+    )
+    is_cover = models.BooleanField('Обложка', default=False)
+
+    class Meta:
+        abstract = True
+        ordering = ['-is_cover', 'order', 'id']
+
+    def __str__(self):
+        """Отображение имени фото в админке."""
+        struct = getattr(self, 'structure', None)
+        struct_name = str(struct) if struct else '—'
+        role = 'обложка' if self.is_cover else f'#{self.order if self.order is not None else "—"}'
+        name = (self.alt or (self.image.name.split('/')[-1] if self.image else 'без файла'))
+        return f'{struct_name} · {role} · {name}'
+
+    def clean(self):
+        if self.image and hasattr(self.image, 'file'):
+            try:
+                from PIL import Image
+                self.image.file.seek(0)
+                img = Image.open(self.image.file)
+                if img.format not in ('JPEG', 'JPG'):
+                    raise ValidationError('Только JPEG изображения допускаются.')
+            except Exception:
+                raise ValidationError('Невалидное изображение. Загрузите JPEG.')
+
+    def _next_order(self) -> int:
+        """
+        Найти следующий order для конкретного объекта (House/Sauna).
+        """
+        qs = self.__class__.objects.filter(structure=self.structure)
+        m = qs.aggregate(m=Max('order'))['m']
+        return 0 if m is None else (m + 1)
+
+    def save(self, *args, **kwargs):
+        if self.order is None:
+            self.order = self._next_order()
+        super().save(*args, **kwargs)
+        if self.is_cover:
+            self.__class__.objects.filter(structure=self.structure) \
+                .exclude(pk=self.pk).update(is_cover=False)
+
+
+class HouseImage(AbstractStructureImage):
+    """Изображения домов."""
+    structure = models.ForeignKey(
+        'House',
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name='Дом',
+    )
+
+    class Meta:
+        verbose_name = 'Фото дома'
+        verbose_name_plural = 'Фото дома'
+        constraints = [
+            UniqueConstraint(
+                fields=['structure'],
+                condition=Q(is_cover=True),
+                name='unique_house_cover_per_structure',
+            ),
+            UniqueConstraint(
+                fields=['structure', 'order'],
+                name='unique_house_structure_order'),
+        ]
+
+
+class SaunaImage(AbstractStructureImage):
+    """Изображения бань."""
+    structure = models.ForeignKey(
+        'Sauna',
+        on_delete=models.CASCADE,
+        related_name='images',
+        verbose_name='Баня',
+    )
+
+    class Meta:
+        verbose_name = 'Фото бани'
+        verbose_name_plural = 'Фото бани'
+        constraints = [
+            UniqueConstraint(
+                fields=['structure'],
+                condition=Q(is_cover=True),
+                name='unique_sauna_cover_per_structure',
+            ),
+            UniqueConstraint(
+                fields=['structure', 'order'],
+                name='unique_sauna_structure_order'),
+        ]
+
+
+def filter_by_all_categories(qs, *categories):
+    """
+    Вернуть объекты qs, которым назначены ВСЕ переданные категории.
+    Работает для House/Sauna/Project (любой модели с полем category M2M).
+    """
+    for c in categories:
+        qs = qs.filter(category=c)
+    return qs.distinct()

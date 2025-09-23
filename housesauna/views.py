@@ -2,7 +2,7 @@ from itertools import chain
 import os
 from datetime import datetime
 
-from django.db.models import CharField, Value, QuerySet
+from django.db.models import Prefetch, CharField, Value, QuerySet
 from django.http.response import HttpResponseRedirect, HttpResponse
 from django.http import HttpRequest
 from django.shortcuts import render
@@ -13,7 +13,7 @@ from django.db import models
 from rest_framework import status
 from django.conf import settings
 
-from houses.models import House, Sauna
+from houses.models import House, Sauna, HouseImage, SaunaImage
 from .forms import SubmitFormHandler
 from .utility import (
     send_telegram,
@@ -21,6 +21,29 @@ from .utility import (
     send_email_notification
 )
 from housesauna.logger import logger
+
+
+house_images_prefetch = Prefetch(
+    'images',
+    queryset=HouseImage.objects.order_by('order'),
+    to_attr='prefetched_images',
+)
+house_cover_prefetch = Prefetch(
+    'images',
+    queryset=HouseImage.objects.filter(is_cover=True).order_by('order'),
+    to_attr='cover_images',
+)
+
+sauna_images_prefetch = Prefetch(
+    'images',
+    queryset=SaunaImage.objects.order_by('order'),
+    to_attr='prefetched_images',
+)
+sauna_cover_prefetch = Prefetch(
+    'images',
+    queryset=SaunaImage.objects.filter(is_cover=True).order_by('order'),
+    to_attr='cover_images',
+)
 
 
 class IndexView(generic.ListView):
@@ -39,13 +62,22 @@ class IndexView(generic.ListView):
     def get_object_list(self, model: models.Model, structure: str) -> QuerySet:
         """
         Возвращает ограниченный список объектов указанной модели,
-        опубликованных до текущего момента.
+        опубликованных до текущего момента, с префетчем картинок.
         """
-        return model.objects.filter(
-            pub_date__lte=timezone.now()
-        ).annotate(
-            structure=Value(
-                structure, output_field=CharField()))[:settings.LAST_TO_VIEW]
+        qs = (
+            model.objects
+            .filter(pub_date__lte=timezone.now())
+            .order_by('-pub_date')
+            .annotate(structure=Value(structure, output_field=CharField()))
+        )
+        if model is House:
+            qs = qs.prefetch_related(
+                house_images_prefetch, house_cover_prefetch)
+        elif model is Sauna:
+            qs = qs.prefetch_related(
+                sauna_images_prefetch, sauna_cover_prefetch)
+
+        return qs[:settings.LAST_TO_VIEW]
 
     def get_queryset(self) -> list:
         """
@@ -58,7 +90,8 @@ class IndexView(generic.ListView):
         ]
         return sorted(
             chain.from_iterable(combined),
-            key=lambda instance: instance.pub_date
+            key=lambda instance: instance.pub_date,
+            reverse=True
         )
 
 

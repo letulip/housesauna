@@ -66,3 +66,22 @@ def save_failed_submission(data: dict):
             logger.info('Неотправленная заявка сохранена.')
     except Exception as e:
         logger.error(f'Не удалось сохранить заявку: {e}')
+
+
+def add_category_to_all_objects():
+    """
+    Вспомогательная функция, нужно использовать в шелле.
+    Добавляет выбранный слаг категорий ко всем объектам,
+    можно настроить фильтр для определенных объектов.
+
+    """
+    # from django.db import transaction
+    # from django.utils import timezone
+    # from houses.models import Sauna, Category
+
+    # cat = Category.objects.get(slug="slug")
+    # qs = Sauna.objects.all()
+
+    # with transaction.atomic():
+    #     for s in qs.iterator():
+    #         s.category.add(cat)

@@ -4,7 +4,7 @@ from django import forms
 
 
 class SubmitFormHandler(forms.Form):
-    email = forms.EmailField(label='Email', max_length=100)
+    email = forms.EmailField(label='Email', max_length=100, required=False)
     name = forms.CharField(label='Имя', max_length=100)
     phone = forms.CharField(label='Телефон', max_length=100)
     form_name = forms.CharField(max_length=200)

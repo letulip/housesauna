@@ -3,8 +3,48 @@ from django.views import generic
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.db.models import Prefetch, Case, When, Value, IntegerField
 
-from .models import House, Sauna, Project, Category
+from .models import House, Sauna, Project, Category, HouseImage, SaunaImage, filter_by_all_categories
+
+
+def order_categories(qs):
+    """
+    Числовые названия (^\d) идут первыми, затем по priority и name.
+    """
+    return (
+        qs.annotate(
+            _num_first=Case(
+                When(name__regex=r'^\d', then=Value(0)),
+                default=Value(1),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by('_num_first', 'priority', 'name')
+        .distinct())
+
+
+house_images_prefetch = Prefetch(
+    'images',
+    queryset=HouseImage.objects.order_by('order'),
+    to_attr='prefetched_images',
+)
+house_cover_prefetch = Prefetch(
+    'images',
+    queryset=HouseImage.objects.filter(is_cover=True).order_by('order'),
+    to_attr='cover_images',
+)
+
+sauna_images_prefetch = Prefetch(
+    'images',
+    queryset=SaunaImage.objects.order_by('order'),
+    to_attr='prefetched_images',
+)
+sauna_cover_prefetch = Prefetch(
+    'images',
+    queryset=SaunaImage.objects.filter(is_cover=True).order_by('order'),
+    to_attr='cover_images',
+)
 
 
 class ProjectsView(generic.ListView):
@@ -35,8 +75,14 @@ class HouseDetailView(generic.DetailView):
     model = House
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+    # slug_field = 'full_name'
+    # slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        return (
+            House.objects
+            .filter(pub_date__lte=timezone.now())
+            .prefetch_related(house_images_prefetch, house_cover_prefetch))
 
 
 class SaunaDetailView(generic.DetailView):
@@ -46,19 +92,25 @@ class SaunaDetailView(generic.DetailView):
     model = Sauna
     template_name = 'structure-detail.html'
     context_object_name = 'structure'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+    # slug_field = 'full_name'
+    # slug_url_kwarg = 'slug'
+
+    def get_queryset(self):
+        return (
+            Sauna.objects
+            .filter(pub_date__lte=timezone.now())
+            .prefetch_related(sauna_images_prefetch, sauna_cover_prefetch))
 
 
-class ProjectDetailView(generic.DetailView):
-    """
-    Детальная страница проекта.
-    """
-    model = Project
-    template_name = 'project-detail.html'
-    context_object_name = 'project'
-    slug_field = 'full_name'
-    slug_url_kwarg = 'slug'
+# class ProjectDetailView(generic.DetailView):
+#     """
+#     Детальная страница проекта.
+#     """
+#     model = Project
+#     template_name = 'project-detail.html'
+#     context_object_name = 'project'
+#     slug_field = 'full_name'
+#     slug_url_kwarg = 'slug'
 
 
 class BaseCategoryView(generic.View):
@@ -79,14 +131,19 @@ class BaseCategoryView(generic.View):
         categories = Category.objects.filter(
             **{f"{self.related_name}__isnull": False}
         ).distinct()
-        object_list = self.object_model.objects.all()
+        categories = order_categories(categories)
+        qs = self.object_model.objects.filter(pub_date__lte=timezone.now())
+        if self.object_model is House:
+            qs = qs.prefetch_related(
+                house_images_prefetch, house_cover_prefetch)
+        elif self.object_model is Sauna:
+            qs = qs.prefetch_related(
+                sauna_images_prefetch, sauna_cover_prefetch)
         context = {
             "categories": categories,
-            self.list_context_key: object_list,
-            "category_title": settings.METATAGS.get(
-                self.meta_key, {}).get('title', ''),
-            "category_description": settings.METATAGS.get(
-                self.meta_key, {}).get('description', ''),
+            self.list_context_key: qs,
+            "category_title": settings.METATAGS.get(self.meta_key, {}).get('title', ''),
+            "category_description": settings.METATAGS.get(self.meta_key, {}).get('description', ''),
         }
 
         return render(request, self.template_name, context)
@@ -128,42 +185,53 @@ class BaseSubcategoryView(generic.View):
 
     def get(self, request, cat_slug, sub_slug=None):
         category = get_object_or_404(Category, slug=cat_slug)
-        objects = self.model.objects.filter(category=category)
-
+        base_qs = self.model.objects.filter(pub_date__lte=timezone.now())
         if sub_slug:
-            subcategory = get_object_or_404(Category, slug=sub_slug)
-            objects = self.model.objects.filter(category=subcategory)
-
+            subcategory = get_object_or_404(
+                Category,
+                slug=sub_slug,
+                parent=category,
+            )
+            objects = filter_by_all_categories(base_qs, category, subcategory)
             desc_data = category.subcategories_description.get(
-                str(subcategory.id), {}) if category.subcategories_description else {}
+                str(subcategory.id), {}
+            ) if category.subcategories_description else {}
+
             header = desc_data.get('header') or getattr(
-                subcategory, f'header_{self.category_field_prefix}')
+                subcategory, f'header_{self.category_field_prefix}'
+            )
             title = desc_data.get('title') or getattr(
-                subcategory, f'title_{self.category_field_prefix}')
+                subcategory, f'title_{self.category_field_prefix}'
+            )
             description = desc_data.get('description') or getattr(
-                subcategory, f'description_{self.category_field_prefix}')
+                subcategory, f'description_{self.category_field_prefix}'
+            )
         else:
+            objects = base_qs.filter(category=category).distinct()
+
             header = getattr(category, f'header_{self.category_field_prefix}')
             title = getattr(category, f'title_{self.category_field_prefix}')
-            description = getattr(
-                category, f'description_{self.category_field_prefix}')
-
+            description = getattr(category, f'description_{self.category_field_prefix}')
+        if self.model is House:
+            objects = objects.prefetch_related(house_images_prefetch, house_cover_prefetch)
+        elif self.model is Sauna:
+            objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch)
         context = {
             self.list_context_key: objects,
             "category_description": description,
             "category_title": title,
             "category_header": header,
         }
-
         subcategories = category.subcategory.all()
+        subcategories = order_categories(subcategories)
         if subcategories:
             context.update({
                 "categories": subcategories,
                 "curr_category": category,
             })
-
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
         return render(request, template, context)
+
 
 
 class SubcategoriesHousesView(BaseSubcategoryView):
