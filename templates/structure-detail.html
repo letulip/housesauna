@@ -30,23 +30,65 @@
 
 {% block content %}
 
-{% with is_project=structure|has_category:"Проект" %} {# <!-- CHANGED: локальный флаг --> #}
+{% with is_project=structure|has_category:"Проект" %}
 
-  <section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({{ structure.images.first.image.url }});">
-    <article class="promo__wrapper">
-      <h1 class="heading heading--h2 heading--bold heading--white">
-        {{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup>
-      </h1>
-      <p class="promo__text text text--white">
-        Размеры дома: <b>{{structure.dimensions}}м</b><br>
-        Общая площадь: <b>{{structure.square}}м<sup class="text__sup">2</sup></b><br>
+<section class="promo" style="background-image: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url({{ structure.images.first.image.url }});">
+  <article class="promo__wrapper">
+    <h1 class="heading heading--h2 heading--bold heading--white">
+      {{structure.title}} {{structure.square}}м<sup class="text__sup">2</sup>
+    </h1>
+    <p class="promo__text text text--white">
+      Размеры дома: <b>{{structure.dimensions}}м</b><br>
+      Общая площадь: <b>{{structure.square}}м<sup class="text__sup">2</sup></b><br>
+      {% if is_project %}
+        Ориентировочная базовая стоимость: <b>{{ structure.cost|spaced_price }} ₽</b>
+      {% else %}
         Базовая стоимость: <b>{{ structure.cost|spaced_price }} ₽</b>
-      </p>
+      {% endif %}
+    </p>
 
-      <div class="grid grid--marginTop-0">
-        <div class="grid__article {% if is_project %}grid__article{% else %}grid__article--two grid__article--gap-big{% endif %}" style="display:flex;justify-content:center"> {# <!-- CHANGED --> #}
+    <div class="grid grid--marginTop-0">
 
-          {% if not is_project %}
+      {% if is_project %}
+        <div class="grid__article" style="display:flex;justify-content:center">
+          <div class="grid__element" style="max-width:680px;margin:0 auto;text-align:center;">
+            <p class="text text--white text--left" style="text-align:center;">
+              Получите консультацию по {% if structure.class_name == 'House' %}этому дому{% else %}этой бане{% endif %}
+            </p>
+            <form action="/submit/" class="form form--house" method="POST" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+              <label class="form__label" style="width:100%;max-width:400px;">
+                <input type="text" name="name" class="form__input" required style="width:100%;text-align:center;">
+                <span class="form__placeholder">Ваше имя</span>
+              </label>
+              <label class="form__label" style="width:100%;max-width:400px;">
+                <input placeholder="(ххх) xxx-xx-xx" maxlength="15" name="phone" type="tel"
+                      class="form__input form__input--phone" required style="width:100%;text-align:center;">
+                <span class="form__placeholder">Ваш телефон</span>
+              </label>
+              <label class="form__label" style="width:100%;max-width:400px;">
+                <input placeholder="example@example.ru" type="email" name="email"
+                      class="form__input form__input--email" style="width:100%;text-align:center;">
+                <span class="form__placeholder">Ваш email (необязательно)</span>
+              </label>
+              <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
+              <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
+              <button type="submit"
+                      class="form__submit button button--big button--bold"
+                      style="color:#fff;">
+                Позвоните мне
+              </button>
+              {% csrf_token %}
+            </form>
+            <p class="text text--white text--sm" style="text-align:center;">
+              Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей
+              <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.
+            </p>
+          </div>
+        </div>
+
+      {% else %}
+        <div class="grid__article grid__article--two grid__article--gap-big">
+
           <div class="grid__element">
             {% if structure.vk_video_url %}
               <iframe loading="lazy" class="quote__video" width="560" height="315"
@@ -67,7 +109,7 @@
                 <li class="social__item social__item--big">
                   <a href="{{ structure.rutube_video_url }}" target="_blank" rel="noopener">
                     <svg class="social__icon social__icon--rt" width="40" height="40">
-                          <use href="{% static 'img/icon-rutube-big.svg' %}"></use>
+                      <use href="{% static 'img/icon-rutube-big.svg' %}"></use>
                     </svg>
                   </a>
                 </li>
@@ -83,20 +125,21 @@
               {% endif %}
             </ul>
           </div>
-          {% endif %}
 
-          <div class="grid__element" {% if is_project %}style="max-width:680px;margin:0 auto;"{% endif %}> {# <!-- CHANGED: центрируем форму --> #}
-            <p class="text text--white text--left">Получите консультацию по {% if structure.class_name == 'House' %}этому дому {% else %} этой бане{% endif %}</p>
+          <div class="grid__element">
+            <p class="text text--white text--left">
+              Получите консультацию по {% if structure.class_name == 'House' %}этому дому{% else %}этой бане{% endif %}
+            </p>
             <form action="/submit/" class="form form--house" method="POST">
-              <label for="" class="form__label">
+              <label class="form__label">
                 <input type="text" name="name" class="form__input" required>
                 <span class="form__placeholder">Ваше имя</span>
               </label>
-              <label for="" class="form__label">
+              <label class="form__label">
                 <input placeholder="(ххх) xxx-xx-xx" maxlength="15" name="phone" type="tel" class="form__input form__input--phone" required>
                 <span class="form__placeholder">Ваш телефон</span>
               </label>
-              <label for="" class="form__label">
+              <label class="form__label">
                 <input placeholder="example@example.ru" type="email" name="email" class="form__input form__input--email">
                 <span class="form__placeholder">Ваш email (необязательно)</span>
               </label>
@@ -109,13 +152,17 @@
               </button>
               {% csrf_token %}
             </form>
-            <p class="text text--white text--sm">Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.</p>
+            <p class="text text--white text--sm">
+              Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей
+              <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.
+            </p>
           </div>
 
         </div>
-      </div>
-    </article>
-  </section>
+      {% endif %}
+    </div>
+  </article>
+</section>
 
   <section class="grid">
     <article class="grid__article">
@@ -132,7 +179,6 @@
           Общая площадь: <b>{{structure.square}} м²</b>
         </p>
 
-        {# <!-- CHANGED: скрываем строку про брус для "Проект" --> #}
         {% if not is_project %}
         <p class="text text--left">
           В данном сооружении использовался клееный брус сечением <b>{{structure.brus}} мм</b>.
@@ -160,7 +206,11 @@
           </ul>
         </div>
         <p class="text text--left">
-          Стоимость базового комплекта, включая материалы и работы: <b>{{ structure.cost|spaced_price }} руб.</b>.
+          {% if is_project %}
+            Ориентировочная стоимость базового комплекта, включая материалы и работы: <br><b>{{ structure.cost|spaced_price }} руб.</b>
+          {% else %}
+            Стоимость базового комплекта, включая материалы и работы: <br><b>{{ structure.cost|spaced_price }} руб.</b>
+          {% endif %}
         </p>
         <p class="text text--left">
           Цена под ключ зависит от индивидуальных предпочтений заказчика. Окончательную цену данного проекта Вы можете уточнить по телефону.
@@ -189,7 +239,7 @@
     {% endwith %}
   </section>
 
-{% endwith %} {# <!-- CHANGED: закрываем with --> #}
+{% endwith %}
 
 {% endblock content %}
 

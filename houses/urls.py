@@ -28,6 +28,16 @@ urlpatterns = [
         name='houses_categories'
     ),
     path(
+        'houses-categories/<int:pk>/',
+        views.HouseDetailView.as_view(),
+        name='house-detail'
+    ),
+    path(
+        'saunas-categories/<int:pk>/',
+        views.SaunaDetailView.as_view(),
+        name='sauna-detail'
+    ),
+    path(
         'saunas-categories/<slug:cat_slug>/',
         SubcategoriesSaunasView.as_view(),
         name='sauna_sub'
@@ -52,16 +62,6 @@ urlpatterns = [
     #     views.ProjectDetailView.as_view(),
     #     name='project-detail'
     # ),
-    path(
-        'houses/<int:pk>/',
-        views.HouseDetailView.as_view(),
-        name='house-detail'
-    ),
-    path(
-        'saunas/<int:pk>/',
-        views.SaunaDetailView.as_view(),
-        name='sauna-detail'
-    ),
 ]
 
 

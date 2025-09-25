@@ -135,10 +135,10 @@ class BaseCategoryView(generic.View):
         qs = self.object_model.objects.filter(pub_date__lte=timezone.now())
         if self.object_model is House:
             qs = qs.prefetch_related(
-                house_images_prefetch, house_cover_prefetch)
+                house_images_prefetch, house_cover_prefetch).order_by('?')[:30]
         elif self.object_model is Sauna:
             qs = qs.prefetch_related(
-                sauna_images_prefetch, sauna_cover_prefetch)
+                sauna_images_prefetch, sauna_cover_prefetch).order_by('?')[:30]
         context = {
             "categories": categories,
             self.list_context_key: qs,
@@ -213,9 +213,9 @@ class BaseSubcategoryView(generic.View):
             title = getattr(category, f'title_{self.category_field_prefix}')
             description = getattr(category, f'description_{self.category_field_prefix}')
         if self.model is House:
-            objects = objects.prefetch_related(house_images_prefetch, house_cover_prefetch)
+            objects = objects.prefetch_related(house_images_prefetch, house_cover_prefetch).order_by('?')[:30]
         elif self.model is Sauna:
-            objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch)
+            objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch).order_by('?')[:30]
         context = {
             self.list_context_key: objects,
             "category_description": description,
@@ -231,7 +231,6 @@ class BaseSubcategoryView(generic.View):
             })
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
         return render(request, template, context)
-
 
 
 class SubcategoriesHousesView(BaseSubcategoryView):
