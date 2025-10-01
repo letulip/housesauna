@@ -195,7 +195,7 @@ class SaunaAdmin(BaseStructureAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     fields = [
-        'priority',
+        'is_visible',
         'name',
         'slug',
         'subcategory',

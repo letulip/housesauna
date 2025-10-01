@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import Prefetch, Case, When, Value, IntegerField
 
 from .models import House, Sauna, Project, Category, HouseImage, SaunaImage, filter_by_all_categories
+from .constants import CATEGORY_NA_SVAYAH_TEXT, CATEGORY_DOMA_BANI_TEXT
 
 
 def order_categories(qs):
@@ -131,6 +132,7 @@ class BaseCategoryView(generic.View):
         categories = Category.objects.filter(
             **{f"{self.related_name}__isnull": False}
         ).distinct()
+        categories = categories.filter(is_visible=True)
         categories = order_categories(categories)
         qs = self.object_model.objects.filter(pub_date__lte=timezone.now())
         if self.object_model is House:
@@ -183,6 +185,14 @@ class BaseSubcategoryView(generic.View):
     template_name = "structure-index.html"
     category_template_name = "categories.html"
 
+    def get_category_description(self, category_slug):
+        """Возвращает специальный текст для конкретных категорий"""
+        category_texts = {
+            'na-svayah': CATEGORY_NA_SVAYAH_TEXT,
+            'doma-bani': CATEGORY_DOMA_BANI_TEXT,
+        }
+        return category_texts.get(category_slug, '')
+
     def get(self, request, cat_slug, sub_slug=None):
         category = get_object_or_404(Category, slug=cat_slug)
         base_qs = self.model.objects.filter(pub_date__lte=timezone.now())
@@ -216,9 +226,12 @@ class BaseSubcategoryView(generic.View):
             objects = objects.prefetch_related(house_images_prefetch, house_cover_prefetch).order_by('?')[:30]
         elif self.model is Sauna:
             objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch).order_by('?')[:30]
+        category_specific_text = self.get_category_description(cat_slug)
+
         context = {
             self.list_context_key: objects,
             "category_description": description,
+            "category_specific_text": category_specific_text,
             "category_title": title,
             "category_header": header,
         }

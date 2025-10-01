@@ -116,6 +116,8 @@ class Category(models.Model):
         blank=True,
         related_name='parent'
     )
+    is_visible = models.BooleanField(
+        'Попадает в выборку', default=True, db_index=True)
     # SEO поля
     title_house = models.CharField(
         'Title (house)', max_length=255, null=True, blank=True)

@@ -140,9 +140,9 @@
     <article class="grid__article grid__article--three">
       {% for project in recent_projects %}
         {% if project.structure == 'house' %}
-          <a class="preview" href="/houses/{{ project.id }}">
+          <a class="preview" href="/houses-categories/{{ project.id }}">
         {% else %}
-          <a class="preview" href="/saunas/{{ project.id }}">
+          <a class="preview" href="/saunas-categories/{{ project.id }}">
         {% endif %}
 
           {% with photos=project.cover_images|default:project.prefetched_images %}
