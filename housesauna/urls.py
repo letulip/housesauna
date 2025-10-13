@@ -25,6 +25,7 @@ urlpatterns = [
     ),
     path('not-found/', views.notfound, name='notfound'),
     path('about/', views.about, name='about'),
+    path('agreement/', views.agreement, name='agreement'),
     path('design/', views.design, name='design'),
     path('policy/', views.policy, name='policy'),
     path('production/', views.production, name='production'),

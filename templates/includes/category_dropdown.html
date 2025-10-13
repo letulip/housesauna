@@ -1,0 +1,86 @@
+<div class="category">
+  <ul class="category__list">
+
+    <li class="category__item">
+      <span class="category__button category__button-arrow">По размеру</span>
+      <ul class="category__sublist">
+        {% for cat in size_categories %}
+        <li class="category__sublist--item">
+          {% if curr_category %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% else %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+
+    <li class="category__item">
+      <span class="category__button category__button-arrow">По этажности</span>
+      <ul class="category__sublist">
+        {% for cat in floor_categories %}
+        <li class="category__sublist--item">
+          {% if curr_category %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% else %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+
+    <li class="category__item">
+      <span class="category__button category__button-arrow">Подборки</span>
+      <ul class="category__sublist">
+        {% for cat in selection_categories %}
+        <li class="category__sublist--item">
+          {% if curr_category %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub_list' cat_slug=curr_category.slug sub_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% else %}
+            {% if saunas_list %}
+              <a href="{% url 'houses:sauna_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% else %}
+              <a href="{% url 'houses:houses_sub' cat_slug=cat.slug %}"
+                 class="category__sublist--link">{{ cat.name }}</a>
+            {% endif %}
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </li>
+
+  </ul>
+</div>

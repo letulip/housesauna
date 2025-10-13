@@ -196,6 +196,9 @@ class SaunaAdmin(BaseStructureAdmin):
 class CategoryAdmin(admin.ModelAdmin):
     fields = [
         'is_visible',
+        'is_size',
+        'is_floor',
+        'is_selection',
         'name',
         'slug',
         'subcategory',

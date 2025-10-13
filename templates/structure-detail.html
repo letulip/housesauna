@@ -72,7 +72,26 @@
               </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
               <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
-              <button type="submit"
+              <div class="checkbox-container" style="width:100%;max-width:400px;">  
+              <div style="display: flex">
+                <input type="checkbox" id="data-agreement" name="data_agreement" class="checkbox" value="1" required>
+              </div>
+                <label for="data-agreement" class="text text--white text--sm text--narrow text--heigth">
+                  Я даю согласие на
+                  <a href="/agreement/" class="text_form--link" target="_blank" style="color:#fff;">обработку персональных данных</a>
+                  в&nbsp;соответствии с&nbsp;<a href="/policy/" class="text_form--link" target="_blank" style="color:#fff;">политикой конфиденциальности</a>
+                </label>
+                </div>
+
+                <button class="form__button--submit">
+                  Позвоните мне
+                </button>
+
+                <p class="text text--white text--sm text--sm-center text--narrow">
+                  Обработка заявки осуществляется в течение рабочего дня
+                </p>
+            </form>
+              <!-- <button type="submit"
                       class="form__submit button button--big button--bold"
                       style="color:#fff;">
                 Позвоните мне
@@ -82,7 +101,7 @@
             <p class="text text--white text--sm" style="text-align:center;">
               Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей
               <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.
-            </p>
+            </p> -->
           </div>
         </div>
 
@@ -131,6 +150,7 @@
               Получите консультацию по {% if structure.class_name == 'House' %}этому дому{% else %}этой бане{% endif %}
             </p>
             <form action="/submit/" class="form form--house" method="POST">
+              {% csrf_token %}
               <label class="form__label">
                 <input type="text" name="name" class="form__input" required>
                 <span class="form__placeholder">Ваше имя</span>
@@ -145,7 +165,28 @@
               </label>
               <input type="hidden" name="form_name" value="{{structure.title}} {{structure.square}}м">
               <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru{{ request.path }}">
-              <button type="submit"
+              
+              <div class="checkbox-container">
+                <div style="display: flex">
+                  <input type="checkbox" id="data-agreement" name="data_agreement" class="checkbox" value="1" required>
+                </div>
+                <label for="data-agreement" class="text text--white text--sm text--narrow text--heigth">
+                  Я даю согласие на
+                  <a href="/agreement/" class="text_form--link" target="_blank" style="color:#fff;">обработку персональных данных</a>
+                  в&nbsp;соответствии с&nbsp;<a href="/policy/" class="text_form--link" target="_blank" style="color:#fff;">политикой конфиденциальности</a>
+                </label>
+                </div>
+
+                <button class="form__button--submit">
+                  Позвоните мне
+                </button>
+
+                <p class="text text--white text--sm text--sm-center text--narrow">
+                  Обработка заявки осуществляется в течение рабочего дня
+                </p>
+            </form>
+          </div>
+              <!-- <button type="submit"
                       class="form__submit button button--big button--bold"
                       style="color:#fff;">
                 Позвоните мне
@@ -156,9 +197,8 @@
               Обработка заявки осуществляется в течение рабочего дня. Отправляя заявку, вы соглашаетесь с нашей
               <a href="/policy/" class="text__link text__link--alt">политикой конфиденциальности</a>.
             </p>
-          </div>
+          </div> -->
 
-        </div>
       {% endif %}
     </div>
   </article>

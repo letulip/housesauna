@@ -46,19 +46,27 @@
         <input type="hidden" name="form_name" value="запросу с общей формы сбора заявок">
         <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru">
 
-        <button type="submit"
-                class="form__submit form__submit--dark form__submit--wide form__submit--center button button--big"
-                style="background:#1F57C8;color:#fff;border:1px solid #1F57C8;padding:14px 24px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">
-          Позвоните мне
-        </button>
+        <div class="checkbox-container" style="width:100%;max-width:400px;">  
+          <div style="display: flex">
+            <input type="checkbox" id="data-agreement" name="data_agreement" class="checkbox" value="1" required>
+          </div>
+          <label for="data-agreement" class="text text--black text--sm text--narrow text--heigth">
+            Я даю согласие на
+            <a href="/agreement/" class="text_form--link" target="_blank">обработку персональных данных</a>
+            в&nbsp;соответствии с&nbsp;<a href="/policy/" class="text_form--link" target="_blank">политикой конфиденциальности</a>
+          </label>  
+        </div>
+
+       <button class="form__button--submit">
+            Позвоните мне
+          </button>
         {% csrf_token %}
+
+      <p class="text text--black text--sm text--sm-center text--narrow">
+          Обработка заявки осуществляется в течение рабочего дня
+        </p>
       </form>
 
-      <p class="text text--sm" style="margin-top:16px;text-align:center;">
-        Обработка заявки осуществляется в течение рабочего дня.<br>
-        Отправляя заявку, вы соглашаетесь с нашей
-        <a href="/policy/" class="text__link" style="color:#1F57C8;">политикой конфиденциальности</a>.
-      </p>
     </div>
   </article>
 </section>

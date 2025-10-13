@@ -190,6 +190,11 @@ def about(request: HttpRequest) -> render:
     return render(request, 'about.html')
 
 
+def agreement(request: HttpRequest) -> render:
+    """Соглашение о персональных данных."""
+    return render(request, 'agreement.html')
+
+
 def design(request: HttpRequest) -> render:
     """Страница «Проектирование»."""
     return render(request, 'design.html')

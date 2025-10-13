@@ -118,6 +118,9 @@ class Category(models.Model):
     )
     is_visible = models.BooleanField(
         'Попадает в выборку', default=True, db_index=True)
+    is_size = models.BooleanField('Категория по размеру', default=False)
+    is_floor = models.BooleanField('Категория по этажности', default=False)
+    is_selection = models.BooleanField('Категория-подборка', default=False)
     # SEO поля
     title_house = models.CharField(
         'Title (house)', max_length=255, null=True, blank=True)

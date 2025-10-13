@@ -1,6 +1,7 @@
 {% extends "common.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load category_tags %}
 
 {% block head %}
   {% if category_title %}
@@ -33,18 +34,7 @@
         style="max-width: 98%; display: inline-block; margin-left: auto; margin-right: auto;">
       {{ category_header|default:"Дома из клееного бруса" }}
     </h1>
-
-    {% if saunas_list %}
-      <a href="{% url 'houses:sauna_categories' %}"
-        class="button button--white button--small button--bold">
-        ← Назад к категориям
-      </a>
-    {% elif houses_list %}
-      <a href="{% url 'houses:houses_categories' %}"
-        class="button button--white button--small button--bold">
-        ← Назад к категориям
-      </a>
-    {% endif %}
+    {% category_menu %}
 
   </div>
 </section>
@@ -55,6 +45,7 @@
 {% endblock content %}
 
 {% block scripts %}
+<script nonce="{{ CSP_NONCE }}" type="module" src="{% static 'js/blocks/category/category.js' %}"></script>
 <script nonce="{{ CSP_NONCE }}" src="{% static 'js/blocks/content-slider/content-slider.js' %}"></script>
 <script nonce="{{ CSP_NONCE }}" src="{% static 'js/more.js' %}"></script>
 <!-- <script nonce="{{ CSP_NONCE }}" src="{% static 'js/tabGroups/tabGroups.js' %}"></script> -->

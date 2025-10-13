@@ -25,6 +25,24 @@ def order_categories(qs):
         .distinct())
 
 
+def get_menu_categories(related_name):
+    """
+    Возвращает кортеж (size_categories, floor_categories, selection_categories)
+    для выпадающего меню. Единая точка получения категорий для меню.
+    """
+    categories = Category.objects.filter(
+        **{f"{related_name}__isnull": False}
+    ).filter(is_visible=True).distinct()
+
+    categories = order_categories(categories)
+
+    return (
+        categories.filter(is_size=True),
+        categories.filter(is_floor=True),
+        categories.filter(is_selection=True),
+    )
+
+
 house_images_prefetch = Prefetch(
     'images',
     queryset=HouseImage.objects.order_by('order'),
@@ -103,17 +121,6 @@ class SaunaDetailView(generic.DetailView):
             .prefetch_related(sauna_images_prefetch, sauna_cover_prefetch))
 
 
-# class ProjectDetailView(generic.DetailView):
-#     """
-#     Детальная страница проекта.
-#     """
-#     model = Project
-#     template_name = 'project-detail.html'
-#     context_object_name = 'project'
-#     slug_field = 'full_name'
-#     slug_url_kwarg = 'slug'
-
-
 class BaseCategoryView(generic.View):
     """
     Базовая вьюха категорий для рендера categories.html
@@ -134,6 +141,9 @@ class BaseCategoryView(generic.View):
         ).distinct()
         categories = categories.filter(is_visible=True)
         categories = order_categories(categories)
+
+        size_categories, floor_categories, selection_categories = get_menu_categories(self.related_name)
+
         qs = self.object_model.objects.filter(pub_date__lte=timezone.now())
         if self.object_model is House:
             qs = qs.prefetch_related(
@@ -146,6 +156,9 @@ class BaseCategoryView(generic.View):
             self.list_context_key: qs,
             "category_title": settings.METATAGS.get(self.meta_key, {}).get('title', ''),
             "category_description": settings.METATAGS.get(self.meta_key, {}).get('description', ''),
+            "size_categories": size_categories,
+            "floor_categories": floor_categories,
+            "selection_categories": selection_categories,
         }
 
         return render(request, self.template_name, context)
@@ -216,6 +229,7 @@ class BaseSubcategoryView(generic.View):
             description = desc_data.get('description') or getattr(
                 subcategory, f'description_{self.category_field_prefix}'
             )
+
         else:
             objects = base_qs.filter(category=category).distinct()
 
@@ -226,6 +240,7 @@ class BaseSubcategoryView(generic.View):
             objects = objects.prefetch_related(house_images_prefetch, house_cover_prefetch).order_by('?')[:30]
         elif self.model is Sauna:
             objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch).order_by('?')[:30]
+
         category_specific_text = self.get_category_description(cat_slug)
 
         context = {
@@ -242,6 +257,12 @@ class BaseSubcategoryView(generic.View):
                 "categories": subcategories,
                 "curr_category": category,
             })
+
+        if sub_slug:
+            context.update({
+                "curr_category": category,
+            })
+
         template = self.category_template_name if subcategories and not sub_slug else self.template_name
         return render(request, template, context)
 
