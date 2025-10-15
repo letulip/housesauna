@@ -242,6 +242,7 @@ class BaseSubcategoryView(generic.View):
             objects = objects.prefetch_related(sauna_images_prefetch, sauna_cover_prefetch).order_by('?')[:30]
 
         category_specific_text = self.get_category_description(cat_slug)
+        base_url = 'houses-categories' if self.model is House else 'saunas-categories'
 
         context = {
             self.list_context_key: objects,
@@ -249,6 +250,7 @@ class BaseSubcategoryView(generic.View):
             "category_specific_text": category_specific_text,
             "category_title": title,
             "category_header": header,
+            "base_url": base_url,
         }
         subcategories = category.subcategory.all()
         subcategories = order_categories(subcategories)
@@ -261,6 +263,8 @@ class BaseSubcategoryView(generic.View):
         if sub_slug:
             context.update({
                 "curr_category": category,
+                "is_subcategory": True,
+                "back_to_categories_url": f"/{base_url}/",
             })
 
         template = self.category_template_name if subcategories and not sub_slug else self.template_name

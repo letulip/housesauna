@@ -24,6 +24,17 @@
 
     {% category_menu %}
 
+    {% if categories and curr_category %}
+      <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        {% for subcategory in categories %}
+          <a href="/{{ base_url }}/{{ curr_category.slug }}/{{ subcategory.slug }}/"
+             class="button button--uppercase button--bold button--big">
+            {{ subcategory.name }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
   </div>
 </section>
 
