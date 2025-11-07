@@ -4,7 +4,7 @@ from .categories import CategoryHouseSitemap, CategorySaunaSitemap
 from .subcategories import SubCategoryHouseSitemap, SubCategorySaunaSitemap
 from .houses import HouseSitemap
 from .saunas import SaunaSitemap
-from .projects import ProjectSitemap
+
 
 sitemaps = {
     'index': IndexViewSiteMap,
@@ -13,7 +13,7 @@ sitemaps = {
     'houses_categories': CategoryHouseSitemap,
     'saunas_subcategories': SubCategorySaunaSitemap,
     'houses_subcategories': SubCategoryHouseSitemap,
-    'houses': ProjectSitemap,
+    'houses': HouseSitemap,
     'saunas': SaunaSitemap,
-    'projects': ProjectSitemap,
+    # 'projects': ProjectSitemap,
 }

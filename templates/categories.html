@@ -28,7 +28,9 @@
       <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
         {% for subcategory in categories %}
           <a href="/{{ base_url }}/{{ curr_category.slug }}/{{ subcategory.slug }}/"
-             class="button button--uppercase button--bold button--big">
+             style="display: inline-block; padding: 6px 45px; border-radius: 4px; background-color: #32328e; font-family: Inter; font-weight: 500; font-size: 16px; color: #fff; text-align: center; transition: all .3s ease-in-out; cursor: pointer; text-decoration: none;"
+             onmouseover="this.style.color='#13133a'; this.style.backgroundColor='#fffc'; this.style.boxShadow='0 3px 8px rgba(255,255,255,0.3)';"
+             onmouseout="this.style.color='#fff'; this.style.backgroundColor='#32328e'; this.style.boxShadow='none';">
             {{ subcategory.name }}
           </a>
         {% endfor %}

@@ -29,24 +29,23 @@
         </li>
       </ul>
 
-      <form action="/submit/" class="form form--wide" method="POST"
-            style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-        <label class="form__label" style="width:100%;max-width:400px;">
-          <input type="text" name="name" class="form__input form__input--dark" required style="width:100%;">
+      <form action="/submit/" class="form" method="POST">
+        <label class="form__label">
+          <input type="text" name="name" class="form__input form__input--dark" required>
           <span class="form__placeholder form__placeholder--dark">Ваше имя</span>
         </label>
-        <label class="form__label" style="width:100%;max-width:400px;">
-          <input type="tel" name="phone" class="form__input form__input--dark form__input--phone" required style="width:100%;" maxlength="15">
+        <label class="form__label">
+          <input placeholder="(ххх) xxx-xx-xx" type="tel" name="phone" class="form__input form__input--dark form__input--phone" required maxlength="15">
           <span class="form__placeholder form__placeholder--dark">Ваш телефон</span>
         </label>
-        <label class="form__label" style="width:100%;max-width:400px;">
-          <input type="email" name="email" class="form__input form__input--dark" style="width:100%;">
+        <label class="form__label">
+          <input type="email" name="email" class="form__input form__input--dark">
           <span class="form__placeholder form__placeholder--dark">Ваш email (необязательно)</span>
         </label>
         <input type="hidden" name="form_name" value="запросу с общей формы сбора заявок">
         <input type="hidden" name="form_link" value="https://domizkleenogobrusa.ru">
 
-        <div class="checkbox-container" style="width:100%;max-width:400px;">  
+        <div class="checkbox-container">  
           <div style="display: flex">
             <input type="checkbox" id="data-agreement" name="data_agreement" class="checkbox" value="1" required>
           </div>

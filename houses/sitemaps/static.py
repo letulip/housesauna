@@ -9,11 +9,11 @@ class StaticViewSiteMap(Sitemap):
 
     def items(self):
         return [
+            {'name': 'index', 'changefreq': 'monthly', 'priority': 0.8},
             {'name': 'about', 'changefreq': 'yearly', 'priority': 0.4},
             {'name': 'design', 'changefreq': 'monthly', 'priority': 0.6},
             {'name': 'policy', 'changefreq': 'yearly', 'priority': 0.3},
             {'name': 'production', 'changefreq': 'monthly', 'priority': 0.6},
-            {'name': 'houses:index', 'changefreq': 'monthly', 'priority': 0.8},
             {'name': 'houses:sauna_categories', 'changefreq': 'monthly', 'priority': 0.7},
             {'name': 'houses:houses_categories', 'changefreq': 'monthly', 'priority': 0.7},
         ]

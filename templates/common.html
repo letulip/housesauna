@@ -53,6 +53,18 @@
 
   {% include "includes/before_footer.html" %}
 
+  <article class="policy policy__close">
+        <div class="policy__container">
+          <p class="policy__text">Наш сайт использует cookies. Продолжая им пользоваться, вы соглашаетесь на обработку персональных данных
+            в&nbsp;соответствии с
+            <a href="/policy/" class="text_form--link" target="_blank">Политикой конфиденциальности</a>
+            и 
+            <a href="/agreement/" class="text_form--link" target="_blank">Обработки персональных данных</a>
+          </p>
+          <button class="form__button--submit policy__button" aria-label="Подтверждение согласия на использование файлов Cookie">Принять</button>
+        </div>
+      </article>
+
   {% include "footer.html" %}
   <!-- <script>
     setTimeout(() => {
@@ -82,6 +94,7 @@
   <link rel="modulepreload" href="{% static 'js/blocks/content-slider/content-slider.js' %}" crossorigin>
   <script type="module" nonce="{{ CSP_NONCE }}" src="{% static 'js/main.js' %}"></script>
   <script nonce="{{ CSP_NONCE }}" type="module" src="{% static 'js/blocks/form/form.js' %}"></script>
+  <script nonce="{{ CSP_NONCE }}" type="module" src="{% static 'js/blocks/policy/policy.js' %}"></script>
   <script nonce="{{ CSP_NONCE }}" type="module" src="{% static 'js/preload-helper.js' %}"></script>
   <script nonce="{{ CSP_NONCE }}" src="{% static 'js/blocks/mainNav/mainNav.js' %}"></script>
 

@@ -18,4 +18,4 @@ class HouseSitemap(Sitemap):
         return House.objects.all()
 
     def location(self, item):
-        return reverse('houses:house-detail', args=[item.slug])
+        return reverse('houses:house-detail', args=[item.pk])

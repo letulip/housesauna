@@ -18,4 +18,4 @@ class SaunaSitemap(Sitemap):
         return Sauna.objects.all()
 
     def location(self, item):
-        return reverse('houses:sauna-detail', args=[item.slug])
+        return reverse('houses:sauna-detail', args=[item.pk])
